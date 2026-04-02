@@ -1,0 +1,32 @@
+<Solution>
+    <Folder Name="/.github/">
+        <File Path=".github/dependabot.yml" />
+    </Folder>
+    <Folder Name="/.github/workflows/">
+        <File Path=".github/workflows/CI.yaml" />
+        <File Path=".github/workflows/ClearCache.yaml" />
+        <File Path=".github/workflows/Prerelease.yaml" />
+        <File Path=".github/workflows/Release.yaml" />
+    </Folder>
+    <Folder Name="/Solution Items/">
+        <File Path=".editorconfig" />
+        <File Path=".gitattributes" />
+        <File Path=".gitignore" />
+        <File Path="codecov.yml" />
+        <File Path="Directory.Build.props" />
+        <File Path="Directory.Packages.props" />
+        <File Path="global.json" />
+        <File Path="NuGet.config" />
+        <File Path="README.md" />
+        <File Path="test.runsettings" />
+    </Folder>
+    <Folder Name="/src/">
+        <Project Path="src/SemVer/SemVer.csproj" />
+    </Folder>
+    <Folder Name="/test/">
+        <Project Path="test/SemVer.Tests/SemVer.Tests.csproj" />
+    </Folder>
+    <Folder Name="/benchmarks/">
+        <Project Path="benchmarks/SemVer.Benchmarks/SemVer.Benchmarks.csproj" />
+    </Folder>
+</Solution>
