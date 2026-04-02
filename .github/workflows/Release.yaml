@@ -1,5 +1,3 @@
-# Comments marked with *TODO* are the customization points where you should adjust the text of this workflow template to the
-# needs of your concrete repo.
 name: Publish NuGet Stable Release
 
 on:
@@ -17,9 +15,7 @@ env:
     "src/SemVer/SemVer.csproj"
     ]
   # Ensure the NUGET_API_KEY secret is issued by the server selected here.
-  # *TODO* 'github' - GitHub Packages; 'nuget' - NuGet.org; URI - others.
   NUGET_SERVER: ${{ vars.NUGET_SERVER || 'github' }}
-  # *TODO* Semicolon-separated preprocessor symbols to pass to the compiler.
   PREPROCESSOR_SYMBOLS: ""
   CONFIGURATION: ${{ vars.CONFIGURATION || 'Release' }} # The build configuration: Debug, Release, etc.
   DOTNET_VERSION: ${{ vars.DOTNET_VERSION || '10.0.x' }} # The .NET SDK version to use.
@@ -107,7 +103,7 @@ jobs:
     uses: vmelamed/vm2.DevOps/.github/workflows/_release.yaml@main
     secrets:
       RELEASE_PAT: ${{ secrets.RELEASE_PAT }} # Required PAT for pushing changelog and tags past branch protection.
-      # *TODO* Make sure to set the API key issued by the selected NuGet server.
+      # Make sure to set the API key issued by the selected NuGet server.
       NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
     permissions:
       contents: write # Required to checkout the code, push changelog, and create tags

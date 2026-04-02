@@ -1,5 +1,3 @@
-# Comments marked with *TODO* are the customization points where you should adjust the text of this workflow template to the
-# needs of your your repo.
 name: "CI: Build, Test, Benchmark, Pack"
 
 on:
@@ -19,7 +17,6 @@ on:
         # Note: there is a known GitHub actions issue: the workflow dispatch UI doesn't properly handle JSON strings with quotes -
         # it removes the quotes. E.g. entering '["ubuntu-latest"]' in the UI prompt removes the inner quotes and it becomes the
         # invalid JSON: '[ubuntu-latest]'.
-        # *TODO* Adjust the default runner OS or OS-es as needed.
         default: ubuntu-latest
 
       preprocessor-symbols:
@@ -59,7 +56,6 @@ env:
     [
     "ubuntu-latest"
     ]
-  # *TODO* Space, comma, or semicolon-separated preprocessor symbols to pass to the compiler.
   PREPROCESSOR_SYMBOLS: ""
   DOTNET_VERSION: ${{ vars.DOTNET_VERSION || '10.0.x' }} # The .NET SDK version to use.
   CONFIGURATION: ${{ vars.CONFIGURATION || 'Release' }} # The build configuration: Debug, Release, etc.
