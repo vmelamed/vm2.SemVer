@@ -38,7 +38,7 @@ concurrency:
 env:
   BUILD_PROJECTS: >-
     [
-    "src/SemVer/SemVer.csproj"
+    "vm2.SemVer.slnx"
     ]
   TEST_PROJECTS: >-
     [
