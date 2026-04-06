@@ -71,6 +71,62 @@ A starter vm2 package scaffold. Customize the code, tests, benchmarks, docs, and
 - scripts/: bootstrap helpers
 - changelog/: git-cliff configs for prerelease/release changelog updates
 
+## Regex abbreviations and conventions
+
+- `RE`: regular expression.
+- `Charset`: a set of characters (that is, a character-class fragment).
+
+Charsets are strings that contain literal characters (for example, `"abc"`) and/or character ranges (for example, `"A-Z"`).
+A charset may represent a BNF term that is defined as a set of characters, for example:
+
+```text
+letter ::= "A" | "B" | "C" | ... | "Z" | "a" | "b" | "c" | ... | "z"
+digit  ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+```
+
+Charsets can be concatenated, subject to .NET regex syntax rules, to build larger charsets, for example:
+
+```csharp
+const string letterChars = "_A-Za-z";
+const string digitChars  = "0-9";
+const string alphanumericChars = $"{letterChars}{digitChars}"; // => "_A-Za-z0-9" is a valid
+                                                               // character class fragment
+```
+
+A charset is not a regular expression by itself; it is typically wrapped in square brackets to form one, for example:
+
+```csharp
+const string letter = $"[{letterChars}]"; // real RE that matches a single letter character
+```
+
+By convention, non-public charset constants use camelCase and the `Chars` suffix, for example `letterChars`.
+
+Non-public constants in camelCase without a suffix represent regex fragments. Most of these are valid regex patterns on their
+own, but they are intended for composition rather than standalone use.
+
+Whitespace rule:
+If a fragment includes readability spaces around operators (for example, around `|`), every Regex instance that includes that
+fragment must be compiled or generated with `RegexOptions.IgnorePatternWhitespace`.
+
+Rex vs Regex:
+
+- `*Rex` constants are generally unanchored patterns intended for composition or searching within larger strings.
+- `*Regex` constants are full-string validation patterns, typically anchored with `^` and `$`.
+
+Only `*Regex` constants get public `Regex` instance producing factory methods.
+These methods are named after the constant without the `Regex` suffix (for example, `SemVer20()`), and are generated via
+`GeneratedRegexAttribute` using the corresponding `*Regex` pattern.
+
+Quick convention table:
+
+| Visibility | Suffix    | Naming convention | Description                                               |
+|------------|-----------|-------------------|-----------------------------------------------------------|
+| Non-public | *Chars    | camelCase         | character-class fragments (not standalone regex patterns) |
+| Non-public |           | camelCase         | regex fragments for composition                           |
+| Public     | *Rex      | PascalCase        | generally unanchored public patterns                      |
+| Public     | *Regex    | PascalCase        | anchored full-string validation patterns                  |
+| Public     | *Regex    | PascalCase        | `GeneratedRegex` factories for `*Regex` constants (method name is the constant name without the `Regex` suffix) |
+
 ## Next steps
 
 - create GitHub repository using the generated bootstrap script: `scripts/repo-setup.sh`
@@ -102,4 +158,5 @@ A starter vm2 package scaffold. Customize the code, tests, benchmarks, docs, and
   - `Settings` -> `Actions` -> `General` -> `Workflow permissions`
   - enable `Allow GitHub Actions to create and approve pull requests`
   - required for prerelease changelog PR creation.
-- Changelog: prerelease workflow appends a prerelease section; release workflow adds a stable header with "See prereleases below." (prerelease sections stay intact).
+- Changelog: prerelease workflow appends a prerelease section; release workflow adds a stable header with "See prereleases
+  below." (prerelease sections stay intact).
