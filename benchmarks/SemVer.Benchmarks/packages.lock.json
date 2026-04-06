@@ -192,6 +192,12 @@
         "resolved": "7.0.0",
         "contentHash": "2lMTCQl5bGP4iv0JNkockPnyllC6eHLz+CoK2ICvalvHod+exXSxueu9hq+zNkU7bZBJf8wMfeRC/Edn8AGmEg=="
       },
+      "Newtonsoft.Json": {
+        "type": "Direct",
+        "requested": "[13.0.4, )",
+        "resolved": "13.0.4",
+        "contentHash": "pdgNNMai3zv51W5aq268sujXUyx7SNdE2bj1wZcWjAQrKMFZV260lbqYop1d2GM67JI1huLRwxo9ZqnfF/lC6A=="
+      },
       "System.Configuration.ConfigurationManager": {
         "type": "Direct",
         "requested": "[10.0.5, )",
@@ -489,6 +495,7 @@
           "Microsoft.Extensions.Logging.Configuration": "[10.0.5, )",
           "Microsoft.Extensions.Logging.Console": "[10.0.5, )",
           "Microsoft.Extensions.Options.ConfigurationExtensions": "[10.0.5, )",
+          "Newtonsoft.Json": "[13.0.4, )",
           "System.Configuration.ConfigurationManager": "[10.0.5, )"
         }
       }
