@@ -68,12 +68,18 @@
     </PropertyGroup>
 
     <!-- Print version info after build for all projects -->
-    <Target Name="PrintVersion" AfterTargets="Build">
-        <Message Importance="high" Text="AssemblyVersion: $(AssemblyVersion)" />
-        <Message Importance="high" Text="FileVersion: $(FileVersion)" />
-        <Message Importance="high" Text="InformationalVersion: $(InformationalVersion)" />
-        <Message Importance="high" Text="PackageVersion: $(PackageVersion)" />
-        <Message Importance="high" Text="Version: $(Version)" />
+    <Target Name="PrintVersion"
+            AfterTargets="Build">
+        <Message Importance="high"
+                 Text="AssemblyVersion: $(AssemblyVersion)" />
+        <Message Importance="high"
+                 Text="FileVersion: $(FileVersion)" />
+        <Message Importance="high"
+                 Text="InformationalVersion: $(InformationalVersion)" />
+        <Message Importance="high"
+                 Text="PackageVersion: $(PackageVersion)" />
+        <Message Importance="high"
+                 Text="Version: $(Version)" />
     </Target>
 
     <!-- ================ Common Package References for All projects ================ -->
@@ -84,12 +90,12 @@
         <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" />
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection"/>
-        <PackageReference Include="Microsoft.Extensions.Hosting"/>
-        <PackageReference Include="Microsoft.Extensions.Logging"/>
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" />
+        <PackageReference Include="Microsoft.Extensions.Logging" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
         <PackageReference Include="Microsoft.Extensions.Logging.Configuration" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Console"/>
+        <PackageReference Include="Microsoft.Extensions.Logging.Console" />
         <PackageReference Include="Microsoft.SourceLink.GitHub">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
@@ -272,5 +278,8 @@
     </PropertyGroup>
 
     <!-- Add project-specific properties and packages here -->
+    <ItemGroup>
+        <PackageReference Include="Newtonsoft.Json" />
+    </ItemGroup>
 
 </Project>
