@@ -164,39 +164,64 @@ public readonly partial struct SemVer :
     /// Returns a new <see cref="SemVer"/> instance with the major version number incremented by one and the minor and patch
     /// version numbers reset to zero.
     /// </summary>
+    /// <param name="preRelease">
+    /// The pre-release version to apply to the bumped version. If this parameter is null or empty, the resulting
+    /// <see cref="SemVer"/> instance will have an empty pre-release component.
+    /// </param>
+    /// <param name="buildMetadata">
+    /// The build metadata to apply to the bumped version. If this parameter is null or empty, the resulting
+    /// <see cref="SemVer"/> instance will have an empty build metadata component.
+    /// </param>
     /// <returns>
     /// A new <see cref="SemVer"/> instance with the major version number incremented by one and the minor and patch version
-    /// numbers reset to zero.
+    /// numbers reset to zero, using the specified pre-release and build metadata components.
     /// </returns>
-    public SemVer BumpMajor()
+    public SemVer BumpMajor(string? preRelease = null, string? buildMetadata = null)
     {
-        return new SemVer(checked(Major + 1), 0, 0);
+        return new SemVer(checked(Major + 1), 0, 0, preRelease, buildMetadata);
     }
 
     /// <summary>
     /// Returns a new <see cref="SemVer"/> instance with the minor version number incremented by one and the patch version number
     /// reset to zero, while the major version number remains unchanged.
     /// </summary>
+    /// <param name="preRelease">
+    /// The pre-release version to apply to the bumped version. If this parameter is null or empty, the resulting
+    /// <see cref="SemVer"/> instance will have an empty pre-release component.
+    /// </param>
+    /// <param name="buildMetadata">
+    /// The build metadata to apply to the bumped version. If this parameter is null or empty, the resulting
+    /// <see cref="SemVer"/> instance will have an empty build metadata component.
+    /// </param>
     /// <returns>
     /// A new <see cref="SemVer"/> instance with the minor version number incremented by one and the patch version number reset
-    /// to zero, while the major version number remains unchanged.
+    /// to zero, while the major version number remains unchanged, using the specified pre-release and build metadata
+    /// components.
     /// </returns>
-    public SemVer BumpMinor()
+    public SemVer BumpMinor(string? preRelease = null, string? buildMetadata = null)
     {
-        return new SemVer(Major, checked(Minor + 1), 0);
+        return new SemVer(Major, checked(Minor + 1), 0, preRelease, buildMetadata);
     }
 
     /// <summary>
     /// Returns a new <see cref="SemVer"/> instance with the patch version number incremented by one, while the major and minor
     /// version numbers remain unchanged.
     /// </summary>
+    /// <param name="preRelease">
+    /// The pre-release version to apply to the bumped version. If this parameter is null or empty, the resulting
+    /// <see cref="SemVer"/> instance will have an empty pre-release component.
+    /// </param>
+    /// <param name="buildMetadata">
+    /// The build metadata to apply to the bumped version. If this parameter is null or empty, the resulting
+    /// <see cref="SemVer"/> instance will have an empty build metadata component.
+    /// </param>
     /// <returns>
     /// A new <see cref="SemVer"/> instance with the patch version number incremented by one, while the major and minor version
-    /// numbers remain unchanged.
+    /// numbers remain unchanged, using the specified pre-release and build metadata components.
     /// </returns>
-    public SemVer BumpPatch()
+    public SemVer BumpPatch(string? preRelease = null, string? buildMetadata = null)
     {
-        return new SemVer(Major, Minor, checked(Patch + 1));
+        return new SemVer(Major, Minor, checked(Patch + 1), preRelease, buildMetadata);
     }
 
     /// <summary>

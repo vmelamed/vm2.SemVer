@@ -8,5 +8,3 @@ global using System.Text;
 global using vm2.TestUtilities;
 
 global using static vm2.TestUtilities.TestUtilities;
-
-global using static vm2.SemVer.SemVerApi;
