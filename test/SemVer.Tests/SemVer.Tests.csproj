@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <RootNamespace>vm2.SemVer.Tests</RootNamespace>
+        <RootNamespace>vm2SemVer.Tests</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
