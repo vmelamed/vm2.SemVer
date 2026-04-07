@@ -1025,7 +1025,7 @@ public class SemVerTests
     }
 
     [Fact]
-    public void ToString_WhenLengthExceedsStackallocThreshold_ShouldUseHeapAllocation()
+    public void ToString_WhenLengthExceeds1024StackallocThreshold_ShouldUseHeapAllocation()
     {
         var version = MakeLargeSemVer();
 
@@ -1037,27 +1037,31 @@ public class SemVerTests
     }
 
     [Fact]
-    public void TryFormatChar_WhenLengthExceedsThreshold_ShouldSucceed()
+    public void TryFormatChar_WhenLengthExceeds1024Threshold_ShouldSucceed()
     {
         var version = MakeLargeSemVer();
+        var expected = version.ToString();
         var destination = new char[version.Length];
 
         var ok = version.TryFormat(destination, out var charsWritten);
 
         ok.Should().BeTrue();
         charsWritten.Should().Be(version.Length);
+        new string(destination, 0, charsWritten).Should().Be(expected);
     }
 
     [Fact]
     public void TryFormatUtf8_WhenLengthExceedsThreshold_ShouldSucceed()
     {
         var version = MakeLargeSemVer();
+        var expected = version.ToString();
         var destination = new byte[version.Length * 2];
 
         var ok = version.TryFormat(destination, out var bytesWritten);
 
         ok.Should().BeTrue();
         bytesWritten.Should().Be(version.Length);
+        System.Text.Encoding.UTF8.GetString(destination[..bytesWritten]).Should().Be(expected);
     }
 
     [Fact]
