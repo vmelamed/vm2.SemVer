@@ -4,6 +4,7 @@
 global using System.Diagnostics.CodeAnalysis;
 global using System.Runtime.Serialization;
 global using System.Text;
+global using System.Text.Json;
 
 global using vm2.TestUtilities;
 

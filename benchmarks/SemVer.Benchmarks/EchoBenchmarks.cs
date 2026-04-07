@@ -13,11 +13,11 @@ namespace vm2.SemVer.Benchmarks;
 [Orderer(SummaryOrderPolicy.FastestToSlowest, MethodOrderPolicy.Declared)]
 public class EchoBenchmarks
 {
-    private string _value = "payload";
+    // private string _value = "payload";
 
-    [Benchmark]
-    public string Echo_Value() => SemVerApi.Echo(_value, "fallback");
+    // [Benchmark]
+    // public string Echo_Value() => SemVerApi.Echo(_value, "fallback");
 
-    [Benchmark]
-    public string Echo_Fallback() => SemVerApi.Echo(null, "fallback");
+    // [Benchmark]
+    // public string Echo_Fallback() => SemVerApi.Echo(null, "fallback");
 }

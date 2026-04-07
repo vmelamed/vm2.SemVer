@@ -1,7 +1,9 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2025-2026 Val Melamed
+
 namespace vm2;
 
-using System.Diagnostics.CodeAnalysis;
-using System.Numerics;
+using System.ComponentModel.DataAnnotations;
 
 /// <summary>
 /// Represents a semantic version as defined by the SemVer 2.0.0 specification.
@@ -11,13 +13,15 @@ using System.Numerics;
 public readonly partial struct SemVer :
     IEquatable<SemVer>,
     IComparable<SemVer>,
-    IParsable<SemVer>,
     ISpanParsable<SemVer>,
+    IUtf8SpanParsable<SemVer>,
     IFormattable,
     ISpanFormattable,
+    IUtf8SpanFormattable,
     IEqualityOperators<SemVer, SemVer, bool>,
     IComparisonOperators<SemVer, SemVer, bool>
 {
+    #region Properties
     /// <summary>
     /// The major version number, which is incremented when there are incompatible API changes.
     /// </summary>
@@ -37,13 +41,13 @@ public readonly partial struct SemVer :
     /// The pre-release version, which is an optional identifier that indicates a version is unstable and may not satisfy the
     /// intended compatibility requirements as denoted by its associated normal version.
     /// </summary>
-    public string PreRelease { get; } = "";
+    public string PreRelease { get => field ?? ""; init; } = "";
 
     /// <summary>
     /// The build metadata, which is an optional identifier that provides additional build information about a version. Build
     /// metadata does not affect version precedence and is ignored when determining version compatibility.
     /// </summary>
-    public string BuildMetadata { get; } = "";
+    public string BuildMetadata { get => field ?? ""; init; } = "";
 
     /// <summary>
     /// Indicates whether the semantic version is a pre-release version.
@@ -65,6 +69,30 @@ public readonly partial struct SemVer :
     public SemVer Core => new(Major, Minor, Patch);
 
     /// <summary>
+    /// The length of the string representation of the semantic version, which is calculated based on the lengths of the major,
+    /// minor, patch, pre-release, and build metadata components, as well as the separators used in the string representation
+    /// (e.g. ".", "-", "+"). The minimum length is 5, corresponding to "0.0.0".
+    /// </summary>
+    public int Length { get => field < 5 ? 5 : field; } = 5;
+    #endregion
+
+    #region Constructors
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SemVer"/> struct with default values for all components (major, minor, patch, pre-release, and build metadata).
+    /// This constructor is primarily used for deserialization purposes, allowing the creation of a <see cref="SemVer"/> instance with default values that can be populated during the deserialization process.
+    /// The resulting <see cref="SemVer"/> instance will have a major version of 0, a minor version of 0, a patch version of 0, an empty pre-release version, and an empty build metadata.
+    /// </summary>
+    public SemVer()
+    {
+        Major         = 0;
+        Minor         = 0;
+        Patch         = 0;
+        PreRelease    = "";
+        BuildMetadata = "";
+        Length        = CalculateLength();
+    }
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="SemVer"/> struct with the specified major, minor, patch, pre-release, and
     /// build metadata components.
     /// </summary>
@@ -76,25 +104,54 @@ public readonly partial struct SemVer :
     public SemVer(int major, int minor, int patch, string? preRelease = null, string? buildMetadata = null)
     {
         if (major < 0)
-            throw new ArgumentOutOfRangeException(nameof(major), "Major version must be a non-negative integer.");
+            throw new ArgumentOutOfRangeException(nameof(major), "SemVer core components must be non-negative integers.");
         if (minor < 0)
-            throw new ArgumentOutOfRangeException(nameof(minor), "Minor version must be a non-negative integer.");
+            throw new ArgumentOutOfRangeException(nameof(minor), "SemVer core components must be non-negative integers.");
         if (patch < 0)
-            throw new ArgumentOutOfRangeException(nameof(patch), "Patch version must be a non-negative integer.");
+            throw new ArgumentOutOfRangeException(nameof(patch), "SemVer core components must be non-negative integers.");
 
         preRelease    = string.IsNullOrWhiteSpace(preRelease)    ? "" : preRelease.Trim();
         buildMetadata = string.IsNullOrWhiteSpace(buildMetadata) ? "" : buildMetadata.Trim();
 
         if (preRelease is not "" && !PreReleaseIdentifier().IsMatch(preRelease))
-            throw new ArgumentException("Pre-release version must consist of dot-separated identifiers containing only alphanumeric characters and hyphens, and must not be empty.", nameof(preRelease));
+            throw new ArgumentException("Pre-release version must consist of dot-separated identifiers containing only alphanumeric characters and hyphens.", nameof(preRelease));
         if (buildMetadata is not "" && !BuildIdentifier().IsMatch(buildMetadata))
-            throw new ArgumentException("Build metadata must consist of dot-separated identifiers containing only alphanumeric characters and hyphens, and must not be empty.", nameof(buildMetadata));
+            throw new ArgumentException("Build metadata must consist of dot-separated identifiers containing only alphanumeric characters and hyphens.", nameof(buildMetadata));
 
         Major         = major;
         Minor         = minor;
         Patch         = patch;
         PreRelease    = preRelease;
         BuildMetadata = buildMetadata;
+        Length        = CalculateLength();
+    }
+
+    private int CalculateLength()
+    {
+        static int LengthOfInt(int value)
+            => value switch
+            {
+                < 10 => 1,
+                < 100 => 2,
+                < 1000 => 3,
+                < 10000 => 4,
+                < 100000 => 5,
+                < 1000000 => 6,
+                < 10000000 => 7,
+                < 100000000 => 8,
+                < 1000000000 => 9,
+                _ => 10,
+            };
+
+        var length = 0;
+
+        length += LengthOfInt(Major) + 1;
+        length += LengthOfInt(Minor) + 1;
+        length += LengthOfInt(Patch);
+
+        return length +
+               (PreRelease.Length    > 0 ? 1 + PreRelease.Length    : 0) +
+               (BuildMetadata.Length > 0 ? 1 + BuildMetadata.Length : 0);
     }
 
     /// <summary>
@@ -113,7 +170,9 @@ public readonly partial struct SemVer :
         Patch         = semVer.Patch;
         PreRelease    = semVer.PreRelease;
         BuildMetadata = semVer.BuildMetadata;
+        Length        = semVer.Length;
     }
+    #endregion
 
     /// <summary>
     /// Returns a string representation of the semantic version, following the format defined by the SemVer 2.0.0 specification.
@@ -121,8 +180,7 @@ public readonly partial struct SemVer :
     /// <returns>
     /// A string representation of the semantic version.
     /// </returns>
-    public override string ToString()
-        => $"{Major}.{Minor}.{Patch}{(PreRelease.Length == 0 ? "" : $"-{PreRelease}") }{ (BuildMetadata.Length == 0 ? "" : $"+{BuildMetadata}")}";
+    public override string ToString() => ToString(null, null);
 
     #region IEquatable<SemVer>
     /// <summary>
@@ -152,7 +210,6 @@ public readonly partial struct SemVer :
 
     /// <summary>
     /// Returns a hash code for the current semantic version instance. The hash code is computed based on the major, minor, patch,
-    /// and pre-release components of the semantic version, ensuring that equal semantic version instances
     /// produce the same hash code, while different semantic version instances are likely to produce different hash codes.
     /// </summary>
     /// <returns>
@@ -179,9 +236,7 @@ public readonly partial struct SemVer :
     /// numbers reset to zero, using the specified pre-release and build metadata components.
     /// </returns>
     public SemVer BumpMajor(string? preRelease = null, string? buildMetadata = null)
-    {
-        return new SemVer(checked(Major + 1), 0, 0, preRelease, buildMetadata);
-    }
+        => new (checked(Major + 1), 0, 0, preRelease, buildMetadata);
 
     /// <summary>
     /// Returns a new <see cref="SemVer"/> instance with the minor version number incremented by one and the patch version number
@@ -201,9 +256,7 @@ public readonly partial struct SemVer :
     /// components.
     /// </returns>
     public SemVer BumpMinor(string? preRelease = null, string? buildMetadata = null)
-    {
-        return new SemVer(Major, checked(Minor + 1), 0, preRelease, buildMetadata);
-    }
+        => new (Major, checked(Minor + 1), 0, preRelease, buildMetadata);
 
     /// <summary>
     /// Returns a new <see cref="SemVer"/> instance with the patch version number incremented by one, while the major and minor
@@ -222,9 +275,7 @@ public readonly partial struct SemVer :
     /// numbers remain unchanged, using the specified pre-release and build metadata components.
     /// </returns>
     public SemVer BumpPatch(string? preRelease = null, string? buildMetadata = null)
-    {
-        return new SemVer(Major, Minor, checked(Patch + 1), preRelease, buildMetadata);
-    }
+        => new (Major, Minor, checked(Patch + 1), preRelease, buildMetadata);
 
     /// <summary>
     /// Returns a new <see cref="SemVer"/> instance with the specified pre-release version, while the major, minor, and patch
@@ -285,9 +336,7 @@ public readonly partial struct SemVer :
     /// but with empty pre-release and build metadata components, indicating that it is a stable release version.
     /// </returns>
     public SemVer Release()
-    {
-        return new SemVer(Major, Minor, Patch);
-    }
+        => new (Major, Minor, Patch);
     #endregion
 
     #region IComparable<SemVer>
@@ -334,7 +383,6 @@ public readonly partial struct SemVer :
         // both have pre-release, compare them
         return CompareSpans(PreRelease, other.PreRelease);
     }
-    #endregion
 
     private static int CompareSpans(
         ReadOnlySpan<char> str1,
@@ -381,6 +429,7 @@ public readonly partial struct SemVer :
         }
         while (true);
     }
+    #endregion
 
     #region IParsable<SemVer>
     /// <summary>
@@ -511,6 +560,54 @@ public readonly partial struct SemVer :
     }
     #endregion
 
+    #region IUtf8SpanParsable<SemVer>
+    /// <summary>
+    /// Parses a span of UTF-8 encoded bytes representing a semantic version and returns the corresponding <see cref="SemVer"/>
+    /// instance. The input span must follow the format defined by the SemVer 2.0.0 specification. If the input span is not in a
+    /// valid semantic version format, a <see cref="FormatException"/> is thrown.
+    /// </summary>
+    public static SemVer Parse(ReadOnlySpan<byte> utf8Text, IFormatProvider? provider)
+    {
+        if (TryParse(utf8Text, provider, out var result))
+            return result;
+
+        throw new FormatException($"Input string '{Encoding.UTF8.GetString(utf8Text)}' is not in a valid semantic version format. See the SemVer 2.0.0 specification for more details: https://semver.org/.");
+    }
+
+    /// <summary>
+    /// Tries to parse a span of UTF-8 encoded bytes representing a semantic version and returns a boolean indicating whether the parsing was successful. If the input span is in a valid semantic version format, the method returns <c>true</c> and outputs the corresponding <see cref="SemVer"/> instance; otherwise, it returns <c>false</c> and outputs the default value.
+    /// </summary>
+    public static bool TryParse(
+        ReadOnlySpan<byte> utf8Text,
+        IFormatProvider? provider,
+        [MaybeNullWhen(false)] out SemVer result)
+    {
+        result = default;
+
+        if (utf8Text.IsEmpty)
+            return false;
+
+        Span<char> chars = utf8Text.Length < 1024 ? stackalloc char[utf8Text.Length] : new char[utf8Text.Length];
+
+        if (!Encoding.UTF8.TryGetChars(utf8Text, chars, out var charsUsed))
+            return false;
+
+        var match = SemVer20().Match(chars[..charsUsed].ToString());
+
+        if (!match.Success)
+            return false;
+
+        var major         = int.Parse(match.Groups[MajorGr].ValueSpan);
+        var minor         = int.Parse(match.Groups[MinorGr].ValueSpan);
+        var patch         = int.Parse(match.Groups[PatchGr].ValueSpan);
+        var preRelease    = match.Groups[PreReleaseGr].Success ? match.Groups[PreReleaseGr].Value : "";
+        var buildMetadata = match.Groups[BuildGr].Success      ? match.Groups[BuildGr].Value      : "";
+
+        result = new SemVer(major, minor, patch, preRelease, buildMetadata);
+        return true;
+    }
+    #endregion
+
     #region IFormattable
     /// <summary>
     /// Returns a string representation of the semantic version, following the format defined by the SemVer 2.0.0 specification.
@@ -529,12 +626,16 @@ public readonly partial struct SemVer :
     /// A string representation of the semantic version.
     /// </returns>
     /// <exception cref="FormatException"></exception>
-    public string ToString(string? format, IFormatProvider? _ = null)
+    public string ToString(string? format, IFormatProvider? _)
     {
-        if (string.IsNullOrEmpty(format))
-            return ToString();
+        if (!string.IsNullOrEmpty(format))
+            throw new FormatException($"The format string '{format}' is not supported. The only supported format is the default format, which can be specified by passing null or an empty string as the format parameter.");
 
-        throw new FormatException($"The format string '{format}' is not supported. The only supported format is the default format, which can be specified by passing null or an empty string as the format parameter.");
+        Span<char> buffer = Length < 1024 ? stackalloc char[Length] : new char[Length];
+        var written = 0;
+
+        TryFormat(buffer, out written);
+        return new(buffer[..written]);
     }
     #endregion
 
@@ -566,18 +667,103 @@ public readonly partial struct SemVer :
     public bool TryFormat(
         Span<char> destination,
         out int charsWritten,
-        ReadOnlySpan<char> format,
+        ReadOnlySpan<char> format = "",
         IFormatProvider? _ = null)
     {
-        var str = ToString();
-        if (str.Length > destination.Length)
+        charsWritten = 0;
+
+        if (!format.IsEmpty)
+            throw new FormatException($"The format string '{format}' is not supported. The only supported format is the default format, which can be specified by passing null or an empty string as the format parameter.");
+
+        if (destination.Length < Length)
+            return false; // Not enough space in the destination span or unsupported format string
+
+        var pos = 0;
+
+        Major.TryFormat(destination[pos..], out var written);
+        pos += written;
+        destination[pos++] = '.';
+
+        Minor.TryFormat(destination[pos..], out written);
+        pos += written;
+        destination[pos++] = '.';
+
+        Patch.TryFormat(destination[pos..], out written);
+        pos += written;
+
+        if (PreRelease.Length > 0)
         {
-            charsWritten = 0;
-            return false; // Not enough space in the destination span
+            destination[pos++] = '-';
+            PreRelease.AsSpan().CopyTo(destination[pos..]);
+            pos += PreRelease.Length;
         }
 
-        str.AsSpan().CopyTo(destination);
-        charsWritten = str.Length;
+        if (BuildMetadata.Length > 0)
+        {
+            destination[pos++] = '+';
+            BuildMetadata.AsSpan().CopyTo(destination[pos..]);
+            pos += BuildMetadata.Length;
+        }
+
+        charsWritten = pos;
+        return true;
+    }
+    #endregion
+
+    #region IUtf8SpanFormattable
+    /// <summary>
+    /// Formats the current semantic version instance into the provided destination span of UTF-8 encoded bytes following the
+    /// format defined by the SemVer 2.0.0 specification. The <paramref name="format"/> parameter is not used and can be null or
+    /// an empty string; otherwise, a <see cref="FormatException"/> is thrown. The <paramref name="provider"/> parameter is also not
+    /// used and can be set to <c>null</c>.
+    /// </summary>
+    public bool TryFormat(
+        Span<byte> utf8Destination,
+        out int bytesWritten,
+        ReadOnlySpan<char> format = "",
+        IFormatProvider? provider = null)
+    {
+        bytesWritten = 0;
+
+        if (!format.IsEmpty)
+            throw new FormatException($"The format string '{format}' is not supported. The only supported format is the default format, which can be specified by passing null or an empty string as the format parameter.");
+
+        if (utf8Destination.Length < Length)
+            return false; // Not enough space in the destination span or unsupported format string
+
+        var pos = 0;
+
+        if (!Major.TryFormat(utf8Destination[pos..], out var written))
+            return false;
+        pos += written;
+        utf8Destination[pos++] = (byte)'.';
+
+        if (!Minor.TryFormat(utf8Destination[pos..], out written))
+            return false;
+        pos += written;
+        utf8Destination[pos++] = (byte)'.';
+
+        if (!Patch.TryFormat(utf8Destination[pos..], out written))
+            return false;
+        pos += written;
+
+        if (PreRelease.Length > 0)
+        {
+            utf8Destination[pos++] = (byte)'-';
+            if (!Encoding.UTF8.TryGetBytes(PreRelease.AsSpan(), utf8Destination[pos..], out written))
+                return false;
+            pos += written;
+        }
+
+        if (BuildMetadata.Length > 0)
+        {
+            utf8Destination[pos++] = (byte)'+';
+            if (!Encoding.UTF8.TryGetBytes(BuildMetadata.AsSpan(), utf8Destination[pos..], out written))
+                return false;
+            pos += written;
+        }
+
+        bytesWritten = pos;
         return true;
     }
     #endregion
