@@ -1,7 +1,5 @@
 namespace vm2;
 
-using System.Text.RegularExpressions;
-
 public readonly partial struct SemVer
 {
     // Abbreviations and conventions used for building regular expressions:

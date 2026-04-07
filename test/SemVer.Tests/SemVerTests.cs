@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2025-2026 Val Melamed
 
-namespace vm2.Tests.SemVer;
+namespace vm2.SemVerTests;
 
 #pragma warning disable IL2026 // Trim analyzer: Newtonsoft.Json and System.Text.Json reflection-based APIs are safe in test code
 
@@ -95,7 +95,7 @@ public class SemVerTests
         string preRelease,
         string buildMetadata)
     {
-        var parsed = vm2.SemVer.Parse(input);
+        var parsed = SemVer.Parse(input);
 
         parsed.Major.Should().Be(major);
         parsed.Minor.Should().Be(minor);
@@ -114,17 +114,17 @@ public class SemVerTests
         string preRelease,
         string buildMetadata)
     {
-        var ok = vm2.SemVer.TryParse(input, null, out var parsed);
+        var ok = SemVer.TryParse(input, null, out var parsed);
 
         ok.Should().BeTrue();
-        parsed.Should().Be(new vm2.SemVer(major, minor, patch, preRelease, buildMetadata));
+        parsed.Should().Be(new SemVer(major, minor, patch, preRelease, buildMetadata));
     }
 
     [Theory]
     [MemberData(nameof(InvalidSemVerCases))]
     public void TryParse_WhenInputIsInvalid_ShouldReturnFalse(string input)
     {
-        var ok = vm2.SemVer.TryParse(input, null, out var parsed);
+        var ok = SemVer.TryParse(input, null, out var parsed);
 
         ok.Should().BeFalse();
         parsed.Should().Be(default);
@@ -134,7 +134,7 @@ public class SemVerTests
     [MemberData(nameof(InvalidSemVerCases))]
     public void Parse_WhenInputIsInvalid_ShouldThrowFormatException(string input)
     {
-        Action act = () => vm2.SemVer.Parse(input, null);
+        Action act = () => SemVer.Parse(input, null);
 
         act.Should().Throw<FormatException>();
     }
@@ -143,7 +143,7 @@ public class SemVerTests
     [MemberData(nameof(InvalidSemVerCases))]
     public void CtorString_WhenInputIsInvalid_ShouldThrowFormatException(string input)
     {
-        Action act = () => _ = new vm2.SemVer(input);
+        Action act = () => _ = new SemVer(input);
 
         act.Should().Throw<FormatException>();
     }
@@ -151,7 +151,7 @@ public class SemVerTests
     [Fact]
     public void TryParse_WhenInputIsNull_ShouldReturnFalse()
     {
-        var ok = vm2.SemVer.TryParse((string?)null, null, out var parsed);
+        var ok = SemVer.TryParse((string?)null, null, out var parsed);
 
         ok.Should().BeFalse();
         parsed.Should().Be(default);
@@ -160,7 +160,7 @@ public class SemVerTests
     [Fact]
     public void Parse_WhenInputIsNull_ShouldThrowFormatException()
     {
-        Action act = () => vm2.SemVer.Parse((string)null!);
+        Action act = () => SemVer.Parse((string)null!);
 
         act.Should().Throw<FormatException>();
     }
@@ -168,12 +168,12 @@ public class SemVerTests
     [Fact]
     public void Properties_ShouldReflectQualifierState_AndCoreShouldDropQualifiers()
     {
-        var preRelease = new vm2.SemVer(1, 2, 3, "rc.1", "build.7");
-        var stable = new vm2.SemVer(1, 2, 3);
+        var preRelease = new SemVer(1, 2, 3, "rc.1", "build.7");
+        var stable = new SemVer(1, 2, 3);
 
         preRelease.IsPreRelease.Should().BeTrue();
         preRelease.IsStable.Should().BeFalse();
-        preRelease.Core.Should().Be(new vm2.SemVer(1, 2, 3));
+        preRelease.Core.Should().Be(new SemVer(1, 2, 3));
 
         stable.IsPreRelease.Should().BeFalse();
         stable.IsStable.Should().BeTrue();
@@ -183,7 +183,7 @@ public class SemVerTests
     [MemberData(nameof(CoreCtorArgumentCases))]
     public void Ctor_WhenCoreVersionIsNegative_ShouldThrowArgumentOutOfRangeException(int major, int minor, int patch, string paramName)
     {
-        Action act = () => _ = new vm2.SemVer(major, minor, patch);
+        Action act = () => _ = new SemVer(major, minor, patch);
 
         act.Should().Throw<ArgumentOutOfRangeException>()
             .Which.ParamName.Should().Be(paramName);
@@ -192,7 +192,7 @@ public class SemVerTests
     [Fact]
     public void Ctor_WhenPreReleaseIsInvalid_ShouldThrowArgumentException()
     {
-        Action act = () => _ = new vm2.SemVer(1, 2, 3, "01");
+        Action act = () => _ = new SemVer(1, 2, 3, "01");
 
         act.Should().Throw<ArgumentException>()
             .Which.ParamName.Should().Be("preRelease");
@@ -201,7 +201,7 @@ public class SemVerTests
     [Fact]
     public void Ctor_WhenBuildMetadataIsInvalid_ShouldThrowArgumentException()
     {
-        Action act = () => _ = new vm2.SemVer(1, 2, 3, buildMetadata: "build..7");
+        Action act = () => _ = new SemVer(1, 2, 3, buildMetadata: "build..7");
 
         act.Should().Throw<ArgumentException>()
             .Which.ParamName.Should().Be("buildMetadata");
@@ -221,17 +221,17 @@ public class SemVerTests
     [MemberData(nameof(ValidCtorSemVerCases))]
     public void CtorString_WhenInputIsValid_ShouldCopyParsedComponents(string input, int major, int minor, int patch, string preRelease, string buildMetadata)
     {
-        var version = new vm2.SemVer(input);
+        var version = new SemVer(input);
 
-        version.Should().Be(new vm2.SemVer(major, minor, patch, preRelease, buildMetadata));
+        version.Should().Be(new SemVer(major, minor, patch, preRelease, buildMetadata));
     }
 
     [Theory]
     [MemberData(nameof(CompareCases))]
     public void CompareTo_ShouldMatchSemVerPrecedence(string left, string right, int sign)
     {
-        var lhs = vm2.SemVer.Parse(left);
-        var rhs = vm2.SemVer.Parse(right);
+        var lhs = SemVer.Parse(left);
+        var rhs = SemVer.Parse(right);
 
         Math.Sign(lhs.CompareTo(rhs)).Should().Be(sign);
         Math.Sign(rhs.CompareTo(lhs)).Should().Be(-sign);
@@ -240,8 +240,8 @@ public class SemVerTests
     [Fact]
     public void CompareTo_WhenOnlyMinorDiffers_ShouldUseMinorComponent()
     {
-        var lhs = vm2.SemVer.Parse("1.2.0");
-        var rhs = vm2.SemVer.Parse("1.3.0");
+        var lhs = SemVer.Parse("1.2.0");
+        var rhs = SemVer.Parse("1.3.0");
 
         lhs.CompareTo(rhs).Should().BeNegative();
         rhs.CompareTo(lhs).Should().BePositive();
@@ -250,8 +250,8 @@ public class SemVerTests
     [Fact]
     public void CompareTo_WhenOnlyPatchDiffers_ShouldUsePatchComponent()
     {
-        var lhs = vm2.SemVer.Parse("1.2.3");
-        var rhs = vm2.SemVer.Parse("1.2.4");
+        var lhs = SemVer.Parse("1.2.3");
+        var rhs = SemVer.Parse("1.2.4");
 
         lhs.CompareTo(rhs).Should().BeNegative();
         rhs.CompareTo(lhs).Should().BePositive();
@@ -260,8 +260,8 @@ public class SemVerTests
     [Fact]
     public void CompareTo_WhenPreReleaseIdentifiersMatch_ShouldReturnZero()
     {
-        var lhs = vm2.SemVer.Parse("1.2.3-alpha.1");
-        var rhs = vm2.SemVer.Parse("1.2.3-alpha.1+build.9");
+        var lhs = SemVer.Parse("1.2.3-alpha.1");
+        var rhs = SemVer.Parse("1.2.3-alpha.1+build.9");
 
         lhs.CompareTo(rhs).Should().Be(0);
     }
@@ -269,7 +269,7 @@ public class SemVerTests
     [Fact]
     public void EqualsObject_WhenObjectIsDifferentType_ShouldReturnFalse()
     {
-        var version = vm2.SemVer.Parse("1.2.3");
+        var version = SemVer.Parse("1.2.3");
 
         version.Equals("1.2.3").Should().BeFalse();
     }
@@ -277,8 +277,8 @@ public class SemVerTests
     [Fact]
     public void Equals_WhenOnlyBuildMetadataDiffers_ShouldBeEqual()
     {
-        var a = vm2.SemVer.Parse("1.2.3-alpha+build.1");
-        var b = vm2.SemVer.Parse("1.2.3-alpha+build.2");
+        var a = SemVer.Parse("1.2.3-alpha+build.1");
+        var b = SemVer.Parse("1.2.3-alpha+build.2");
 
         a.Should().Be(b);
         a.GetHashCode().Should().Be(b.GetHashCode());
@@ -287,8 +287,8 @@ public class SemVerTests
     [Fact]
     public void Equals_WhenPreReleaseCaseDiffers_ShouldNotBeEqual()
     {
-        var a = vm2.SemVer.Parse("1.2.3-alpha");
-        var b = vm2.SemVer.Parse("1.2.3-Alpha");
+        var a = SemVer.Parse("1.2.3-alpha");
+        var b = SemVer.Parse("1.2.3-Alpha");
 
         a.Should().NotBe(b);
     }
@@ -297,7 +297,7 @@ public class SemVerTests
     [MemberData(nameof(BumpCases))]
     public void BumpMethods_ShouldReturnExpectedVersion(string bump, string source, string expected)
     {
-        var version = vm2.SemVer.Parse(source);
+        var version = SemVer.Parse(source);
 
         var next = bump switch
         {
@@ -319,7 +319,7 @@ public class SemVerTests
         string buildMetadata,
         string expected)
     {
-        var version = vm2.SemVer.Parse(source);
+        var version = SemVer.Parse(source);
 
         var next = bump switch
         {
@@ -335,7 +335,7 @@ public class SemVerTests
     [Fact]
     public void WithPreRelease_ShouldPreserveBuildMetadata()
     {
-        var version = vm2.SemVer.Parse("1.2.3+build.7");
+        var version = SemVer.Parse("1.2.3+build.7");
 
         var changed = version.WithPreRelease("rc.1");
 
@@ -345,7 +345,7 @@ public class SemVerTests
     [Fact]
     public void WithPreRelease_WhenValueIsWhitespace_ShouldClearPreRelease()
     {
-        var version = vm2.SemVer.Parse("1.2.3-rc.1+build.7");
+        var version = SemVer.Parse("1.2.3-rc.1+build.7");
 
         var changed = version.WithPreRelease("   ");
 
@@ -355,7 +355,7 @@ public class SemVerTests
     [Fact]
     public void WithPreRelease_WhenValueIsInvalid_ShouldThrowArgumentException()
     {
-        var version = vm2.SemVer.Parse("1.2.3+build.7");
+        var version = SemVer.Parse("1.2.3+build.7");
 
         Action act = () => _ = version.WithPreRelease("01");
 
@@ -366,7 +366,7 @@ public class SemVerTests
     [Fact]
     public void WithBuildMetadata_ShouldPreservePreRelease()
     {
-        var version = vm2.SemVer.Parse("1.2.3-rc.1");
+        var version = SemVer.Parse("1.2.3-rc.1");
 
         var changed = version.WithBuildMetadata("build.7");
 
@@ -376,7 +376,7 @@ public class SemVerTests
     [Fact]
     public void WithBuildMetadata_WhenValueIsWhitespace_ShouldClearBuildMetadata()
     {
-        var version = vm2.SemVer.Parse("1.2.3-rc.1+build.7");
+        var version = SemVer.Parse("1.2.3-rc.1+build.7");
 
         var changed = version.WithBuildMetadata("   ");
 
@@ -386,7 +386,7 @@ public class SemVerTests
     [Fact]
     public void WithBuildMetadata_WhenValueIsInvalid_ShouldThrowArgumentException()
     {
-        var version = vm2.SemVer.Parse("1.2.3-rc.1");
+        var version = SemVer.Parse("1.2.3-rc.1");
 
         Action act = () => _ = version.WithBuildMetadata("build..7");
 
@@ -397,7 +397,7 @@ public class SemVerTests
     [Fact]
     public void Release_ShouldClearPreReleaseAndBuildMetadata()
     {
-        var version = vm2.SemVer.Parse("1.2.3-rc.1+build.7");
+        var version = SemVer.Parse("1.2.3-rc.1+build.7");
 
         var released = version.Release();
 
@@ -407,7 +407,7 @@ public class SemVerTests
     [Fact]
     public void TryFormat_WhenDestinationIsTooSmall_ShouldReturnFalse()
     {
-        var version = vm2.SemVer.Parse("1.2.3-rc.1+build.7");
+        var version = SemVer.Parse("1.2.3-rc.1+build.7");
         Span<char> destination = stackalloc char[4];
 
         var ok = version.TryFormat(destination, out var charsWritten, default, null);
@@ -419,7 +419,7 @@ public class SemVerTests
     [Fact]
     public void TryFormat_WhenDestinationHasEnoughRoom_ShouldWriteFullValue()
     {
-        var version = vm2.SemVer.Parse("1.2.3-rc.1+build.7");
+        var version = SemVer.Parse("1.2.3-rc.1+build.7");
         Span<char> destination = stackalloc char[64];
 
         var ok = version.TryFormat(destination, out var charsWritten, default, null);
@@ -432,15 +432,15 @@ public class SemVerTests
     [Fact]
     public void ParseSpan_WhenInputIsValid_ShouldReturnExpectedVersion()
     {
-        var parsed = vm2.SemVer.Parse(" 1.2.3-rc.1+build.7 ".AsSpan(), null);
+        var parsed = SemVer.Parse(" 1.2.3-rc.1+build.7 ".AsSpan(), null);
 
-        parsed.Should().Be(new vm2.SemVer(1, 2, 3, "rc.1", "build.7"));
+        parsed.Should().Be(new SemVer(1, 2, 3, "rc.1", "build.7"));
     }
 
     [Fact]
     public void ParseSpan_WhenInputIsInvalid_ShouldThrowFormatException()
     {
-        Action act = () => vm2.SemVer.Parse("not-semver".AsSpan(), null);
+        Action act = () => SemVer.Parse("not-semver".AsSpan(), null);
 
         act.Should().Throw<FormatException>();
     }
@@ -448,16 +448,16 @@ public class SemVerTests
     [Fact]
     public void TryParseSpan_WhenInputIsValid_ShouldSucceed()
     {
-        var ok = vm2.SemVer.TryParse(" 1.2.3-alpha+build.7 ".AsSpan(), null, out var parsed);
+        var ok = SemVer.TryParse(" 1.2.3-alpha+build.7 ".AsSpan(), null, out var parsed);
 
         ok.Should().BeTrue();
-        parsed.Should().Be(new vm2.SemVer(1, 2, 3, "alpha", "build.7"));
+        parsed.Should().Be(new SemVer(1, 2, 3, "alpha", "build.7"));
     }
 
     [Fact]
     public void TryParseSpan_WhenInputIsEmpty_ShouldReturnFalse()
     {
-        var ok = vm2.SemVer.TryParse(ReadOnlySpan<char>.Empty, null, out var parsed);
+        var ok = SemVer.TryParse(ReadOnlySpan<char>.Empty, null, out var parsed);
 
         ok.Should().BeFalse();
         parsed.Should().Be(default);
@@ -466,7 +466,7 @@ public class SemVerTests
     [Fact]
     public void TryParseSpan_WhenInputIsWhitespace_ShouldReturnFalse()
     {
-        var ok = vm2.SemVer.TryParse("   ".AsSpan(), null, out var parsed);
+        var ok = SemVer.TryParse("   ".AsSpan(), null, out var parsed);
 
         ok.Should().BeFalse();
         parsed.Should().Be(default);
@@ -475,7 +475,7 @@ public class SemVerTests
     [Fact]
     public void TryParseSpan_WhenInputIsInvalid_ShouldReturnFalse()
     {
-        var ok = vm2.SemVer.TryParse("1.2".AsSpan(), null, out var parsed);
+        var ok = SemVer.TryParse("1.2".AsSpan(), null, out var parsed);
 
         ok.Should().BeFalse();
         parsed.Should().Be(default);
@@ -484,7 +484,7 @@ public class SemVerTests
     [Fact]
     public void ToStringFormat_WhenFormatIsNullOrEmpty_ShouldReturnDefaultString()
     {
-        var version = vm2.SemVer.Parse("1.2.3-rc.1+build.7");
+        var version = SemVer.Parse("1.2.3-rc.1+build.7");
 
         version.ToString(null, null).Should().Be("1.2.3-rc.1+build.7");
         version.ToString(string.Empty, null).Should().Be("1.2.3-rc.1+build.7");
@@ -493,7 +493,7 @@ public class SemVerTests
     [Fact]
     public void ToStringFormat_WhenFormatIsUnsupported_ShouldThrowFormatException()
     {
-        var version = vm2.SemVer.Parse("1.2.3");
+        var version = SemVer.Parse("1.2.3");
 
         Action act = () => _ = version.ToString("G", null);
 
@@ -503,9 +503,9 @@ public class SemVerTests
     [Fact]
     public void Operators_ShouldDelegateToEqualityAndComparisonSemantics()
     {
-        var left = vm2.SemVer.Parse("1.2.3-alpha+build.1");
-        var equal = vm2.SemVer.Parse("1.2.3-alpha+build.2");
-        var greater = vm2.SemVer.Parse("1.2.3");
+        var left = SemVer.Parse("1.2.3-alpha+build.1");
+        var equal = SemVer.Parse("1.2.3-alpha+build.2");
+        var greater = SemVer.Parse("1.2.3");
 
         (left == equal).Should().BeTrue();
         (left != greater).Should().BeTrue();
@@ -531,7 +531,7 @@ public class SemVerTests
     [MemberData(nameof(LengthCases))]
     public void Length_ShouldMatchActualStringLength(string input, int expectedLength)
     {
-        var version = vm2.SemVer.Parse(input);
+        var version = SemVer.Parse(input);
 
         version.Length.Should().Be(expectedLength);
         version.ToString().Length.Should().Be(expectedLength);
@@ -540,7 +540,7 @@ public class SemVerTests
     [Fact]
     public void Length_WhenConstructedFromString_ShouldBeCorrect()
     {
-        var version = new vm2.SemVer("1.2.3-rc.1+build.7");
+        var version = new SemVer("1.2.3-rc.1+build.7");
 
         version.Length.Should().Be("1.2.3-rc.1+build.7".Length);
     }
@@ -552,7 +552,7 @@ public class SemVerTests
     public void TryFormatUtf8_WhenDestinationHasEnoughRoom_ShouldWriteCorrectBytes(
         int major, int minor, int patch, string preRelease, string buildMetadata)
     {
-        var version = new vm2.SemVer(major, minor, patch, preRelease, buildMetadata);
+        var version = new SemVer(major, minor, patch, preRelease, buildMetadata);
         var expected = version.ToString();
         Span<byte> destination = stackalloc byte[256];
 
@@ -565,7 +565,7 @@ public class SemVerTests
     [Fact]
     public void TryFormatUtf8_WhenDestinationIsTooSmall_ShouldReturnFalse()
     {
-        var version = vm2.SemVer.Parse("1.2.3-rc.1+build.7");
+        var version = SemVer.Parse("1.2.3-rc.1+build.7");
         Span<byte> destination = stackalloc byte[4];
 
         var ok = version.TryFormat(destination, out var bytesWritten);
@@ -577,7 +577,7 @@ public class SemVerTests
     [Fact]
     public void TryFormatUtf8_WhenFormatIsNonEmpty_ShouldThrowFormatException()
     {
-        var version = vm2.SemVer.Parse("1.2.3");
+        var version = SemVer.Parse("1.2.3");
         var destination = new byte[64];
 
         Action act = () => version.TryFormat(destination, out _, "G");
@@ -588,7 +588,7 @@ public class SemVerTests
     [Fact]
     public void TryFormatUtf8_WhenVersionIsDefault_ShouldWriteZeroZeroZero()
     {
-        var version = default(vm2.SemVer);
+        var version = default(SemVer);
         Span<byte> destination = stackalloc byte[64];
 
         var ok = version.TryFormat(destination, out var bytesWritten);
@@ -606,10 +606,10 @@ public class SemVerTests
     {
         var utf8 = Encoding.UTF8.GetBytes(input);
 
-        var ok = vm2.SemVer.TryParse(utf8, null, out var parsed);
+        var ok = SemVer.TryParse(utf8, null, out var parsed);
 
         ok.Should().BeTrue();
-        parsed.Should().Be(new vm2.SemVer(major, minor, patch, preRelease, buildMetadata));
+        parsed.Should().Be(new SemVer(major, minor, patch, preRelease, buildMetadata));
     }
 
     [Theory]
@@ -618,7 +618,7 @@ public class SemVerTests
     {
         var utf8 = Encoding.UTF8.GetBytes(input);
 
-        var ok = vm2.SemVer.TryParse(utf8, null, out var parsed);
+        var ok = SemVer.TryParse(utf8, null, out var parsed);
 
         ok.Should().BeFalse();
         parsed.Should().Be(default);
@@ -627,7 +627,7 @@ public class SemVerTests
     [Fact]
     public void TryParseUtf8_WhenInputIsEmpty_ShouldReturnFalse()
     {
-        var ok = vm2.SemVer.TryParse(ReadOnlySpan<byte>.Empty, null, out var parsed);
+        var ok = SemVer.TryParse(ReadOnlySpan<byte>.Empty, null, out var parsed);
 
         ok.Should().BeFalse();
         parsed.Should().Be(default);
@@ -638,9 +638,9 @@ public class SemVerTests
     {
         var utf8 = Encoding.UTF8.GetBytes("1.2.3-rc.1+build.7");
 
-        var parsed = vm2.SemVer.Parse(utf8, null);
+        var parsed = SemVer.Parse(utf8, null);
 
-        parsed.Should().Be(new vm2.SemVer(1, 2, 3, "rc.1", "build.7"));
+        parsed.Should().Be(new SemVer(1, 2, 3, "rc.1", "build.7"));
     }
 
     [Fact]
@@ -648,7 +648,7 @@ public class SemVerTests
     {
         var utf8 = Encoding.UTF8.GetBytes("not-semver");
 
-        Action act = () => vm2.SemVer.Parse(utf8, null);
+        Action act = () => SemVer.Parse(utf8, null);
 
         act.Should().Throw<FormatException>();
     }
@@ -659,7 +659,7 @@ public class SemVerTests
         // 0xFF is not valid UTF-8
         ReadOnlySpan<byte> badUtf8 = [0xFF, 0xFE, 0x31, 0x2E, 0x32, 0x2E, 0x33];
 
-        var ok = vm2.SemVer.TryParse(badUtf8, null, out var parsed);
+        var ok = SemVer.TryParse(badUtf8, null, out var parsed);
 
         ok.Should().BeFalse();
         parsed.Should().Be(default);
@@ -672,12 +672,12 @@ public class SemVerTests
     public void Utf8RoundTrip_FormatThenParse_ShouldProduceSameVersion(
         int major, int minor, int patch, string preRelease, string buildMetadata)
     {
-        var original = new vm2.SemVer(major, minor, patch, preRelease, buildMetadata);
+        var original = new SemVer(major, minor, patch, preRelease, buildMetadata);
         Span<byte> buffer = stackalloc byte[256];
 
         original.TryFormat(buffer, out var bytesWritten).Should().BeTrue();
 
-        var ok = vm2.SemVer.TryParse(buffer[..bytesWritten], null, out var parsed);
+        var ok = SemVer.TryParse(buffer[..bytesWritten], null, out var parsed);
 
         ok.Should().BeTrue();
         parsed.Should().Be(original);
@@ -688,7 +688,7 @@ public class SemVerTests
     [Fact]
     public void TryFormatChar_WhenFormatIsNonEmpty_ShouldThrowFormatException()
     {
-        var version = vm2.SemVer.Parse("1.2.3");
+        var version = SemVer.Parse("1.2.3");
         var destination = new char[64];
 
         Action act = () => version.TryFormat(destination, out _, "G");
@@ -699,7 +699,7 @@ public class SemVerTests
     [Fact]
     public void TryFormatChar_WhenExactSize_ShouldSucceed()
     {
-        var version = vm2.SemVer.Parse("1.2.3-rc.1+build.7");
+        var version = SemVer.Parse("1.2.3-rc.1+build.7");
         Span<char> destination = stackalloc char[version.Length];
 
         var ok = version.TryFormat(destination, out var charsWritten);
@@ -716,10 +716,10 @@ public class SemVerTests
     public void SysJson_RoundTrip_ShouldPreserveValue(
         int major, int minor, int patch, string preRelease, string buildMetadata)
     {
-        var original = new vm2.SemVer(major, minor, patch, preRelease, buildMetadata);
+        var original = new SemVer(major, minor, patch, preRelease, buildMetadata);
 
         var json = JsonSerializer.Serialize(original);
-        var deserialized = JsonSerializer.Deserialize<vm2.SemVer>(json);
+        var deserialized = JsonSerializer.Deserialize<SemVer>(json);
 
         deserialized.Should().Be(original);
     }
@@ -727,7 +727,7 @@ public class SemVerTests
     [Fact]
     public void SysJson_Serialize_ShouldWriteQuotedString()
     {
-        var version = new vm2.SemVer(1, 2, 3, "rc.1", "build.7");
+        var version = new SemVer(1, 2, 3, "rc.1", "build.7");
 
         var json = JsonSerializer.Serialize(version);
 
@@ -739,7 +739,7 @@ public class SemVerTests
     [Fact]
     public void SysJson_Serialize_CoreVersion_ShouldWriteQuotedString()
     {
-        var version = new vm2.SemVer(1, 2, 3);
+        var version = new SemVer(1, 2, 3);
 
         var json = JsonSerializer.Serialize(version);
 
@@ -749,7 +749,7 @@ public class SemVerTests
     [Fact]
     public void SysJson_Deserialize_NullableSemVer_WhenJsonIsNull_ShouldReturnNull()
     {
-        var result = JsonSerializer.Deserialize<vm2.SemVer?>("null");
+        var result = JsonSerializer.Deserialize<SemVer?>("null");
 
         result.Should().BeNull();
     }
@@ -757,7 +757,7 @@ public class SemVerTests
     [Fact]
     public void SysJson_Deserialize_WhenJsonIsInvalidSemVer_ShouldThrowJsonException()
     {
-        Action act = () => JsonSerializer.Deserialize<vm2.SemVer>("\"not-a-semver\"");
+        Action act = () => JsonSerializer.Deserialize<SemVer>("\"not-a-semver\"");
 
         act.Should().Throw<JsonException>();
     }
@@ -765,7 +765,7 @@ public class SemVerTests
     [Fact]
     public void SysJson_Deserialize_WhenJsonIsNumber_ShouldThrowJsonException()
     {
-        Action act = () => JsonSerializer.Deserialize<vm2.SemVer>("42");
+        Action act = () => JsonSerializer.Deserialize<SemVer>("42");
 
         act.Should().Throw<JsonException>();
     }
@@ -773,10 +773,10 @@ public class SemVerTests
     [Fact]
     public void SysJson_RoundTrip_NullableSemVer_WithValue()
     {
-        var original = (vm2.SemVer?)new vm2.SemVer(1, 2, 3);
+        var original = (SemVer?)new SemVer(1, 2, 3);
 
         var json = JsonSerializer.Serialize(original);
-        var deserialized = JsonSerializer.Deserialize<vm2.SemVer?>(json);
+        var deserialized = JsonSerializer.Deserialize<SemVer?>(json);
 
         deserialized.Should().Be(original);
     }
@@ -784,10 +784,10 @@ public class SemVerTests
     [Fact]
     public void SysJson_RoundTrip_NullableSemVer_Null()
     {
-        vm2.SemVer? original = null;
+        SemVer? original = null;
 
         var json = JsonSerializer.Serialize(original);
-        var deserialized = JsonSerializer.Deserialize<vm2.SemVer?>(json);
+        var deserialized = JsonSerializer.Deserialize<SemVer?>(json);
 
         json.Should().Be("null");
         deserialized.Should().BeNull();
@@ -796,7 +796,7 @@ public class SemVerTests
     [Fact]
     public void SysJson_RoundTrip_ObjectWithSemVerProperty()
     {
-        var obj = new SysJsonTestModel { Version = new vm2.SemVer(1, 2, 3, "beta.1"), Label = "test" };
+        var obj = new SysJsonTestModel { Version = new SemVer(1, 2, 3, "beta.1"), Label = "test" };
 
         var json = JsonSerializer.Serialize(obj);
         var deserialized = JsonSerializer.Deserialize<SysJsonTestModel>(json);
@@ -818,13 +818,13 @@ public class SemVerTests
 
     private sealed class SysJsonTestModel
     {
-        public vm2.SemVer Version { get; set; }
+        public SemVer Version { get; set; }
         public string Label { get; set; } = "";
     }
 
     private sealed class SysJsonTestModelNullable
     {
-        public vm2.SemVer? Version { get; set; }
+        public SemVer? Version { get; set; }
         public string Label { get; set; } = "";
     }
     #endregion
@@ -835,10 +835,10 @@ public class SemVerTests
     public void NsJson_RoundTrip_ShouldPreserveValue(
         int major, int minor, int patch, string preRelease, string buildMetadata)
     {
-        var original = new vm2.SemVer(major, minor, patch, preRelease, buildMetadata);
+        var original = new SemVer(major, minor, patch, preRelease, buildMetadata);
 
         var json = Newtonsoft.Json.JsonConvert.SerializeObject(original);
-        var deserialized = Newtonsoft.Json.JsonConvert.DeserializeObject<vm2.SemVer>(json);
+        var deserialized = Newtonsoft.Json.JsonConvert.DeserializeObject<SemVer>(json);
 
         deserialized.Should().Be(original);
     }
@@ -846,7 +846,7 @@ public class SemVerTests
     [Fact]
     public void NsJson_Serialize_ShouldWriteQuotedString()
     {
-        var version = new vm2.SemVer(1, 2, 3, "rc.1", "build.7");
+        var version = new SemVer(1, 2, 3, "rc.1", "build.7");
 
         var json = Newtonsoft.Json.JsonConvert.SerializeObject(version);
 
@@ -856,7 +856,7 @@ public class SemVerTests
     [Fact]
     public void NsJson_Deserialize_NullableSemVer_WhenJsonIsNull_ShouldReturnNull()
     {
-        var result = Newtonsoft.Json.JsonConvert.DeserializeObject<vm2.SemVer?>("null");
+        var result = Newtonsoft.Json.JsonConvert.DeserializeObject<SemVer?>("null");
 
         result.Should().BeNull();
     }
@@ -864,7 +864,7 @@ public class SemVerTests
     [Fact]
     public void NsJson_Deserialize_WhenJsonIsInvalidSemVer_ShouldThrowJsonReaderException()
     {
-        Action act = () => Newtonsoft.Json.JsonConvert.DeserializeObject<vm2.SemVer>("\"not-a-semver\"");
+        Action act = () => Newtonsoft.Json.JsonConvert.DeserializeObject<SemVer>("\"not-a-semver\"");
 
         act.Should().Throw<Newtonsoft.Json.JsonReaderException>();
     }
@@ -872,7 +872,7 @@ public class SemVerTests
     [Fact]
     public void NsJson_Deserialize_WhenJsonIsNumber_ShouldThrowJsonReaderException()
     {
-        Action act = () => Newtonsoft.Json.JsonConvert.DeserializeObject<vm2.SemVer>("42");
+        Action act = () => Newtonsoft.Json.JsonConvert.DeserializeObject<SemVer>("42");
 
         act.Should().Throw<Newtonsoft.Json.JsonReaderException>();
     }
@@ -880,10 +880,10 @@ public class SemVerTests
     [Fact]
     public void NsJson_RoundTrip_NullableSemVer_WithValue()
     {
-        var original = (vm2.SemVer?)new vm2.SemVer(1, 2, 3);
+        var original = (SemVer?)new SemVer(1, 2, 3);
 
         var json = Newtonsoft.Json.JsonConvert.SerializeObject(original);
-        var deserialized = Newtonsoft.Json.JsonConvert.DeserializeObject<vm2.SemVer?>(json);
+        var deserialized = Newtonsoft.Json.JsonConvert.DeserializeObject<SemVer?>(json);
 
         deserialized.Should().Be(original);
     }
@@ -891,10 +891,10 @@ public class SemVerTests
     [Fact]
     public void NsJson_RoundTrip_NullableSemVer_Null()
     {
-        vm2.SemVer? original = null;
+        SemVer? original = null;
 
         var json = Newtonsoft.Json.JsonConvert.SerializeObject(original);
-        var deserialized = Newtonsoft.Json.JsonConvert.DeserializeObject<vm2.SemVer?>(json);
+        var deserialized = Newtonsoft.Json.JsonConvert.DeserializeObject<SemVer?>(json);
 
         json.Should().Be("null");
         deserialized.Should().BeNull();
@@ -903,7 +903,7 @@ public class SemVerTests
     [Fact]
     public void NsJson_RoundTrip_ObjectWithSemVerProperty()
     {
-        var obj = new NsJsonTestModel { Version = new vm2.SemVer(1, 2, 3, "beta.1"), Label = "test" };
+        var obj = new NsJsonTestModel { Version = new SemVer(1, 2, 3, "beta.1"), Label = "test" };
 
         var json = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
         var deserialized = Newtonsoft.Json.JsonConvert.DeserializeObject<NsJsonTestModel>(json);
@@ -925,13 +925,13 @@ public class SemVerTests
 
     private sealed class NsJsonTestModel
     {
-        public vm2.SemVer Version { get; set; }
+        public SemVer Version { get; set; }
         public string Label { get; set; } = "";
     }
 
     private sealed class NsJsonTestModelNullable
     {
-        public vm2.SemVer? Version { get; set; }
+        public SemVer? Version { get; set; }
         public string Label { get; set; } = "";
     }
     #endregion
@@ -940,7 +940,7 @@ public class SemVerTests
     [Fact]
     public void Default_ShouldBeZeroZeroZero()
     {
-        var version = default(vm2.SemVer);
+        var version = default(SemVer);
 
         version.Major.Should().Be(0);
         version.Minor.Should().Be(0);
@@ -954,7 +954,7 @@ public class SemVerTests
     [Fact]
     public void ZeroVersion_ShouldBeValidZeroZeroZero()
     {
-        var version = new vm2.SemVer(0, 0, 0);
+        var version = new SemVer(0, 0, 0);
 
         version.Major.Should().Be(0);
         version.Minor.Should().Be(0);
@@ -968,27 +968,27 @@ public class SemVerTests
     [Fact]
     public void HugeVersionNumbers_ShouldFormatAndParsecorrectly()
     {
-        var version = new vm2.SemVer(int.MaxValue, int.MaxValue, int.MaxValue);
+        var version = new SemVer(int.MaxValue, int.MaxValue, int.MaxValue);
         var expected = $"{int.MaxValue}.{int.MaxValue}.{int.MaxValue}";
 
         version.ToString().Should().Be(expected);
         version.Length.Should().Be(expected.Length);
 
-        var parsed = vm2.SemVer.Parse(expected);
+        var parsed = SemVer.Parse(expected);
         parsed.Should().Be(version);
     }
 
     [Fact]
     public void HugeVersionNumbers_Utf8RoundTrip()
     {
-        var version = new vm2.SemVer(int.MaxValue, int.MaxValue, int.MaxValue);
+        var version = new SemVer(int.MaxValue, int.MaxValue, int.MaxValue);
         var expected = $"{int.MaxValue}.{int.MaxValue}.{int.MaxValue}";
         Span<byte> buffer = stackalloc byte[256];
 
         version.TryFormat(buffer, out var bytesWritten).Should().BeTrue();
         Encoding.UTF8.GetString(buffer[..bytesWritten]).Should().Be(expected);
 
-        var ok = vm2.SemVer.TryParse(buffer[..bytesWritten], null, out var parsed);
+        var ok = SemVer.TryParse(buffer[..bytesWritten], null, out var parsed);
         ok.Should().BeTrue();
         parsed.Should().Be(version);
     }
@@ -996,10 +996,10 @@ public class SemVerTests
     [Fact]
     public void SysJson_CrossSerializer_NsJsonSerialized_SysJsonDeserialized()
     {
-        var original = new vm2.SemVer(1, 2, 3, "alpha.1", "build.7");
+        var original = new SemVer(1, 2, 3, "alpha.1", "build.7");
 
         var json = Newtonsoft.Json.JsonConvert.SerializeObject(original);
-        var deserialized = JsonSerializer.Deserialize<vm2.SemVer>(json);
+        var deserialized = JsonSerializer.Deserialize<SemVer>(json);
 
         deserialized.Should().Be(original);
     }
@@ -1007,10 +1007,10 @@ public class SemVerTests
     [Fact]
     public void NsJson_CrossSerializer_SysJsonSerialized_NsJsonDeserialized()
     {
-        var original = new vm2.SemVer(1, 2, 3, "alpha.1", "build.7");
+        var original = new SemVer(1, 2, 3, "alpha.1", "build.7");
 
         var json = JsonSerializer.Serialize(original);
-        var deserialized = Newtonsoft.Json.JsonConvert.DeserializeObject<vm2.SemVer>(json);
+        var deserialized = Newtonsoft.Json.JsonConvert.DeserializeObject<SemVer>(json);
 
         deserialized.Should().Be(original);
     }

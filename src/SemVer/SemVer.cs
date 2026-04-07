@@ -3,8 +3,6 @@
 
 namespace vm2;
 
-using System.ComponentModel.DataAnnotations;
-
 /// <summary>
 /// Represents a semantic version as defined by the SemVer 2.0.0 specification.
 /// </summary>
