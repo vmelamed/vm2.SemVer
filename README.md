@@ -142,8 +142,9 @@ var parsed = JsonConvert.DeserializeObject<SemVer>(json);
   > In a personal development environment, you can run benchmarks with the `SHORT_RUN` preprocessor directive for faster (less
   accurate) iterations:
   >
-  > `dotnet run --project benchmarks/SemVer.Benchmarks/SemVer.Benchmarks.csproj -c Release -p:preprocessor_symbols=SHORT_RUN --
-  --filter '*'`
+  > ```bash
+  > `dotnet run --project benchmarks/SemVer.Benchmarks/SemVer.Benchmarks.csproj -c Release -p:preprocessor_symbols=SHORT_RUN -- --filter '*'`
+  > ```
 
 ## Package metadata
 

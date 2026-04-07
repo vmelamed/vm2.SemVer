@@ -1,10 +1,13 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2025-2026 Val Melamed
+
 namespace vm2.SemVerSerialization.NsJson;
 
 using Newtonsoft.Json;
 
 /// <summary>
 /// Provides functionality to convert <see cref="vm2.SemVer"/> values to and from JSON format.
-/// Implements the Newtonsoft.Json.<see cref="JsonConverter{T}"/>".
+/// Implements the Newtonsoft.Json.<see cref="JsonConverter{T}"/>.
 /// </summary>
 /// <remarks>This converter is used to serialize and deserialize <see cref="SemVer"/> values in JSON format. It
 /// ensures that <see cref="SemVer"/> instances are correctly represented as strings in JSON and parsed back into <see

@@ -39,13 +39,13 @@ public readonly partial struct SemVer :
     /// The pre-release version, which is an optional identifier that indicates a version is unstable and may not satisfy the
     /// intended compatibility requirements as denoted by its associated normal version.
     /// </summary>
-    public string PreRelease { get => field ?? ""; init; } = "";
+    public string PreRelease { get => field ?? ""; } = "";
 
     /// <summary>
     /// The build metadata, which is an optional identifier that provides additional build information about a version. Build
     /// metadata does not affect version precedence and is ignored when determining version compatibility.
     /// </summary>
-    public string BuildMetadata { get => field ?? ""; init; } = "";
+    public string BuildMetadata { get => field ?? ""; } = "";
 
     /// <summary>
     /// Indicates whether the semantic version is a pre-release version.
@@ -197,7 +197,8 @@ public readonly partial struct SemVer :
 
     /// <summary>
     /// Determines whether the specified object is equal to the current semantic version instance. Two semantic version
-    /// instances are considered equal if they have the same major, minor, patch, pre-release, and build metadata components.
+    /// instances are considered equal if they have the same major, minor, patch, and pre-release. Build metadata components are
+    /// ignored in equality comparisons.
     /// </summary>
     /// <param name="obj">The object to compare with the current semantic version instance.</param>
     /// <returns>
@@ -405,12 +406,32 @@ public readonly partial struct SemVer :
             var id1 = str1[e1.Current];
             var id2 = str2[e2.Current];
 
-            var isNum1 = ulong.TryParse(id1, out var nId1);
-            var isNum2 = ulong.TryParse(id2, out var nId2);
+            bool isNum1 = id1.Length > 0;
+
+            if (isNum1)
+                for (int i = 0; i < id1.Length; i++)
+                    if (!char.IsDigit(id1[i]))
+                    {
+                        isNum1 = false;
+                        break;
+                    }
+
+            bool isNum2 = id2.Length > 0;
+
+            if (isNum2)
+                for (int i = 0; i < id2.Length; i++)
+                    if (!char.IsDigit(id2[i]))
+                    {
+                        isNum2 = false;
+                        break;
+                    }
 
             if (isNum1 && isNum2) {
-                if (nId1 != nId2)
-                    return nId1 < nId2 ? -1 : 1; // Both identifiers are numeric and different, return the difference
+                if (id1.Length != id2.Length)
+                    return id1.Length < id2.Length ? -1 : 1; // the longer identifier is bigger, i.e. has higher precedence
+                var comp = id1.CompareTo(id2, StringComparison.Ordinal);
+                if (comp != 0)
+                    return comp; // Both identifiers are numeric and equal in length, compare lexically
                 // else continue to the next identifiers
             }
             else
@@ -590,7 +611,9 @@ public readonly partial struct SemVer :
         if (!Encoding.UTF8.TryGetChars(utf8Text, chars, out var charsUsed))
             return false;
 
-        var match = SemVer20().Match(chars[..charsUsed].ToString());
+        chars = chars[..charsUsed].Trim();
+
+        var match = SemVer20().Match(chars.ToString());
 
         if (!match.Success)
             return false;
@@ -769,7 +792,7 @@ public readonly partial struct SemVer :
     #region IEqualityOperators<SemVer>
     /// <summary>
     /// Determines whether two <see cref="SemVer"/> instances are equal. Two semantic version instances are considered equal if
-    /// they have the same major, minor, patch, pre-release, and build metadata components.
+    /// they have the same major, minor, patch, and pre-release components.
     /// </summary>
     /// <param name="left">The first <see cref="SemVer"/> instance to compare.</param>
     /// <param name="right">The second <see cref="SemVer"/> instance to compare.</param>
@@ -780,7 +803,7 @@ public readonly partial struct SemVer :
 
     /// <summary>
     /// Determines whether two <see cref="SemVer"/> instances are not equal. Two semantic version instances are considered not
-    /// equal if they differ in any of their major, minor, patch, pre-release, or build metadata components.
+    /// equal if they differ in any of their major, minor, patch, or pre-release components.
     /// </summary>
     /// <param name="left">The first <see cref="SemVer"/> instance to compare.</param>
     /// <param name="right">The second <see cref="SemVer"/> instance to compare.</param>
@@ -791,8 +814,8 @@ public readonly partial struct SemVer :
 
     /// <summary>
     /// Determines whether the first <see cref="SemVer"/> instance is less than the second <see cref="SemVer"/> instance.
-    /// Two semantic version instances are compared based on their major, minor, patch, pre-release, and build metadata
-    /// components, following the precedence rules defined by the SemVer 2.0.0 specification.
+    /// Two semantic version instances are compared based on their major, minor, patch, and pre-release components,
+    /// following the precedence rules defined by the SemVer 2.0.0 specification.
     /// </summary>
     /// <param name="left">The first <see cref="SemVer"/> instance to compare.</param>
     /// <param name="right">The second <see cref="SemVer"/> instance to compare.</param>
@@ -804,8 +827,8 @@ public readonly partial struct SemVer :
 
     /// <summary>
     /// Determines whether the first <see cref="SemVer"/> instance is less than or equal to the second <see cref="SemVer"/>
-    /// instance. Two semantic version instances are compared based on their major, minor, patch, pre-release, and build
-    /// metadata components, following the precedence rules defined by the SemVer 2.0.0 specification.
+    /// instance. Two semantic version instances are compared based on their major, minor, patch, and pre-release components,
+    /// following the precedence rules defined by the SemVer 2.0.0 specification.
     /// </summary>
     /// <param name="left">The first <see cref="SemVer"/> instance to compare.</param>
     /// <param name="right">The second <see cref="SemVer"/> instance to compare.</param>
@@ -817,7 +840,7 @@ public readonly partial struct SemVer :
 
     /// <summary>
     /// Determines whether the first <see cref="SemVer"/> instance is greater than the second <see cref="SemVer"/> instance. Two
-    /// semantic version instances are compared based on their major, minor, patch, pre-release, and build metadata components,
+    /// semantic version instances are compared based on their major, minor, patch, and pre-release components,
     /// following the precedence rules defined by the SemVer 2.0.0 specification.
     /// </summary>
     /// <param name="left">The first <see cref="SemVer"/> instance to compare.</param>
@@ -830,8 +853,8 @@ public readonly partial struct SemVer :
 
     /// <summary>
     /// Determines whether the first <see cref="SemVer"/> instance is greater than or equal to the second <see cref="SemVer"/>
-    /// instance. Two semantic version instances are compared based on their major, minor, patch, pre-release, and build
-    /// metadata components, following the precedence rules defined by the SemVer 2.0.0 specification.
+    /// instance. Two semantic version instances are compared based on their major, minor, patch, and pre-release components,
+    /// following the precedence rules defined by the SemVer 2.0.0 specification.
     /// </summary>
     /// <param name="left">The first <see cref="SemVer"/> instance to compare.</param>
     /// <param name="right">The second <see cref="SemVer"/> instance to compare.</param>
