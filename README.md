@@ -1,6 +1,32 @@
 # vm2.SemVer
 
+[![CI](https://github.com/vmelamed/vm2.SemVer/actions/workflows/CI.yaml/badge.svg?branch=main)](https://github.com/vmelamed/vm2.SemVer/actions/workflows/CI.yaml)
+[![codecov](https://codecov.io/gh/vmelamed/vm2.SemVer/branch/main/graph/badge.svg?branch=main)](https://codecov.io/gh/vmelamed/vm2.SemVer)
+[![Release](https://github.com/vmelamed/vm2.SemVer/actions/workflows/Release.yaml/badge.svg?branch=main)](https://github.com/vmelamed/vm2.SemVer/actions/workflows/Release.yaml)
+
+[![NuGet Version](https://img.shields.io/nuget/v/vm2.SemVer)](https://www.nuget.org/packages/vm2.SemVer/)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/vm2.SemVer.svg)](https://www.nuget.org/packages/vm2.SemVer/)
+[![GitHub License](https://img.shields.io/github/license/vmelamed/vm2.SemVer)](https://github.com/vmelamed/vm2.SemVer/blob/main/LICENSE)
+
+
 A .NET implementation of the [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html) specification. Provides parsing, formatting, comparison, and JSON serialization of semantic versions as a lightweight, immutable `readonly struct`.
+
+<!-- TOC tocDepth:2..6 chapterDepth:2..6 -->
+
+- [vm2.SemVer](#vm2semver)
+  - [Features](#features)
+  - [Installation](#installation)
+  - [Quick start](#quick-start)
+  - [JSON serialization](#json-serialization)
+    - [System.Text.Json](#systemtextjson)
+    - [Newtonsoft.Json](#newtonsoftjson)
+  - [Building and testing](#building-and-testing)
+  - [Package metadata](#package-metadata)
+  - [Project structure](#project-structure)
+  - [Regex abbreviations and conventions](#regex-abbreviations-and-conventions)
+  - [CI/CD setup](#cicd-setup)
+
+<!-- /TOC -->
 
 ## Features
 
