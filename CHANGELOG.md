@@ -1,5 +1,11 @@
 # Changelog
 
+
+## v1.0.0-preview.1 - 2026-04-07
+
+### Internal
+
+DevOps changes only.
 All notable changes to this project will be documented in this file.
 
 ## [0.1.0] - YYYY-MM-DD
