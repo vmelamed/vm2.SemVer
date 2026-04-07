@@ -68,18 +68,12 @@
     </PropertyGroup>
 
     <!-- Print version info after build for all projects -->
-    <Target Name="PrintVersion"
-            AfterTargets="Build">
-        <Message Importance="high"
-                 Text="AssemblyVersion: $(AssemblyVersion)" />
-        <Message Importance="high"
-                 Text="FileVersion: $(FileVersion)" />
-        <Message Importance="high"
-                 Text="InformationalVersion: $(InformationalVersion)" />
-        <Message Importance="high"
-                 Text="PackageVersion: $(PackageVersion)" />
-        <Message Importance="high"
-                 Text="Version: $(Version)" />
+    <Target Name="PrintVersion" AfterTargets="Build">
+        <Message Importance="high" Text="AssemblyVersion: $(AssemblyVersion)" />
+        <Message Importance="high" Text="FileVersion: $(FileVersion)" />
+        <Message Importance="high" Text="InformationalVersion: $(InformationalVersion)" />
+        <Message Importance="high" Text="PackageVersion: $(PackageVersion)" />
+        <Message Importance="high" Text="Version: $(Version)" />
     </Target>
 
     <!-- ================ Common Package References for All projects ================ -->
