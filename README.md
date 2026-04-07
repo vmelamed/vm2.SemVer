@@ -1,8 +1,92 @@
 # vm2.SemVer
 
-A starter vm2 package scaffold. Customize the code, tests, benchmarks, docs, and workflows as needed.
+A .NET implementation of the [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html) specification. Provides parsing, formatting, comparison, and JSON serialization of semantic versions as a lightweight, immutable `readonly struct`.
 
-## Getting started
+## Features
+
+- **Immutable value type** — `readonly partial struct` with value semantics
+- **Full SemVer 2.0.0 compliance** — major, minor, patch, pre-release, and build metadata
+- **Multiple parsing paths** — `string`, `ReadOnlySpan<char>`, `ReadOnlySpan<byte>` (UTF-8)
+- **Multiple formatting paths** — `ToString()`, `TryFormat(Span<char>)`, `TryFormat(Span<byte>)` (UTF-8)
+- **Zero-allocation formatting** — span-based `TryFormat` overloads allocate nothing
+- **JSON serialization** — built-in converters for both System.Text.Json and Newtonsoft.Json
+- **Comparison & equality** — implements `IComparable<SemVer>`, `IEquatable<SemVer>`, and all comparison/equality operators per the spec (build metadata is ignored in precedence)
+- **Regex validation** — `GeneratedRegex`-based patterns for SemVer strings, pre-release identifiers, and build metadata identifiers
+- **Interface-rich** — implements `ISpanParsable<SemVer>`, `IUtf8SpanParsable<SemVer>`, `ISpanFormattable`, `IUtf8SpanFormattable`, `IFormattable`
+
+## Installation
+
+```bash
+dotnet add package vm2.SemVer
+```
+
+## Quick start
+
+```csharp
+using vm2;
+
+// Parse
+var version = SemVer.Parse("1.2.3-rc.1+build.7");
+
+// Construct
+var v = new SemVer(1, 2, 3, "rc.1", "build.7");
+
+// Properties
+Console.WriteLine(v.Major);         // 1
+Console.WriteLine(v.Minor);         // 2
+Console.WriteLine(v.Patch);         // 3
+Console.WriteLine(v.PreRelease);    // "rc.1"
+Console.WriteLine(v.BuildMetadata); // "build.7"
+Console.WriteLine(v.IsPreRelease);  // true
+Console.WriteLine(v.IsStable);      // false
+Console.WriteLine(v.Core);          // 1.2.3
+
+// Format
+Console.WriteLine(v.ToString());    // "1.2.3-rc.1+build.7"
+
+// Compare (build metadata is ignored per spec)
+var a = SemVer.Parse("1.0.0-alpha");
+var b = SemVer.Parse("1.0.0-beta");
+Console.WriteLine(a < b);           // true
+
+// Span-based formatting (zero allocation)
+Span<char> buffer = stackalloc char[v.Length];
+v.TryFormat(buffer, out int charsWritten);
+
+// UTF-8 formatting (zero allocation)
+Span<byte> utf8 = stackalloc byte[v.Length];
+v.TryFormat(utf8, out int bytesWritten);
+```
+
+## JSON serialization
+
+Both converters are applied via attributes on the `SemVer` struct, so serialization works out of the box with no additional configuration.
+
+### System.Text.Json
+
+The `SemVerSysConverter` uses span-based UTF-8 formatting and parsing for minimal allocations.
+
+```csharp
+using System.Text.Json;
+
+var v = new SemVer(1, 2, 3, "rc.1", "build.7");
+string json = JsonSerializer.Serialize(v);          // "\"1.2.3-rc.1+build.7\""
+var parsed = JsonSerializer.Deserialize<SemVer>(json);
+```
+
+### Newtonsoft.Json
+
+The `SemVerNsConverter` provides serialization support for Newtonsoft.Json consumers.
+
+```csharp
+using Newtonsoft.Json;
+
+var v = new SemVer(1, 2, 3, "rc.1", "build.7");
+string json = JsonConvert.SerializeObject(v);       // "\"1.2.3-rc.1+build.7\""
+var parsed = JsonConvert.DeserializeObject<SemVer>(json);
+```
+
+## Building and testing
 
 - Build:
 
@@ -15,61 +99,42 @@ A starter vm2 package scaffold. Customize the code, tests, benchmarks, docs, and
   - from **CLI**, if it is not built yet (builds on MTP v2):
 
     ```bash
-    dotnet run --project test/SemVer.Tests/SemVer.Tests.csproj`
+    dotnet run --project test/SemVer.Tests/SemVer.Tests.csproj
     ```
 
   - from **CLI**, if it is already built in **CLI** or **VSCode** (MTP v2):
-    - any OS or shell:
 
-      ```bash
-      dotnet test test/SemVer.Tests/bin/Debug/net10.0/SemVer.Tests.dll`
-      ```
+    ```bash
+    dotnet test --solution vm2.SemVer.slnx
+    ```
 
-    - on Windows **CLI** (already built in **CLI** or **VSCode** - on MTP v2):
-
-      ```batch
-      test/SemVer.Tests/bin/Debug/net10.0/SemVer.Tests.exe`
-      ```
-
-    - on Linux or MacOS **CLI** (already built in **CLI** or **VSCode** - on MTP v2):
-
-      ```bash
-      test/SemVer.Tests/bin/Debug/net10.0/SemVer.Tests`
-      ```
-
-  - from Visual Studio:
-    - use the Test Explorer to build and run tests (builds on MTP v1)
-    - if it is already built in **Visual Studio** (MTP v1), from the **CLI** you can run:
-
-      ```bash
-      dotnet test
-      ```
-
-- Benchmarks (if included):
+- Benchmarks:
 
   ```bash
-  dotnet run --project benchmarks/SemVer.Benchmarks/SemVer.Benchmarks.csproj --configuration Release
+  dotnet run --project benchmarks/SemVer.Benchmarks/SemVer.Benchmarks.csproj -c Release -- --filter '*'
   ```
 
-  > [!TIP] in a personal development environment, you can run benchmarks with defined `SHORT_RUN` preprocessor directive. The run will be faster, although less accurate, but still suitable for quick iterations.
+  > [!TIP]
+  > In a personal development environment, you can run benchmarks with the `SHORT_RUN` preprocessor directive for faster (less
+  accurate) iterations:
+  >
+  > `dotnet run --project benchmarks/SemVer.Benchmarks/SemVer.Benchmarks.csproj -c Release -p:preprocessor_symbols=SHORT_RUN --
+  --filter '*'`
 
 ## Package metadata
 
 - Package ID: `vm2.SemVer`
-- Version: 0.1.0
 - License: MIT
 - Repository: <https://github.com/vmelamed/vm2.SemVer>
 
-## Structure
+## Project structure
 
-- .github/workflows: CI, prerelease, release, clear-cache.
-- src/SemVer: the library source code
-- test/SemVer.Tests: xUnit + MTP tests, includes testconfig.json
-- benchmarks/SemVer.Benchmarks: BenchmarkDotNet suite (optional)
-- examples/SemVer.Example: minimal console sample (optional)
-- docs/: documentation starter (optional)
-- scripts/: bootstrap helpers
-- changelog/: git-cliff configs for prerelease/release changelog updates
+- `src/SemVer/` — library source code
+- `test/SemVer.Tests/` — xUnit v3 + MTP tests
+- `benchmarks/SemVer.Benchmarks/` — BenchmarkDotNet suite (Parse, Format, JSON)
+- `examples/SemVer.Example/` — minimal console sample
+- `docs/` — documentation
+- `changelog/` — git-cliff configs for prerelease/release changelog updates
 
 ## Regex abbreviations and conventions
 
@@ -127,36 +192,18 @@ Quick convention table:
 | Public     | *Regex    | PascalCase        | anchored full-string validation patterns                  |
 | Public     | *Regex    | PascalCase        | `GeneratedRegex` factories for `*Regex` constants (method name is the constant name without the `Regex` suffix) |
 
-## Next steps
+## CI/CD setup
 
-- create GitHub repository using the generated bootstrap script: `scripts/repo-setup.sh`
-- Update README, CHANGELOG, and package metadata.
-- Set secrets and variables for workflows:
-  - Set required secrets in the new GitHub repo:
-    - `CODECOV_TOKEN`
-    - `BENCHER_API_TOKEN`
-    - `NUGET_API_KEY` must be issued by the selected `NUGET_SERVER` (below)
-  - Set required variables:
-    - `DOTNET_VERSION`: `10.0.x`: the .NET SDK version to use
-    - `CONFIGURATION`: `Release`: the build configuration to use (e.g., Release or Debug)
-    - `NUGET_SERVER`: `github`: the NuGet server to publish to (supported values: 'github', 'nuget', or custom URI)
-    - `MINVERTAGPREFIX`: `v`: Prefix for git tags to be recognized by MinVer
-    - `MINVERDEFAULTPRERELEASEIDENTIFIERS`: `.0`: Prefix for the prerelease tag, e.g. 'preview.0', 'alpha', 'beta', 'rc', etc.
-    - `SAVE_PACKAGE_ARTIFACTS`: `false`: Whether to save package artifacts after build/publish
-    - `MIN_COVERAGE_PCT`: `80`%: Minimum code coverage percentage required
-    - `MAX_REGRESSION_PCT`: `20`%: Maximum allowed regression percentage
-    - `RESET_BENCHMARK_THRESHOLDS`: `false`: Whether to reset Bencher thresholds
-  - Set debug flags (variables):
-    - `ACTIONS_RUNNER_DEBUG`: `false`: Whether to enable GitHub Actions runner debug logging
-    - `ACTIONS_STEP_DEBUG`: `false`: Whether to enable GitHub Actions step debug logging
-
-- Protect the `main` branch by enabling required checks and requiring pull requests. Suggested check names:
-  - `build` (job id from CI workflow "CI: Build, Test, Benchmark")
-  - `test` (job id from CI workflow "CI: Build, Test, Benchmark")
-  - `benchmark` (job id from CI workflow "CI: Build, Test, Benchmark")
-- In GitHub repo settings, enable Actions PR automation:
-  - `Settings` -> `Actions` -> `General` -> `Workflow permissions`
-  - enable `Allow GitHub Actions to create and approve pull requests`
-  - required for prerelease changelog PR creation.
-- Changelog: prerelease workflow appends a prerelease section; release workflow adds a stable header with "See prereleases
-  below." (prerelease sections stay intact).
+- Set required secrets in the GitHub repo:
+  - `CODECOV_TOKEN`
+  - `BENCHER_API_TOKEN`
+  - `NUGET_API_KEY` (must match the selected `NUGET_SERVER`)
+- Set required variables:
+  - `DOTNET_VERSION`: `10.0.x`
+  - `CONFIGURATION`: `Release`
+  - `NUGET_SERVER`: `github` (or `nuget`, or a custom URI)
+  - `MINVERTAGPREFIX`: `v`
+  - `MIN_COVERAGE_PCT`: `80`
+  - `MAX_REGRESSION_PCT`: `20`
+- Protect the `main` branch and enable required status checks.
+- Enable `Allow GitHub Actions to create and approve pull requests` for prerelease changelog PR creation.
