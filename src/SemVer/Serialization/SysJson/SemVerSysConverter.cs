@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 
 /// <summary>
 /// Provides functionality to convert <see cref="SemVer"/> values to and from JSON format.
-/// Implements the System.Text.Json.Serialization.<see cref="JsonConverter{T}"/>".
+/// Implements the System.Text.Json.Serialization.<see cref="JsonConverter{T}"/>.
 /// </summary>
 /// <remarks>
 /// This converter is used to serialize and deserialize <see cref="SemVer"/> values when working with JSON. It ensures that
@@ -63,7 +63,7 @@ public class SemVerSysConverter : JsonConverter<SemVer>
         try
         {
             if (reader.TokenType == JsonTokenType.Null)
-                return default;
+                throw new JsonException("Cannot convert null value to SemVer.");
 
             // Cannot use reader.ValueSpan directly: Utf8JsonWriter escapes '+' as '\u002B',
             // and ValueSpan returns the raw (still-escaped) bytes. CopyString unescapes first.

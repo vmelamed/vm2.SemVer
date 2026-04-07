@@ -966,7 +966,7 @@ public class SemVerTests
     }
 
     [Fact]
-    public void HugeVersionNumbers_ShouldFormatAndParsecorrectly()
+    public void HugeVersionNumbers_ShouldFormatAndParseCorrectly()
     {
         var version = new SemVer(int.MaxValue, int.MaxValue, int.MaxValue);
         var expected = $"{int.MaxValue}.{int.MaxValue}.{int.MaxValue}";
