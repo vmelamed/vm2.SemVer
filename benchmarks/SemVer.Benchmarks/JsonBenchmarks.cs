@@ -11,10 +11,6 @@ namespace vm2.SemVerBenchmarks;
 #else
 [SimpleJob(RuntimeMoniker.HostProcess)]
 #endif
-[JsonExporter]
-[MarkdownExporter]
-[MemoryDiagnoser]
-[Orderer(SummaryOrderPolicy.FastestToSlowest, MethodOrderPolicy.Declared)]
 public class JsonBenchmarks
 {
     static readonly SemVer CoreOnly = new(1, 2, 3);
