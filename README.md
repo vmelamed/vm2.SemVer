@@ -8,7 +8,6 @@
 [![NuGet Downloads](https://img.shields.io/nuget/dt/vm2.SemVer.svg)](https://www.nuget.org/packages/vm2.SemVer/)
 [![GitHub License](https://img.shields.io/github/license/vmelamed/vm2.SemVer)](https://github.com/vmelamed/vm2.SemVer/blob/main/LICENSE)
 
-
 A .NET implementation of the [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html) specification. Provides parsing, formatting, comparison, and JSON serialization of semantic versions as a lightweight, immutable `readonly struct`.
 
 <!-- TOC tocDepth:2..6 chapterDepth:2..6 -->
@@ -24,7 +23,6 @@ A .NET implementation of the [Semantic Versioning 2.0.0](https://semver.org/spec
   - [Package metadata](#package-metadata)
   - [Project structure](#project-structure)
   - [Regex abbreviations and conventions](#regex-abbreviations-and-conventions)
-  - [CI/CD setup](#cicd-setup)
 
 <!-- /TOC -->
 
@@ -217,19 +215,3 @@ Quick convention table:
 | Public     | *Rex      | PascalCase        | generally unanchored public patterns                      |
 | Public     | *Regex    | PascalCase        | anchored full-string validation patterns                  |
 | Public     | *Regex    | PascalCase        | `GeneratedRegex` factories for `*Regex` constants (method name is the constant name without the `Regex` suffix) |
-
-## CI/CD setup
-
-- Set required secrets in the GitHub repo:
-  - `CODECOV_TOKEN`
-  - `BENCHER_API_TOKEN`
-  - `NUGET_API_KEY` (must match the selected `NUGET_SERVER`)
-- Set required variables:
-  - `DOTNET_VERSION`: `10.0.x`
-  - `CONFIGURATION`: `Release`
-  - `NUGET_SERVER`: `github` (or `nuget`, or a custom URI)
-  - `MINVERTAGPREFIX`: `v`
-  - `MIN_COVERAGE_PCT`: `80`
-  - `MAX_REGRESSION_PCT`: `20`
-- Protect the `main` branch and enable required status checks.
-- Enable `Allow GitHub Actions to create and approve pull requests` for prerelease changelog PR creation.
