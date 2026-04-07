@@ -1015,4 +1015,316 @@ public class SemVerTests
         deserialized.Should().Be(original);
     }
     #endregion
+
+    #region Coverage gap tests — large strings (>1024 threshold)
+    private static SemVer MakeLargeSemVer()
+    {
+        // Build metadata long enough to push Length > 1024
+        var longMeta = new string('a', 1100);
+        return new SemVer(1, 2, 3, "", longMeta);
+    }
+
+    [Fact]
+    public void ToString_WhenLengthExceedsStackallocThreshold_ShouldUseHeapAllocation()
+    {
+        var version = MakeLargeSemVer();
+
+        version.Length.Should().BeGreaterThanOrEqualTo(1024);
+        var str = version.ToString();
+
+        str.Should().StartWith("1.2.3+");
+        str.Length.Should().Be(version.Length);
+    }
+
+    [Fact]
+    public void TryFormatChar_WhenLengthExceedsThreshold_ShouldSucceed()
+    {
+        var version = MakeLargeSemVer();
+        var destination = new char[version.Length];
+
+        var ok = version.TryFormat(destination, out var charsWritten);
+
+        ok.Should().BeTrue();
+        charsWritten.Should().Be(version.Length);
+    }
+
+    [Fact]
+    public void TryFormatUtf8_WhenLengthExceedsThreshold_ShouldSucceed()
+    {
+        var version = MakeLargeSemVer();
+        var destination = new byte[version.Length * 2];
+
+        var ok = version.TryFormat(destination, out var bytesWritten);
+
+        ok.Should().BeTrue();
+        bytesWritten.Should().Be(version.Length);
+    }
+
+    [Fact]
+    public void SysJson_RoundTrip_WhenLengthExceedsThreshold_ShouldPreserveValue()
+    {
+        var original = MakeLargeSemVer();
+
+        var json = JsonSerializer.Serialize(original);
+        var deserialized = JsonSerializer.Deserialize<SemVer>(json);
+
+        deserialized.Should().Be(original);
+    }
+
+    [Fact]
+    public void TryParseString_WhenInputIsNull_ShouldReturnFalse()
+    {
+        var ok = SemVer.TryParse((string?)null, null, out var result);
+
+        ok.Should().BeFalse();
+        result.Should().Be(default);
+    }
+
+    [Fact]
+    public void TryParseUtf8_WhenLengthExceedsThreshold_ShouldSucceed()
+    {
+        var version = MakeLargeSemVer();
+        var str = version.ToString();
+        var utf8 = Encoding.UTF8.GetBytes(str);
+
+        utf8.Length.Should().BeGreaterThanOrEqualTo(1024);
+
+        var ok = SemVer.TryParse(utf8, null, out var parsed);
+
+        ok.Should().BeTrue();
+        parsed.Should().Be(version);
+    }
+    #endregion
+
+    #region Coverage gap tests — Newtonsoft.Json CanConvert + WriteJson
+    [Fact]
+    public void NsJsonConverter_CanConvert_ShouldReturnTrueForSemVer()
+    {
+        var converter = new vm2.SemVerSerialization.NsJson.SemVerNsConverter();
+
+        converter.CanConvert(typeof(SemVer)).Should().BeTrue();
+    }
+
+    [Fact]
+    public void NsJsonConverter_CanConvert_ShouldReturnTrueForNullableSemVer()
+    {
+        var converter = new vm2.SemVerSerialization.NsJson.SemVerNsConverter();
+
+        converter.CanConvert(typeof(SemVer?)).Should().BeTrue();
+    }
+
+    [Fact]
+    public void NsJsonConverter_CanConvert_ShouldReturnFalseForOtherTypes()
+    {
+        var converter = new vm2.SemVerSerialization.NsJson.SemVerNsConverter();
+
+        converter.CanConvert(typeof(string)).Should().BeFalse();
+        converter.CanConvert(typeof(int)).Should().BeFalse();
+        converter.CanConvert(typeof(object)).Should().BeFalse();
+    }
+
+    [Fact]
+    public void NsJsonConverter_WriteJson_WhenValueIsNull_ShouldWriteNull()
+    {
+        var converter = new vm2.SemVerSerialization.NsJson.SemVerNsConverter();
+        var sb = new System.IO.StringWriter();
+        var writer = new Newtonsoft.Json.JsonTextWriter(sb);
+
+        converter.WriteJson(writer, null, Newtonsoft.Json.JsonSerializer.CreateDefault());
+        writer.Flush();
+
+        sb.ToString().Should().Be("null");
+    }
+
+    [Fact]
+    public void NsJsonConverter_WriteJson_WhenValueIsNotSemVer_ShouldThrow()
+    {
+        var converter = new vm2.SemVerSerialization.NsJson.SemVerNsConverter();
+        var sb = new System.IO.StringWriter();
+        var writer = new Newtonsoft.Json.JsonTextWriter(sb);
+
+        Action act = () => converter.WriteJson(writer, "not-a-semver", Newtonsoft.Json.JsonSerializer.CreateDefault());
+
+        act.Should().Throw<Newtonsoft.Json.JsonWriterException>();
+    }
+    #endregion
+
+    #region Coverage gap tests — Equals(SemVer) short-circuit branches
+    [Fact]
+    public void Equals_WhenMajorDiffers_ShouldReturnFalse()
+    {
+        var a = new SemVer(1, 0, 0);
+        var b = new SemVer(2, 0, 0);
+
+        a.Equals(b).Should().BeFalse();
+    }
+
+    [Fact]
+    public void Equals_WhenMinorDiffers_ShouldReturnFalse()
+    {
+        var a = new SemVer(1, 2, 0);
+        var b = new SemVer(1, 3, 0);
+
+        a.Equals(b).Should().BeFalse();
+    }
+
+    [Fact]
+    public void Equals_WhenPatchDiffers_ShouldReturnFalse()
+    {
+        var a = new SemVer(1, 2, 3);
+        var b = new SemVer(1, 2, 4);
+
+        a.Equals(b).Should().BeFalse();
+    }
+    #endregion
+
+    #region Coverage gap tests — TryParse(Span<char>) group branches
+    [Fact]
+    public void TryParseSpan_CoreOnly_ShouldSucceed()
+    {
+        var ok = SemVer.TryParse("1.2.3".AsSpan(), null, out var parsed);
+
+        ok.Should().BeTrue();
+        parsed.PreRelease.Should().Be("");
+        parsed.BuildMetadata.Should().Be("");
+    }
+
+    [Fact]
+    public void TryParseSpan_WithPreReleaseOnly_ShouldSucceed()
+    {
+        var ok = SemVer.TryParse("1.2.3-alpha".AsSpan(), null, out var parsed);
+
+        ok.Should().BeTrue();
+        parsed.PreRelease.Should().Be("alpha");
+        parsed.BuildMetadata.Should().Be("");
+    }
+
+    [Fact]
+    public void TryParseSpan_WithBuildMetadataOnly_ShouldSucceed()
+    {
+        var ok = SemVer.TryParse("1.2.3+build.7".AsSpan(), null, out var parsed);
+
+        ok.Should().BeTrue();
+        parsed.PreRelease.Should().Be("");
+        parsed.BuildMetadata.Should().Be("build.7");
+    }
+    #endregion
+
+    #region Coverage gap tests — Equals(object?) non-SemVer paths
+    [Fact]
+    public void EqualsObject_WhenObjectIsNull_ShouldReturnFalse()
+    {
+        var version = SemVer.Parse("1.2.3");
+
+        version.Equals((object?)null).Should().BeFalse();
+    }
+
+    [Fact]
+    public void EqualsObject_WhenObjectIsBoxedSemVer_ShouldReturnTrue()
+    {
+        var version = SemVer.Parse("1.2.3");
+        object boxed = new SemVer(1, 2, 3);
+
+        version.Equals(boxed).Should().BeTrue();
+    }
+    #endregion
+
+    #region Coverage gap tests — WithPreRelease / WithBuildMetadata null path
+    [Fact]
+    public void WithPreRelease_WhenValueIsNull_ShouldClearPreRelease()
+    {
+        var version = SemVer.Parse("1.2.3-rc.1+build.7");
+
+        var changed = version.WithPreRelease(null);
+
+        changed.PreRelease.Should().Be("");
+        changed.BuildMetadata.Should().Be("build.7");
+    }
+
+    [Fact]
+    public void WithPreRelease_WhenValueHasLeadingTrailingSpaces_ShouldTrim()
+    {
+        var version = SemVer.Parse("1.2.3");
+
+        var changed = version.WithPreRelease("  rc.1  ");
+
+        changed.PreRelease.Should().Be("rc.1");
+    }
+
+    [Fact]
+    public void WithBuildMetadata_WhenValueIsNull_ShouldClearBuildMetadata()
+    {
+        var version = SemVer.Parse("1.2.3-rc.1+build.7");
+
+        var changed = version.WithBuildMetadata(null);
+
+        changed.BuildMetadata.Should().Be("");
+        changed.PreRelease.Should().Be("rc.1");
+    }
+
+    [Fact]
+    public void WithBuildMetadata_WhenValueHasLeadingTrailingSpaces_ShouldTrim()
+    {
+        var version = SemVer.Parse("1.2.3");
+
+        var changed = version.WithBuildMetadata("  build.7  ");
+
+        changed.BuildMetadata.Should().Be("build.7");
+    }
+    #endregion
+
+    #region Coverage gap tests — CompareSpans rare branches
+    [Fact]
+    public void CompareTo_WhenOnePreReleaseIdIsNumericAndOtherIsNot_NumericShouldBeLower()
+    {
+        // Numeric identifiers always have lower precedence than alphanumeric ones
+        var a = SemVer.Parse("1.0.0-1");
+        var b = SemVer.Parse("1.0.0-alpha");
+
+        a.CompareTo(b).Should().BeNegative();
+        b.CompareTo(a).Should().BePositive();
+    }
+
+    [Fact]
+    public void CompareTo_WhenNumericIdsHaveDifferentLengths_LongerShouldBeGreater()
+    {
+        // "10" (2 digits) > "9" (1 digit) by length
+        var a = SemVer.Parse("1.0.0-9");
+        var b = SemVer.Parse("1.0.0-10");
+
+        a.CompareTo(b).Should().BeNegative();
+        b.CompareTo(a).Should().BePositive();
+    }
+
+    [Fact]
+    public void CompareTo_WhenOneHasMoreIdentifiers_FewerShouldBeLower()
+    {
+        var a = SemVer.Parse("1.0.0-alpha");
+        var b = SemVer.Parse("1.0.0-alpha.1");
+
+        a.CompareTo(b).Should().BeNegative();
+        b.CompareTo(a).Should().BePositive();
+    }
+
+    [Fact]
+    public void CompareTo_WhenEqualLengthNumericIds_ShouldCompareLexically()
+    {
+        var a = SemVer.Parse("1.0.0-11");
+        var b = SemVer.Parse("1.0.0-12");
+
+        a.CompareTo(b).Should().BeNegative();
+        b.CompareTo(a).Should().BePositive();
+    }
+    #endregion
+
+    #region Coverage gap tests — SysConverter.Read null token
+    [Fact]
+    public void SysJson_Deserialize_WhenJsonIsNull_NonNullable_ShouldThrowJsonException()
+    {
+        // Directly deserializing "null" into non-nullable SemVer should throw
+        Action act = () => JsonSerializer.Deserialize<SemVer>("null");
+
+        act.Should().Throw<JsonException>();
+    }
+    #endregion
 }
