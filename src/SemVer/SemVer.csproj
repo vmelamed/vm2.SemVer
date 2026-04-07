@@ -7,21 +7,27 @@
     <PropertyGroup Label="NuGet">
         <PackageId>vm2.SemVer</PackageId>
         <Title>vm2 SemVer</Title>
-        <Description>vm2 SemVer package skeleton.</Description>
-        <PackageTags>vm2 SemVer library template</PackageTags>
+        <Description>A .NET implementation of Semantic Versioning 2.0.0 — parsing, formatting, comparison, and JSON serialization as a lightweight immutable readonly struct.</Description>
+        <PackageTags>vm2 semver semantic versioning parsing formatting comparison json</PackageTags>
         <PackageProjectUrl>https://github.com/vmelamed/vm2.SemVer</PackageProjectUrl>
         <RepositoryUrl>https://github.com/vmelamed/vm2.SemVer</RepositoryUrl>
         <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
 
     <ItemGroup>
-        <None Include="../../README.md" Pack="true" PackagePath="\">
+        <None Include="../../README.md"
+              Pack="true"
+              PackagePath="\">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Include="../../LICENSE" Pack="true" PackagePath="\">
+        <None Include="../../LICENSE"
+              Pack="true"
+              PackagePath="\">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Include="../../CHANGELOG.md" Pack="true" PackagePath="\">
+        <None Include="../../CHANGELOG.md"
+              Pack="true"
+              PackagePath="\">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
