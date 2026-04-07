@@ -1,5 +1,3 @@
-using System;
-
 namespace vm2.SemVerSerialization.NsJson;
 
 using Newtonsoft.Json;
@@ -31,13 +29,18 @@ public class SemVerNsConverter : JsonConverter
     /// <param name="serializer">The <see cref="JsonSerializer"/> used to customize the serialization process. Cannot be <c>null</c>.</param>
     public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
     {
+        if (value is null)
+        {
+            writer.WriteNull();
+            return;
+        }
+
         if (value is SemVer semVer)
         {
             writer.WriteValue(semVer.ToString());
             return;
         }
 
-        // Debug.Assert(false, "This should never happen because JsonConvert.SerializeObject  should prevent it.");
         throw new JsonWriterException($"Expected value to be of type {typeof(SemVer)} or null, but got {value?.GetType()}.");
     }
 
@@ -54,16 +57,11 @@ public class SemVerNsConverter : JsonConverter
     {
         try
         {
-            if (reader.TokenType is JsonToken.Null ||
-                reader.Value is null ||
-                reader.Value.ToString() is null)
+            if (reader.TokenType is JsonToken.Null || reader.Value is null)
                 return null;
 
             if (reader.TokenType is not JsonToken.String)
-            {
-                // Debug.Assert(false, "This should never happen because JsonConvert.DeserializeObject should prevent it.");
                 throw new JsonReaderException($"Expected token type to be {JsonToken.String} or {JsonToken.Null}, but got {reader.TokenType}.");
-            }
 
             return SemVer.Parse(reader.Value.ToString()!);
         }
