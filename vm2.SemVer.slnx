@@ -8,6 +8,9 @@
         <File Path=".github/workflows/Prerelease.yaml" />
         <File Path=".github/workflows/Release.yaml" />
     </Folder>
+    <Folder Name="/examples/">
+        <File Path="examples/Program.cs" />
+    </Folder>
     <Folder Name="/Solution Items/">
         <File Path=".editorconfig" />
         <File Path=".gitattributes" />

@@ -219,6 +219,15 @@ public readonly partial struct SemVer :
 
     #region Methods
     /// <summary>
+    /// Determines whether the specified string is a valid semantic version.
+    /// </summary>
+    /// <param name="s">The string to validate.</param>
+    /// <returns>
+    /// <c>true</c> if the specified string is a valid semantic version; otherwise, <c>false</c>.
+    /// </returns>
+    public static bool IsValid(string? s) => s is not null && SemVer20().IsMatch(s.Trim());
+
+    /// <summary>
     /// Returns a new <see cref="SemVer"/> instance with the major version number incremented by one and the minor and patch
     /// version numbers reset to zero.
     /// </summary>
@@ -525,14 +534,16 @@ public readonly partial struct SemVer :
     /// semantic version format, a <see cref="FormatException"/> is thrown.
     /// </summary>
     /// <param name="s">The span of characters representing the semantic version.</param>
-    /// <param name="provider">An object that supplies culture-specific formatting information.</param>
+    /// <param name="_">
+    /// An object that supplies culture-specific formatting information. This parameter is not used in the parsing process and can be set to <c>null</c>.
+    /// </param>
     /// <returns>The <see cref="SemVer"/> instance equivalent to the semantic version contained in the input span.</returns>
     /// <exception cref="FormatException">Thrown when the input span is not in a valid semantic version format.</exception>
     public static SemVer Parse(
         ReadOnlySpan<char> s,
-        IFormatProvider? provider)
+        IFormatProvider? _ = null)
     {
-        if (TryParse(s, provider, out var result))
+        if (TryParse(s, _, out var result))
             return result;
 
         throw new FormatException($"Input string '{s}' is not in a valid semantic version format. See the SemVer 2.0.0 specification for more details: https://semver.org/.");
@@ -544,7 +555,9 @@ public readonly partial struct SemVer :
     /// corresponding <see cref="SemVer"/> instance; otherwise, it returns <c>false</c> and outputs the default value.
     /// </summary>
     /// <param name="s">The span of characters representing the semantic version.</param>
-    /// <param name="provider">An object that supplies culture-specific formatting information.</param>
+    /// <param name="_">
+    /// An object that supplies culture-specific formatting information. This parameter is not used in the parsing process and can be set to <c>null</c>.
+    /// </param>
     /// <param name="result">
     /// When this method returns, contains the <see cref="SemVer"/> instance equivalent to the semantic version contained in the
     /// input span, if the parsing succeeded; otherwise, the default value.
@@ -554,7 +567,7 @@ public readonly partial struct SemVer :
     /// </returns>
     public static bool TryParse(
         ReadOnlySpan<char> s,
-        IFormatProvider? provider,
+        IFormatProvider? _,
         [MaybeNullWhen(false)] out SemVer result)
     {
         result = default;
@@ -585,9 +598,17 @@ public readonly partial struct SemVer :
     /// instance. The input span must follow the format defined by the SemVer 2.0.0 specification. If the input span is not in a
     /// valid semantic version format, a <see cref="FormatException"/> is thrown.
     /// </summary>
-    public static SemVer Parse(ReadOnlySpan<byte> utf8Text, IFormatProvider? provider)
+    /// <param name="utf8Text">The span of UTF-8 encoded bytes representing the semantic version.</param>
+    /// <param name="_">
+    /// An object that supplies culture-specific formatting information. This parameter is not used in the parsing process and can be set to <c>null</c>.
+    /// </param>
+    /// <returns>The <see cref="SemVer"/> instance equivalent to the semantic version contained in the input span.</returns>
+    /// <exception cref="FormatException">
+    /// Thrown when the input span is not in a valid semantic version format.
+    /// </exception>
+    public static SemVer Parse(ReadOnlySpan<byte> utf8Text, IFormatProvider? _ = null)
     {
-        if (TryParse(utf8Text, provider, out var result))
+        if (TryParse(utf8Text, _, out var result))
             return result;
 
         throw new FormatException($"Input string '{Encoding.UTF8.GetString(utf8Text)}' is not in a valid semantic version format. See the SemVer 2.0.0 specification for more details: https://semver.org/.");
@@ -596,9 +617,15 @@ public readonly partial struct SemVer :
     /// <summary>
     /// Tries to parse a span of UTF-8 encoded bytes representing a semantic version and returns a boolean indicating whether the parsing was successful. If the input span is in a valid semantic version format, the method returns <c>true</c> and outputs the corresponding <see cref="SemVer"/> instance; otherwise, it returns <c>false</c> and outputs the default value.
     /// </summary>
+    /// <param name="utf8Text">The span of UTF-8 encoded bytes representing the semantic version.</param>
+    /// <param name="_">
+    /// An object that supplies culture-specific formatting information. This parameter is not used in the parsing process and can be set to <c>null</c>.
+    /// </param>
+    /// <param name="result">When this method returns, contains the <see cref="SemVer"/> instance equivalent to the semantic version contained in the input span, if the parsing succeeded; otherwise, the default value.</param>
+    /// <returns><c>true</c> if the input span was successfully parsed; otherwise, <c>false</c>.</returns>
     public static bool TryParse(
         ReadOnlySpan<byte> utf8Text,
-        IFormatProvider? provider,
+        IFormatProvider? _,
         [MaybeNullWhen(false)] out SemVer result)
     {
         result = default;
@@ -627,6 +654,56 @@ public readonly partial struct SemVer :
         result = new SemVer(major, minor, patch, preRelease, buildMetadata);
         return true;
     }
+    #endregion
+
+    #region Practical TryParse overloads
+    /// <summary>
+    /// Tries to parse a string representation of a semantic version and returns a boolean indicating whether the parsing was
+    /// successful. If the input string is in a valid semantic version format, the method returns <c>true</c> and outputs the
+    /// corresponding <see cref="SemVer"/> instance; otherwise, it returns <c>false</c> and outputs the default value of
+    /// <see cref="SemVer"/>.
+    /// </summary>
+    /// <param name="s">
+    /// The string representation of the semantic version to parse. The string must follow the format defined by the SemVer
+    /// 2.0.0 specification.
+    /// </param>
+    /// <param name="result">
+    /// When this method returns, contains the <see cref="SemVer"/> instance equivalent to the semantic version contained in
+    /// <paramref name="s"/>, if the conversion succeeded, or the default value if the conversion failed.
+    /// </param>
+    /// <returns>
+    /// <c>true</c> if the <paramref name="s"/> parameter was converted successfully; otherwise, <c>false</c>.
+    /// </returns>
+    public static bool TryParse(
+        [NotNullWhen(true)] string? s,
+        [MaybeNullWhen(false)] out SemVer result) => TryParse(s, null, out result);
+
+    /// <summary>
+    /// Tries to parse a span of characters representing a semantic version and returns a boolean indicating whether the parsing
+    /// was successful. If the input span is in a valid semantic version format, the method returns <c>true</c> and outputs the
+    /// corresponding <see cref="SemVer"/> instance; otherwise, it returns <c>false</c> and outputs the default value.
+    /// </summary>
+    /// <param name="s">The span of characters representing the semantic version.</param>
+    /// <param name="result">
+    /// When this method returns, contains the <see cref="SemVer"/> instance equivalent to the semantic version contained in the
+    /// input span, if the parsing succeeded; otherwise, the default value.
+    /// </param>
+    /// <returns>
+    /// <c>true</c> if the input span was successfully parsed; otherwise, <c>false</c>.
+    /// </returns>
+    public static bool TryParse(
+        ReadOnlySpan<char> s,
+        [MaybeNullWhen(false)] out SemVer result) => TryParse(s, null, out result);
+
+    /// <summary>
+    /// Tries to parse a span of UTF-8 encoded bytes representing a semantic version and returns a boolean indicating whether the parsing was successful. If the input span is in a valid semantic version format, the method returns <c>true</c> and outputs the corresponding <see cref="SemVer"/> instance; otherwise, it returns <c>false</c> and outputs the default value.
+    /// </summary>
+    /// <param name="utf8Text">The span of UTF-8 encoded bytes representing the semantic version.</param>
+    /// <param name="result">When this method returns, contains the <see cref="SemVer"/> instance equivalent to the semantic version contained in the input span, if the parsing succeeded; otherwise, the default value.</param>
+    /// <returns><c>true</c> if the input span was successfully parsed; otherwise, <c>false</c>.</returns>
+    public static bool TryParse(
+        ReadOnlySpan<byte> utf8Text,
+        [MaybeNullWhen(false)] out SemVer result) => TryParse(utf8Text, null, out result);
     #endregion
 
     #region IFormattable
@@ -738,6 +815,22 @@ public readonly partial struct SemVer :
     /// an empty string; otherwise, a <see cref="FormatException"/> is thrown. The <paramref name="provider"/> parameter is also not
     /// used and can be set to <c>null</c>.
     /// </summary>
+    /// <param name="utf8Destination">
+    /// The span of UTF-8 encoded bytes to which the semantic version will be formatted. The method will attempt to format the semantic version into this span, and if the span is not large enough to hold the formatted string, the method will return <c>false</c> and set <paramref name="bytesWritten"/> to zero.
+    /// </param>
+    /// <param name="bytesWritten">
+    /// The number of bytes written to the destination span. If the span is not large enough, this will be set to zero.
+    /// </param>
+    /// <param name="format">
+    /// The format string. This parameter is not used and must be null or an empty string; otherwise, a <see cref="FormatException"/> is thrown.
+    /// </param>
+    /// <param name="provider">
+    /// The format provider. This parameter is not used and can be set to <c>null</c>.
+    /// </param>
+    /// <returns>
+    /// <c>true</c> if the semantic version was successfully formatted; otherwise, <c>false</c>.
+    /// </returns>
+    /// <exception cref="FormatException"></exception>
     public bool TryFormat(
         Span<byte> utf8Destination,
         out int bytesWritten,
