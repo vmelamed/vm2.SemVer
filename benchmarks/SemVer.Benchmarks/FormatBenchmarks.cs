@@ -10,6 +10,9 @@ namespace vm2.SemVerBenchmarks;
 #else
 [SimpleJob(RuntimeMoniker.HostProcess)]
 #endif
+[JsonExporterAttribute.BriefCompressed]
+[MarkdownExporterAttribute.GitHub]
+[MemoryDiagnoser]
 public class FormatBenchmarks
 {
     static readonly SemVer CoreOnly = new(1, 2, 3);
