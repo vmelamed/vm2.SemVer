@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <RootNamespace>vm2.SemVerTool</RootNamespace>
+        <PackAsTool>true</PackAsTool>
+        <ToolCommandName>semver</ToolCommandName>
+    </PropertyGroup>
+
+    <PropertyGroup Label="NuGet">
+        <PackageId>vm2.SemVerTool</PackageId>
+        <Title>SemVer 2.0.0 Command Line Tool</Title>
+        <Description>A command line tool for validating, comparing, and bumping SemVer strings.</Description>
+        <PackageTags>SemVer Semantic Versioning CLI tool command-line .net core vm2</PackageTags>
+        <PackageProjectUrl>https://github.com/vmelamed/vm2.SemVer/tree/main/src/SemVerTool</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/vmelamed/vm2.SemVer</RepositoryUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="../SemVer/SemVer.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="System.CommandLine" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+            <_Parameter1>SemVerTool.Tests</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- <None Include="README.md" Pack="true" PackagePath="\" /> -->
+        <None Include="../../LICENSE" Pack="true" PackagePath="\" />
+        <None Include="../../CHANGELOG.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
+
+</Project>

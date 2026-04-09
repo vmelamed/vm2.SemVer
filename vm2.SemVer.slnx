@@ -8,9 +8,6 @@
         <File Path=".github/workflows/Prerelease.yaml" />
         <File Path=".github/workflows/Release.yaml" />
     </Folder>
-    <Folder Name="/examples/">
-        <File Path="examples/Program.cs" />
-    </Folder>
     <Folder Name="/Solution Items/">
         <File Path=".editorconfig" />
         <File Path=".gitattributes" />
@@ -25,11 +22,16 @@
     </Folder>
     <Folder Name="/src/">
         <Project Path="src/SemVer/SemVer.csproj" />
+        <Project Path="src/SemVerTool/SemVerTool.csproj" />
     </Folder>
     <Folder Name="/test/">
         <Project Path="test/SemVer.Tests/SemVer.Tests.csproj" />
+        <Project Path="test/SemVerTool.Tests/SemVerTool.Tests.csproj" />
     </Folder>
     <Folder Name="/benchmarks/">
         <Project Path="benchmarks/SemVer.Benchmarks/SemVer.Benchmarks.csproj" />
+    </Folder>
+    <Folder Name="/examples/">
+        <File Path="examples/Program.cs" />
     </Folder>
 </Solution>
