@@ -957,4 +957,18 @@ public readonly partial struct SemVer :
     /// </returns>
     public static bool operator >=(SemVer left, SemVer right) => left.CompareTo(right)>=0;
     #endregion
+
+
+    #region Implicit conversions
+    /// <summary>
+    /// Defines an implicit conversion from a <see cref="SemVer"/> to its string representation.
+    /// </summary>
+    public static implicit operator string(SemVer semver) => semver.ToString();
+
+    /// <summary>
+    /// Defines an implicit conversion from a string to a <see cref="SemVer"/> instance.
+    /// </summary>
+    /// <param name="s"></param>
+    public static explicit operator SemVer(string s) => new(s);
+    #endregion
 }
