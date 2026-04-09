@@ -11,19 +11,27 @@ using static System.Console;
 using vm2;
 
 var version1 = new SemVer("1.2.3");
-
 var version2 = new SemVer(1, 2, 4);
+
 CompareSemVer(version1, version2);
 
-var version3 = new SemVer("1.2.3-alpha.1+2026.04.07");
-CompareSemVer(version1, version3);
-CompareSemVer(version2, version3);
+var versionString3 = "1.2.3-alpha.1+2026.04.07";
 
-if (SemVer.TryParse("1.2.3-alpha.1+2026.04.08", out SemVer version4))
+if (SemVer.IsValid(versionString3))
 {
-    CompareSemVer(version1, version4);
-    CompareSemVer(version2, version4);
-    CompareSemVer(version3, version4);
+    WriteLine($"Version string '{versionString3}' is a valid SemVer 2.0.0 version.");
+
+    var version3 = new SemVer(versionString3);
+
+    CompareSemVer(version1, version3);
+    CompareSemVer(version2, version3);
+
+    if (SemVer.TryParse("1.2.3-alpha.1+2026.04.08", out SemVer version4))
+    {
+        CompareSemVer(version1, version4);
+        CompareSemVer(version2, version4);
+        CompareSemVer(version3, version4);
+    }
 }
 
 int CompareSemVer(SemVer version1, SemVer version2)
