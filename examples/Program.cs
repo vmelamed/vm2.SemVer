@@ -30,26 +30,36 @@ if (SemVer.IsValid(versionString3))
     {
         CompareSemVer(version1, version4);
         CompareSemVer(version2, version4);
+        // Note: Build metadata is ignored in SemVer precedence — version3 and version4 compare as equal.
         CompareSemVer(version3, version4);
+
+        if (version3.ToString() != version4.ToString())
+            WriteLine($"Although equal as SemVer the version string '{version3}' is not equal to the version string '{version4}'");
+
+        var v3 = version3.BumpPatch();
+        var v4 = version4.BumpPatch();
+
+        if ((string)v3 == (string)v4) // note the explicit cast to string here and the implicit cast on the next line
+            WriteLine($"After bumping patch, the version string '{v3}' is equal to the version string '{v4}'");
+        // now even the strings are equal, because the Bump* methods remove pre-release and build metadata, unless they are specified explicitly in the methods.
+        CompareSemVer(v3, v4);
     }
 }
 
-int CompareSemVer(SemVer version1, SemVer version2)
+void CompareSemVer(SemVer left, SemVer right)
 {
-    var relationship = version1.CompareTo(version2);
+    var relationship = left.CompareTo(right);
 
-    switch(relationship)
+    switch (relationship)
     {
         case 0:
-            WriteLine($"Version '{version1}' is equal to version '{version2}'");
+            WriteLine($"Version '{left}' is equal to version '{right}'");
             break;
         case < 0:
-            WriteLine($"Version '{version1}' is less than version '{version2}'");
+            WriteLine($"Version '{left}' is less than version '{right}'");
             break;
         case > 0:
-            WriteLine($"Version '{version1}' is greater than version '{version2}'");
+            WriteLine($"Version '{left}' is greater than version '{right}'");
             break;
     }
-
-    return relationship;
 }
