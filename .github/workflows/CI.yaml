@@ -38,25 +38,25 @@ concurrency:
 env:
   BUILD_PROJECTS: >-
     [
-      "vm2.SemVer.slnx"
+    "vm2.SemVer.slnx"
     ]
   TEST_PROJECTS: >-
     [
-      "test/SemVer.Tests/SemVer.Tests.csproj"
-      "test/SemVerTool.Tests/SemVerTool.Tests.csproj"
+    "test/SemVer.Tests/SemVer.Tests.csproj"
+    "test/SemVerTool.Tests/SemVerTool.Tests.csproj"
     ]
   BENCHMARK_PROJECTS: >-
     [
-      "benchmarks/SemVer.Benchmarks/SemVer.Benchmarks.csproj"
+    "benchmarks/SemVer.Benchmarks/SemVer.Benchmarks.csproj"
     ]
   PACKAGE_PROJECTS: >-
     [
-      "src/SemVer/SemVer.csproj"
-      "src/SemVerTool/SemVerTool.csproj"
+    "src/SemVer/SemVer.csproj"
+    "src/SemVerTool/SemVerTool.csproj"
     ]
   RUNNERS_OS: >-
     [
-      "ubuntu-latest"
+    "ubuntu-latest"
     ]
   PREPROCESSOR_SYMBOLS: ""
   DOTNET_VERSION: ${{ vars.DOTNET_VERSION || '10.0.x' }} # The .NET SDK version to use.
