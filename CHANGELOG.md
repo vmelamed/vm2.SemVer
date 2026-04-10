@@ -3,6 +3,7 @@
 ## v1.0.0-preview.1 - 2026-04-07
 
 ### Added
+
 - Initial implementation of SemVer parsing and formatting
 - Regular expression-based SemVer validation
 - `Newtonsoft.Json` and `System.Text.Json` converters for SemVer serialization
@@ -11,6 +12,7 @@
 - Comprehensive unit tests
 
 ### Internal
+
 - Scaffold from vm2pkg template with CI/CD workflows
 
 ## Usage Notes
