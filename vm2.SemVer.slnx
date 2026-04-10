@@ -3,22 +3,32 @@
         <File Path=".github/dependabot.yml" />
     </Folder>
     <Folder Name="/.github/workflows/">
+        <File Path=".github/workflows/AutoMerge.yaml" />
         <File Path=".github/workflows/CI.yaml" />
         <File Path=".github/workflows/ClearCache.yaml" />
         <File Path=".github/workflows/Prerelease.yaml" />
         <File Path=".github/workflows/Release.yaml" />
     </Folder>
-    <Folder Name="/Solution Items/">
+    <Folder Name="/benchmarks/">
+        <Project Path="benchmarks/SemVer.Benchmarks/SemVer.Benchmarks.csproj" />
+    </Folder>
+    <Folder Name="/examples/">
+        <File Path="examples/Program.cs" />
+    </Folder>
+    <Folder Name="/solution Items/">
         <File Path=".editorconfig" />
         <File Path=".gitattributes" />
         <File Path=".gitignore" />
-        <File Path="codecov.yml" />
+        <File Path="CHANGELOG.md" />
+        <File Path="codecov.yaml" />
+        <File Path="coverage.settings.xml" />
         <File Path="Directory.Build.props" />
         <File Path="Directory.Packages.props" />
         <File Path="global.json" />
+        <File Path="LICENSE" />
         <File Path="NuGet.config" />
         <File Path="README.md" />
-        <File Path="test.runsettings" />
+        <File Path="testconfig.json" />
     </Folder>
     <Folder Name="/src/">
         <Project Path="src/SemVer/SemVer.csproj" />
@@ -27,11 +37,5 @@
     <Folder Name="/test/">
         <Project Path="test/SemVer.Tests/SemVer.Tests.csproj" />
         <Project Path="test/SemVerTool.Tests/SemVerTool.Tests.csproj" />
-    </Folder>
-    <Folder Name="/benchmarks/">
-        <Project Path="benchmarks/SemVer.Benchmarks/SemVer.Benchmarks.csproj" />
-    </Folder>
-    <Folder Name="/examples/">
-        <File Path="examples/Program.cs" />
     </Folder>
 </Solution>
