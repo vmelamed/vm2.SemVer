@@ -10,9 +10,6 @@ namespace vm2.SemVerBenchmarks;
 #else
 [SimpleJob(RuntimeMoniker.HostProcess)]
 #endif
-[JsonExporterAttribute.BriefCompressed]
-[MarkdownExporterAttribute.GitHub]
-[MemoryDiagnoser]
 public class ParseBenchmarks
 {
     const string CoreOnly = "1.2.3";
