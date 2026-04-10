@@ -198,6 +198,7 @@ internal static class SemVerToolApp
             HelpName = "version",
             Description = "The SemVer 2.0.0 string to bump.",
             Arity = ArgumentArity.ExactlyOne,
+            DefaultValueFactory = _ => "",
             Validators =
             {
                 result =>

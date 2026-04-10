@@ -15,7 +15,7 @@
     <Folder Name="/examples/">
         <File Path="examples/Program.cs" />
     </Folder>
-    <Folder Name="/solution Items/">
+    <Folder Name="/solution items/">
         <File Path=".editorconfig" />
         <File Path=".gitattributes" />
         <File Path=".gitignore" />

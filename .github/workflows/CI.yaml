@@ -42,7 +42,7 @@ env:
     ]
   TEST_PROJECTS: >-
     [
-    "test/SemVer.Tests/SemVer.Tests.csproj"
+    "test/SemVer.Tests/SemVer.Tests.csproj",
     "test/SemVerTool.Tests/SemVerTool.Tests.csproj"
     ]
   BENCHMARK_PROJECTS: >-
@@ -51,7 +51,7 @@ env:
     ]
   PACKAGE_PROJECTS: >-
     [
-    "src/SemVer/SemVer.csproj"
+    "src/SemVer/SemVer.csproj",
     "src/SemVerTool/SemVerTool.csproj"
     ]
   RUNNERS_OS: >-
