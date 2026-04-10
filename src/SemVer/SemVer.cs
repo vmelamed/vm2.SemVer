@@ -966,7 +966,7 @@ public readonly partial struct SemVer :
     public static implicit operator string(SemVer semver) => semver.ToString();
 
     /// <summary>
-    /// Defines an implicit conversion from a string to a <see cref="SemVer"/> instance.
+    /// Defines an explicit conversion from a string to a <see cref="SemVer"/> instance.
     /// </summary>
     /// <param name="s"></param>
     public static explicit operator SemVer(string s) => new(s);

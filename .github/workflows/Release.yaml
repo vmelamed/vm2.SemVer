@@ -12,7 +12,8 @@ on:
 env:
   PACKAGE_PROJECTS: >-
     [
-    "src/SemVer/SemVer.csproj"
+    "src/SemVer/SemVer.csproj",
+    "src/SemVerTool/SemVerTool.csproj"
     ]
   # Ensure the NUGET_API_KEY secret is issued by the server selected here.
   NUGET_SERVER: ${{ vars.NUGET_SERVER || 'github' }}
