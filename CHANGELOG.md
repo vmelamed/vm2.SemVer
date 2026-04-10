@@ -1,19 +1,19 @@
 # Changelog
 
-
-
 ## v1.0.0 - 2026-04-07
 See prereleases below.
 ## v1.0.0-preview.1 - 2026-04-07
 
+### Added
+- Initial implementation of SemVer parsing and formatting
+- Regular expression-based SemVer validation
+- `Newtonsoft.Json` and `System.Text.Json` converters for SemVer serialization
+- Explicit and implicit string conversions
+- Benchmarks for parsing, formatting, and JSON serialization
+- Comprehensive unit tests
+
 ### Internal
-
-DevOps changes only.
-All notable changes to this project will be documented in this file.
-
-## [0.1.0] - YYYY-MM-DD
-
-- Initial scaffold created from vm2pkg template.
+- Scaffold from vm2pkg template with CI/CD workflows
 
 ## Usage Notes
 
