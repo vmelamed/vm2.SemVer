@@ -349,4 +349,25 @@ public readonly partial struct SemVer
     /// </returns>
     [GeneratedRegex(ValidSemVerRegex, RegexOptions.IgnorePatternWhitespace)]
     public static partial Regex SemVer20();
+
+    /// <summary>
+    /// Helper method that prints the regex patterns defined in this class to the console.
+    /// This can be useful for debugging or educational purposes to see the actual regex patterns being used.
+    /// </summary>
+    public static void PrintREs(Action<string>? WriteLine = null)
+    {
+        WriteLine ??= Console.WriteLine;
+
+        WriteLine($"NumericIdentifierRex: {NumericIdentifierRex}");
+        WriteLine($"NumericIdentifierRegex: {NumericIdentifierRegex}");
+
+        WriteLine($"BuildRex: {BuildRex}");
+        WriteLine($"BuildRegex: {BuildRegex}");
+
+        WriteLine($"PreReleaseRex: {PreReleaseRex}");
+        WriteLine($"PreReleaseRegex: {PreReleaseRegex}");
+
+        WriteLine($"ValidSemVerRex: {ValidSemVerRex}");
+        WriteLine($"ValidSemVerRegex: {ValidSemVerRegex}");
+    }
 }

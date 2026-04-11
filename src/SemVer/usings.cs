@@ -6,6 +6,7 @@ global using System.Numerics;
 global using System.Text;
 global using System.Text.Json;
 global using System.Text.RegularExpressions;
+global using static System.Console;
 
 global using vm2.SemVerSerialization.NsJson;
 global using vm2.SemVerSerialization.SysJson;
