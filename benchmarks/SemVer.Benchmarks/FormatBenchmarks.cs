@@ -12,19 +12,11 @@ namespace vm2.SemVerBenchmarks;
 #endif
 public class FormatBenchmarks
 {
-    static readonly SemVer CoreOnly = new(1, 2, 3);
     static readonly SemVer WithPreRelease = new(1, 2, 3, "rc.1");
     static readonly SemVer Full = new(1, 2, 3, "rc.1", "build.7");
     static readonly SemVer HugeNumbers = new(int.MaxValue, int.MaxValue, int.MaxValue, "alpha.1", "meta.2");
 
     // --- TryFormat(Span<char>) ---
-
-    [Benchmark(Description = "TryFormat(char) core")]
-    public bool TryFormat_Char_CoreOnly()
-    {
-        Span<char> buffer = stackalloc char[CoreOnly.Length];
-        return CoreOnly.TryFormat(buffer, out _);
-    }
 
     [Benchmark(Description = "TryFormat(char) pre-release")]
     public bool TryFormat_Char_WithPreRelease()
@@ -48,13 +40,6 @@ public class FormatBenchmarks
     }
 
     // --- TryFormat(Span<byte>) UTF-8 ---
-
-    [Benchmark(Description = "TryFormat(byte) core")]
-    public bool TryFormat_Utf8_CoreOnly()
-    {
-        Span<byte> buffer = stackalloc byte[CoreOnly.Length];
-        return CoreOnly.TryFormat(buffer, out _);
-    }
 
     [Benchmark(Description = "TryFormat(byte) pre-release")]
     public bool TryFormat_Utf8_WithPreRelease()
