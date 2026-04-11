@@ -50,12 +50,7 @@ See prereleases below.
 > **Removed**
 >
 > - add removed/obsolete items
-> - commit prefix for git-cliff: `revert:`
->
-> **Security**
->
-> - add security-related changes
-> - commit prefix for git-cliff: `security:`
+> - commit prefix for git-cliff: `revert:` or `remove:`
 >
 > **Internal**
 >
