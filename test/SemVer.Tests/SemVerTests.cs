@@ -7,6 +7,10 @@ namespace vm2.SemVerTests;
 
 public class SemVerTests
 {
+    ITestOutputHelper _output;
+
+    public SemVerTests(ITestOutputHelper output) => _output = output;
+
     public static TheoryData<string, int, int, int, string, string> ValidSemVerCases => new()
     {
         { "1.2.3", 1, 2, 3, "", "" },
@@ -85,6 +89,18 @@ public class SemVerTests
         { 1, 2, 3, "rc.1", "meta.9" },
     };
 
+    public static TheoryData<string?, bool> IsValidCases => new()
+    {
+        { "1.2.3", true },
+        { "1.2.3-alpha.1+build.7", true },
+        { "1.2.3-rc.1+meta.09", true },
+        { "1.2.a3-rc.1+meta.9", false },
+        { "some string", false },
+        { "", false },
+        { "   ", false },
+        { null, false },
+    };
+
     [Theory]
     [MemberData(nameof(ValidSemVerCases))]
     public void Parse_WhenInputIsValid_ShouldReturnExpectedParts(
@@ -125,6 +141,32 @@ public class SemVerTests
     public void TryParse_WhenInputIsInvalid_ShouldReturnFalse(string input)
     {
         var ok = SemVer.TryParse(input, null, out var parsed);
+
+        ok.Should().BeFalse();
+        parsed.Should().Be(default);
+    }
+
+    [Theory]
+    [MemberData(nameof(ValidSemVerCases))]
+    public void TryParse2_WhenInputIsValid_ShouldSucceed(
+        string input,
+        int major,
+        int minor,
+        int patch,
+        string preRelease,
+        string buildMetadata)
+    {
+        var ok = SemVer.TryParse(input, out var parsed);
+
+        ok.Should().BeTrue();
+        parsed.Should().Be(new SemVer(major, minor, patch, preRelease, buildMetadata));
+    }
+
+    [Theory]
+    [MemberData(nameof(InvalidSemVerCases))]
+    public void TryParse2_WhenInputIsInvalid_ShouldReturnFalse(string input)
+    {
+        var ok = SemVer.TryParse(input, out var parsed);
 
         ok.Should().BeFalse();
         parsed.Should().Be(default);
@@ -476,6 +518,43 @@ public class SemVerTests
     public void TryParseSpan_WhenInputIsInvalid_ShouldReturnFalse()
     {
         var ok = SemVer.TryParse("1.2".AsSpan(), null, out var parsed);
+
+        ok.Should().BeFalse();
+        parsed.Should().Be(default);
+    }
+
+
+    [Fact]
+    public void TryParse2Span_WhenInputIsValid_ShouldSucceed()
+    {
+        var ok = SemVer.TryParse(" 1.2.3-alpha+build.7 ".AsSpan(), out var parsed);
+
+        ok.Should().BeTrue();
+        parsed.Should().Be(new SemVer(1, 2, 3, "alpha", "build.7"));
+    }
+
+    [Fact]
+    public void TryParse2Span_WhenInputIsEmpty_ShouldReturnFalse()
+    {
+        var ok = SemVer.TryParse(ReadOnlySpan<char>.Empty, out var parsed);
+
+        ok.Should().BeFalse();
+        parsed.Should().Be(default);
+    }
+
+    [Fact]
+    public void TryParse2Span_WhenInputIsWhitespace_ShouldReturnFalse()
+    {
+        var ok = SemVer.TryParse("   ".AsSpan(), out var parsed);
+
+        ok.Should().BeFalse();
+        parsed.Should().Be(default);
+    }
+
+    [Fact]
+    public void TryParse2Span_WhenInputIsInvalid_ShouldReturnFalse()
+    {
+        var ok = SemVer.TryParse("1.2".AsSpan(), out var parsed);
 
         ok.Should().BeFalse();
         parsed.Should().Be(default);
@@ -1331,4 +1410,13 @@ public class SemVerTests
         act.Should().Throw<JsonException>();
     }
     #endregion
+
+    [Theory]
+    [MemberData(nameof(IsValidCases))]
+    public void IsValid_ShouldValidateInput(string? input, bool expected)
+    {
+        var valid = SemVer.IsValid(input);
+
+        valid.Should().Be(expected);
+    }
 }

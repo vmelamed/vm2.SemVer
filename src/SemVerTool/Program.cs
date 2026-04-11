@@ -96,7 +96,7 @@ internal static class SemVerToolApp
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Error validating SemVer string: {ex.Message}");
-                    return 255;
+                    return 128;
                 }
 #pragma warning restore CA1031
             });
@@ -180,7 +180,7 @@ internal static class SemVerToolApp
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Error comparing SemVer strings: {ex.Message}");
-                    return 255;
+                    return 128;
                 }
 #pragma warning restore CA1031
             });
@@ -216,7 +216,7 @@ internal static class SemVerToolApp
             Description = "The part of the version to bump: major or j, minor or n, or patch or p.",
             Required = false,
             Arity = ArgumentArity.ExactlyOne,
-            DefaultValueFactory = _ => "patch",
+            DefaultValueFactory = _ => "",
             Validators =
             {
                 result =>
