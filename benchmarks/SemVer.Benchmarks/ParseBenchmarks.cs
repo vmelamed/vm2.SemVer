@@ -22,45 +22,45 @@ public class ParseBenchmarks
     static readonly byte[] FullUtf8 = Encoding.UTF8.GetBytes(Full);
     static readonly byte[] HugeNumbersUtf8 = Encoding.UTF8.GetBytes(HugeNumbers);
 
-    // --- String Parse ---
+    // --- String TryParse ---
 
-    [Benchmark(Description = "Parse(string) core")]
-    public SemVer Parse_String_CoreOnly() => SemVer.Parse(CoreOnly, null);
+    [Benchmark(Description = "TryParse(string) core")]
+    public bool TryParse_String_CoreOnly() => SemVer.TryParse(CoreOnly, null, out _);
 
-    [Benchmark(Description = "Parse(string) pre-release")]
-    public SemVer Parse_String_WithPreRelease() => SemVer.Parse(WithPreRelease, null);
+    [Benchmark(Description = "TryParse(string) pre-release")]
+    public bool TryParse_String_WithPreRelease() => SemVer.TryParse(WithPreRelease, null, out _);
 
-    [Benchmark(Description = "Parse(string) full")]
-    public SemVer Parse_String_Full() => SemVer.Parse(Full, null);
+    [Benchmark(Description = "TryParse(string) full")]
+    public bool TryParse_String_Full() => SemVer.TryParse(Full, null, out _);
 
-    [Benchmark(Description = "Parse(string) huge")]
-    public SemVer Parse_String_HugeNumbers() => SemVer.Parse(HugeNumbers, null);
+    [Benchmark(Description = "TryParse(string) huge")]
+    public bool TryParse_String_HugeNumbers() => SemVer.TryParse(HugeNumbers, null, out _);
 
-    // --- Span<char> Parse ---
+    // --- Span<char> TryParse ---
 
-    [Benchmark(Description = "Parse(span<char>) core")]
-    public SemVer Parse_CharSpan_CoreOnly() => SemVer.Parse(CoreOnly.AsSpan(), null);
+    [Benchmark(Description = "TryParse(span<char>) core")]
+    public bool TryParse_CharSpan_CoreOnly() => SemVer.TryParse(CoreOnly.AsSpan(), null, out _);
 
-    [Benchmark(Description = "Parse(span<char>) pre-release")]
-    public SemVer Parse_CharSpan_WithPreRelease() => SemVer.Parse(WithPreRelease.AsSpan(), null);
+    [Benchmark(Description = "TryParse(span<char>) pre-release")]
+    public bool TryParse_CharSpan_WithPreRelease() => SemVer.TryParse(WithPreRelease.AsSpan(), null, out _);
 
-    [Benchmark(Description = "Parse(span<char>) full")]
-    public SemVer Parse_CharSpan_Full() => SemVer.Parse(Full.AsSpan(), null);
+    [Benchmark(Description = "TryParse(span<char>) full")]
+    public bool TryParse_CharSpan_Full() => SemVer.TryParse(Full.AsSpan(), null, out _);
 
-    [Benchmark(Description = "Parse(span<char>) huge")]
-    public SemVer Parse_CharSpan_HugeNumbers() => SemVer.Parse(HugeNumbers.AsSpan(), null);
+    [Benchmark(Description = "TryParse(span<char>) huge")]
+    public bool TryParse_CharSpan_HugeNumbers() => SemVer.TryParse(HugeNumbers.AsSpan(), null, out _);
 
-    // --- Span<byte> UTF-8 Parse ---
+    // --- Span<byte> UTF-8 TryParse ---
 
-    [Benchmark(Description = "Parse(span<byte>) core")]
-    public SemVer Parse_Utf8Span_CoreOnly() => SemVer.Parse(CoreOnlyUtf8.AsSpan(), null);
+    [Benchmark(Description = "TryParse(span<byte>) core")]
+    public bool TryParse_Utf8Span_CoreOnly() => SemVer.TryParse(CoreOnlyUtf8.AsSpan(), null, out _);
 
-    [Benchmark(Description = "Parse(span<byte>) pre-release")]
-    public SemVer Parse_Utf8Span_WithPreRelease() => SemVer.Parse(WithPreReleaseUtf8.AsSpan(), null);
+    [Benchmark(Description = "TryParse(span<byte>) pre-release")]
+    public bool TryParse_Utf8Span_WithPreRelease() => SemVer.TryParse(WithPreReleaseUtf8.AsSpan(), null, out _);
 
-    [Benchmark(Description = "Parse(span<byte>) full")]
-    public SemVer Parse_Utf8Span_Full() => SemVer.Parse(FullUtf8.AsSpan(), null);
+    [Benchmark(Description = "TryParse(span<byte>) full")]
+    public bool TryParse_Utf8Span_Full() => SemVer.TryParse(FullUtf8.AsSpan(), null, out _);
 
-    [Benchmark(Description = "Parse(span<byte>) huge")]
-    public SemVer Parse_Utf8Span_HugeNumbers() => SemVer.Parse(HugeNumbersUtf8.AsSpan(), null);
+    [Benchmark(Description = "TryParse(span<byte>) huge")]
+    public bool TryParse_Utf8Span_HugeNumbers() => SemVer.TryParse(HugeNumbersUtf8.AsSpan(), null, out _);
 }

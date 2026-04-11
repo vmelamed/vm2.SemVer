@@ -17,20 +17,6 @@ public class FormatBenchmarks
     static readonly SemVer Full = new(1, 2, 3, "rc.1", "build.7");
     static readonly SemVer HugeNumbers = new(int.MaxValue, int.MaxValue, int.MaxValue, "alpha.1", "meta.2");
 
-    // --- ToString (allocating) ---
-
-    [Benchmark(Description = "ToString() core")]
-    public string ToString_CoreOnly() => CoreOnly.ToString();
-
-    [Benchmark(Description = "ToString() pre-release")]
-    public string ToString_WithPreRelease() => WithPreRelease.ToString();
-
-    [Benchmark(Description = "ToString() full")]
-    public string ToString_Full() => Full.ToString();
-
-    [Benchmark(Description = "ToString() huge")]
-    public string ToString_HugeNumbers() => HugeNumbers.ToString();
-
     // --- TryFormat(Span<char>) ---
 
     [Benchmark(Description = "TryFormat(char) core")]
