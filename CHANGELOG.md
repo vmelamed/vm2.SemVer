@@ -1,5 +1,48 @@
 # Changelog
 
+
+## v1.1.0-preview.1 - 2026-04-11
+
+### Added
+
+- add practical overloads for the TryParse functions. Add example program.
+- add explicit and implicit string conversions to SemVer
+- add an example program
+- add an example program
+- add dotnet tool SemVer
+- add JsonExporter and MemoryDiagnoser attributes to benchmark classes
+- add regex printing helper and improve SemVer validation tests. Addressed Copilot review comments.
+
+
+### Fixed
+
+- no indentation in block scalars
+- update environment variables to provide default values and remove deprecated attributes in benchmarks
+- conditionally disable TestingPlatformServerCapability for Visual Studio builds
+- curate CHANGELOG and fix git-cliff template for v2.x
+- add missing newlines in CHANGELOG and cliff.prerelease.toml for better readability
+- update vm2.TestUtilities version to 1.3.1 in package locks
+- update project references and improve README for SemVerTool; added DefaultValueFactory for the Tool's parameter version; Added README.md for the Tool;
+- the comment in Program.cs regarding explicit string cast was wrong
+- remove unnecessary blank lines in CHANGELOG.md
+- adjust default bump value to "patch" in the command. Update vm2.TestUtilities to version 1.4.0 and inherit all test classes from TestBase
+- update settings for cSpell and improve Codecov configuration. Adjust coverage settings for better source matching.
+- add missing newline at end of packages.lock.json files
+
+
+### Performance
+
+- trim redundant benchmarks - remove ToString (wraps TryFormat), replace Parse with TryParse, drop CoreOnly JSON payloads
+- remove CoreOnly benchmarks to reduce alert noise
+
+
+## v1.0.0 - 2026-04-07
+
+### Internal
+
+- promote to stable v1.0.0 [skip ci]
+- update changelog for v1.0.0 [skip ci]
+
 ## v1.0.0 - 2026-04-07
 
 See prereleases below.
