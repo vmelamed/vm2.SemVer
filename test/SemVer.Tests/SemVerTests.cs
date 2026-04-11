@@ -5,12 +5,8 @@ namespace vm2.SemVerTests;
 
 #pragma warning disable IL2026 // Trim analyzer: Newtonsoft.Json and System.Text.Json reflection-based APIs are safe in test code
 
-public class SemVerTests
+public class SemVerTests(ITestOutputHelper output) : TestBase(output)
 {
-    ITestOutputHelper _output;
-
-    public SemVerTests(ITestOutputHelper output) => _output = output;
-
     public static TheoryData<string, int, int, int, string, string> ValidSemVerCases => new()
     {
         { "1.2.3", 1, 2, 3, "", "" },
