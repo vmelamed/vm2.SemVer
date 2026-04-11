@@ -12,20 +12,15 @@ namespace vm2.SemVerBenchmarks;
 #endif
 public class ParseBenchmarks
 {
-    const string CoreOnly = "1.2.3";
     const string WithPreRelease = "1.2.3-rc.1";
     const string Full = "1.2.3-rc.1+build.7";
     const string HugeNumbers = "2147483647.2147483647.2147483647-alpha.1+meta.2";
 
-    static readonly byte[] CoreOnlyUtf8 = Encoding.UTF8.GetBytes(CoreOnly);
     static readonly byte[] WithPreReleaseUtf8 = Encoding.UTF8.GetBytes(WithPreRelease);
     static readonly byte[] FullUtf8 = Encoding.UTF8.GetBytes(Full);
     static readonly byte[] HugeNumbersUtf8 = Encoding.UTF8.GetBytes(HugeNumbers);
 
     // --- String TryParse ---
-
-    [Benchmark(Description = "TryParse(string) core")]
-    public bool TryParse_String_CoreOnly() => SemVer.TryParse(CoreOnly, null, out _);
 
     [Benchmark(Description = "TryParse(string) pre-release")]
     public bool TryParse_String_WithPreRelease() => SemVer.TryParse(WithPreRelease, null, out _);
@@ -38,9 +33,6 @@ public class ParseBenchmarks
 
     // --- Span<char> TryParse ---
 
-    [Benchmark(Description = "TryParse(span<char>) core")]
-    public bool TryParse_CharSpan_CoreOnly() => SemVer.TryParse(CoreOnly.AsSpan(), null, out _);
-
     [Benchmark(Description = "TryParse(span<char>) pre-release")]
     public bool TryParse_CharSpan_WithPreRelease() => SemVer.TryParse(WithPreRelease.AsSpan(), null, out _);
 
@@ -51,9 +43,6 @@ public class ParseBenchmarks
     public bool TryParse_CharSpan_HugeNumbers() => SemVer.TryParse(HugeNumbers.AsSpan(), null, out _);
 
     // --- Span<byte> UTF-8 TryParse ---
-
-    [Benchmark(Description = "TryParse(span<byte>) core")]
-    public bool TryParse_Utf8Span_CoreOnly() => SemVer.TryParse(CoreOnlyUtf8.AsSpan(), null, out _);
 
     [Benchmark(Description = "TryParse(span<byte>) pre-release")]
     public bool TryParse_Utf8Span_WithPreRelease() => SemVer.TryParse(WithPreReleaseUtf8.AsSpan(), null, out _);
