@@ -216,7 +216,7 @@ internal static class SemVerToolApp
             Description = "The part of the version to bump: major or j, minor or n, or patch or p.",
             Required = false,
             Arity = ArgumentArity.ExactlyOne,
-            DefaultValueFactory = _ => "",
+            DefaultValueFactory = _ => "patch",
             Validators =
             {
                 result =>

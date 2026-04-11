@@ -3,7 +3,9 @@
 
 namespace vm2.SemVerToolTests;
 
-public class SemVerToolTests
+using vm2.TestUtilities;
+
+public class SemVerToolTests(ITestOutputHelper outputHelper) : TestBase(outputHelper)
 {
     static (int exitCode, string output) RunTool(params string[] args)
     {
