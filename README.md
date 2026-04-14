@@ -216,3 +216,7 @@ Quick convention table:
 | Public     | *Rex      | PascalCase        | generally unanchored public patterns                      |
 | Public     | *Regex    | PascalCase        | anchored full-string validation patterns                  |
 | Public     | *Regex    | PascalCase        | `GeneratedRegex` factories for `*Regex` constants (method name is the constant name without the `Regex` suffix) |
+
+> [!NOTE] This style of building the regexes usually requires that the regular expression objects MUST be built with the
+> options `RegexOptions.IgnorePatternWhitespace` and `RegexOptions.ExplicitCapture` for correctness, better readability, and
+> performance.

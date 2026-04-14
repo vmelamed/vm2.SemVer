@@ -46,6 +46,9 @@ if (SemVer.IsValid(versionString3))
         // now even the strings are equal, because the Bump* methods remove pre-release and build metadata, unless they are specified explicitly in the methods.
         CompareSemVer(v3, v4);
     }
+
+    WriteLine($"Regular expressions used by SemVer for parsing and validation:");
+    SemVer.PrintREs();
 }
 
 void CompareSemVer(SemVer left, SemVer right)
