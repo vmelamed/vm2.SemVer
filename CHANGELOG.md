@@ -1,6 +1,15 @@
 # Changelog
 
 
+
+
+
+
+
+## v1.1.0 - 2026-04-14
+
+See prereleases below.
+
 ## v1.1.0-preview.3 - 2026-04-14
 
 ### Internal
