@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v1.1.0-preview.3 - 2026-04-14
+
+### Internal
+
+- update vm2.TestUtilities to 1.4.3 and refine changelog template
+
+
 ## v1.1.0-preview.2 - 2026-04-14
 
 ### Internal
