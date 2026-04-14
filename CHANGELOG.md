@@ -1,6 +1,21 @@
 # Changelog
 
 
+## v1.1.0-preview.2 - 2026-04-14
+
+### Internal
+
+- update .gitattributes and add .slnx support; enhance changelog reminders in workflows; bump vm2.TestUtilities to 1.4.1; refine changelog commit parsers; add .gitmessage template
+- bump vm2.TestUtilities to 1.4.2 and align changelog parser
+- update tag pattern in changelog configuration for semantic versioning compliance
+- refine documentation commit parser regex and add pull request template
+
+
+### deps
+
+- Bump the minor-and-patch group with 1 update
+
+
 ## v1.1.0-preview.1 - 2026-04-11
 
 ### Added
