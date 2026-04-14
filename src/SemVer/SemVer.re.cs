@@ -42,16 +42,16 @@ public readonly partial struct SemVer
     // - Public `*Regex` (PascalCase): anchored full-string validation patterns.
     // - Public methods named like `*Regex` without suffix: `GeneratedRegex` factories for `*Regex` constants.
     //
-    // This style of building the regexes usually requires that the regular expression objects MUST be built with the options
-    // `RegexOptions.IgnorePatternWhitespace` and `RegexOptions.ExplicitCapture` for correctness, better readability, and performance.
+    // This style of building the regexes typically requires that the regular expression objects use the options
+    // `RegexOptions.IgnorePatternWhitespace` and `RegexOptions.ExplicitCapture` for readability, where applicable, performance.
 
     /// <summary>
-    /// The regex options that must be used when compiling or generating the regular expressions defined in this class:
+    /// The regex options that MUST be used when compiling or generating the regular expressions defined in this class:
     /// - RegexOptions.IgnorePatternWhitespace: allows for whitespace and comments in the regex pattern, which can enhance readability.
     /// - RegexOptions.ExplicitCapture: disables implicit capture groups, which can improve performance and reduce memory usage
     ///   when the regex does not rely on numbered capture groups.
     /// </summary>
-    public const RegexOptions RegexOptions = RegexOptions.IgnorePatternWhitespace | RegexOptions.ExplicitCapture;
+    public const RegexOptions RequiredRegexOptions = RegexOptions.IgnorePatternWhitespace | RegexOptions.ExplicitCapture;
 
     /// <summary>
     /// Charset containing the letters in identifiers.
@@ -162,7 +162,7 @@ public readonly partial struct SemVer
     /// <summary>
     /// Method returns a <see cref="Regex"/> instance that can be used to validate numeric identifier strings against the SemVer 2.0.0 specification.
     /// </summary>
-    [GeneratedRegex(NumericIdentifierRegex, RegexOptions)]
+    [GeneratedRegex(NumericIdentifierRegex, RequiredRegexOptions)]
     public static partial Regex NumericIdentifier();
 
     /// <summary>
@@ -234,7 +234,7 @@ public readonly partial struct SemVer
     /// <summary>
     /// The method returns a <see cref="Regex"/> instance that can be used to validate build metadata strings against the SemVer 2.0.0 specification.
     /// </summary>
-    [GeneratedRegex(BuildRegex, RegexOptions.IgnorePatternWhitespace)]
+    [GeneratedRegex(BuildRegex, RequiredRegexOptions)]
     public static partial Regex BuildIdentifier();
 
     /// <summary>
@@ -250,7 +250,7 @@ public readonly partial struct SemVer
     /// <summary>
     /// The method returns a <see cref="Regex"/> instance that can be used to validate pre-release version strings against the SemVer 2.0.0 specification.
     /// </summary>
-    [GeneratedRegex(PreReleaseRegex, RegexOptions.IgnorePatternWhitespace)]
+    [GeneratedRegex(PreReleaseRegex, RequiredRegexOptions)]
     public static partial Regex PreReleaseIdentifier();
 
     /// <summary>
@@ -334,7 +334,7 @@ public readonly partial struct SemVer
     /// <returns>
     /// A <see cref="Regex"/> instance that can be used to validate semantic version strings.
     /// </returns>
-    [GeneratedRegex(ValidSemVerRegex, RegexOptions.IgnorePatternWhitespace)]
+    [GeneratedRegex(ValidSemVerRegex, RequiredRegexOptions)]
     public static partial Regex SemVer20();
 
     /// <summary>
