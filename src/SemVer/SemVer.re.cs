@@ -41,6 +41,17 @@ public readonly partial struct SemVer
     // - Public `*Rex` (PascalCase): generally unanchored public patterns.
     // - Public `*Regex` (PascalCase): anchored full-string validation patterns.
     // - Public methods named like `*Regex` without suffix: `GeneratedRegex` factories for `*Regex` constants.
+    //
+    // This style of building the regexes usually requires that the regular expression objects MUST be built with the options
+    // `RegexOptions.IgnorePatternWhitespace` and `RegexOptions.ExplicitCapture` for correctness, better readability, and performance.
+
+    /// <summary>
+    /// The regex options that must be used when compiling or generating the regular expressions defined in this class:
+    /// - RegexOptions.IgnorePatternWhitespace: allows for whitespace and comments in the regex pattern, which can enhance readability.
+    /// - RegexOptions.ExplicitCapture: disables implicit capture groups, which can improve performance and reduce memory usage
+    ///   when the regex does not rely on numbered capture groups.
+    /// </summary>
+    public const RegexOptions RegexOptions = RegexOptions.IgnorePatternWhitespace | RegexOptions.ExplicitCapture;
 
     /// <summary>
     /// Charset containing the letters in identifiers.
@@ -130,7 +141,7 @@ public readonly partial struct SemVer
     /// <example>
     /// Strings that match the pattern: "0", "1", "2", "10", "23", "107", etc.
     /// </example>
-    const string numericIdentifier = $"(?: 0 | {positiveDigit}{digit}* )";
+    const string numericIdentifier = $"( 0 | {positiveDigit}{digit}* )";
 
     /// <summary>
     /// numericIdentifier = '0' | positive_digit digit*
@@ -138,9 +149,6 @@ public readonly partial struct SemVer
     /// <example>
     /// Strings that match the pattern: "0", "1", "2", "10", "23", "107", etc.
     /// </example>
-    /// <remarks>
-    /// The regex must be run/compiled with the option <see cref="RegexOptions.IgnorePatternWhitespace"/> for correct performance.
-    /// </remarks>
     public const string NumericIdentifierRex = numericIdentifier;
 
     /// <summary>
@@ -149,15 +157,12 @@ public readonly partial struct SemVer
     /// <example>
     /// Strings that match the pattern: "0", "1", "2", "10", "23", "107", etc.
     /// </example>
-    /// <remarks>
-    /// The regex must be run/compiled with the option <see cref="RegexOptions.IgnorePatternWhitespace"/> for correct performance.
-    /// </remarks>
-    public const string NumericIdentifierRegex = $"^(?: {NumericIdentifierRex} )$";
+    public const string NumericIdentifierRegex = $"^( {NumericIdentifierRex} )$";
 
     /// <summary>
     /// Method returns a <see cref="Regex"/> instance that can be used to validate numeric identifier strings against the SemVer 2.0.0 specification.
     /// </summary>
-    [GeneratedRegex(NumericIdentifierRegex, RegexOptions.IgnorePatternWhitespace)]
+    [GeneratedRegex(NumericIdentifierRegex, RegexOptions)]
     public static partial Regex NumericIdentifier();
 
     /// <summary>
@@ -166,7 +171,7 @@ public readonly partial struct SemVer
     /// <example>
     /// Strings that match the pattern: "A", "1A", "A1", "A1B", "1A1", "1-A", "A-1", "A-1B", etc. But not "1", "01", etc.
     /// </example>
-    const string alphanumericIdentifier = $"(?: {identifierCharacter}* {nonDigit} {identifierCharacter}* )";    // has to have at least one non-digit character
+    const string alphanumericIdentifier = $"( {identifierCharacter}* {nonDigit} {identifierCharacter}* )";    // has to have at least one non-digit character
 
     /// <summary>
     /// buildIdentifier = { alphanumeric_identifier } | { digits }
@@ -190,7 +195,7 @@ public readonly partial struct SemVer
     /// <example>
     /// Strings that match the pattern: "A", "1A", "A1", "A1B", "01A1", "1-A", "A-1", "A-1B", etc. and "0", "1", "2", "10", "023", "107", etc. and combinations of these separated by dots like "A.1A.01A1" or "1.10.023" etc.
     /// </example>
-    const string dotSeparatedBuildIdentifiers = @$"(?> {buildIdentifier} (?:\.{buildIdentifier})* )";
+    const string dotSeparatedBuildIdentifiers = @$"(?> {buildIdentifier} (\.{buildIdentifier})* )";
 
     /// <summary>
     /// build = dotSeparatedBuildIdentifiers
@@ -206,7 +211,7 @@ public readonly partial struct SemVer
     /// <example>
     /// Strings that match the pattern: "A", "1A", "A1", "A1B", "1-A", "A-1", "A-1B", etc. and "0", "1", "2", "10", "023", "107", etc. But not "01", etc. and combinations of these separated by dots like "A.1A.01A1" or "1.10.023" etc.
     /// </example>
-    const string dotSeparatedPreReleaseIdentifiers = @$"(?> {preReleaseIdentifier} (?:\.{preReleaseIdentifier})* )";
+    const string dotSeparatedPreReleaseIdentifiers = @$"(?> {preReleaseIdentifier} (\.{preReleaseIdentifier})* )";
 
     /// <summary>
     /// preRelease = dotSeparatedPreReleaseIdentifiers
@@ -219,17 +224,11 @@ public readonly partial struct SemVer
     /// <summary>
     /// Matches a build metadata identifier in a string.
     /// </summary>
-    /// <remarks>
-    /// The regex must be run/compiled with the option <see cref="RegexOptions.IgnorePatternWhitespace"/> for correct performance.
-    /// </remarks>
     public const string BuildRex = dotSeparatedBuildIdentifiers;
 
     /// <summary>
     /// Matches a string if it is a SemVer build metadata identifier.
     /// </summary>
-    /// <remarks>
-    /// The regex must be run/compiled with the option <see cref="RegexOptions.IgnorePatternWhitespace"/> for correct performance.
-    /// </remarks>
     public const string BuildRegex = $"^{BuildRex}$";
 
     /// <summary>
@@ -241,17 +240,11 @@ public readonly partial struct SemVer
     /// <summary>
     /// Matches a pre-release version in a string.
     /// </summary>
-    /// <remarks>
-    /// The regex must be run/compiled with the option <see cref="RegexOptions.IgnorePatternWhitespace"/> for correct performance.
-    /// </remarks>
     public const string PreReleaseRex = preRelease;
 
     /// <summary>
     /// Matches a string if it is a SemVer pre-release version.
     /// </summary>
-    /// <remarks>
-    /// The regex must be run/compiled with the option <see cref="RegexOptions.IgnorePatternWhitespace"/> for correct performance.
-    /// </remarks>
     public const string PreReleaseRegex = $"^{PreReleaseRex}$";
 
     /// <summary>
@@ -327,18 +320,12 @@ public readonly partial struct SemVer
     /// Regular expression that matches semantic version (SemVer) in a string.
     /// <see href="https://semver.org/#backusnaur-form-grammar-for-valid-semver-versions"/>
     /// </summary>
-    /// <remarks>
-    /// The regex must be run/compiled with the option <see cref="RegexOptions.IgnorePatternWhitespace"/> for correct performance.
-    /// </remarks>
-    public const string ValidSemVerRex = @$"(?<{CoreGr}> {versionCore} )(?: - (?<{PreReleaseGr}> {preRelease} ) )? (?: \+ (?<{BuildGr}> {build} ) )?";
+    public const string ValidSemVerRex = @$"(?<{CoreGr}> {versionCore} )( - (?<{PreReleaseGr}> {preRelease} ) )? ( \+ (?<{BuildGr}> {build} ) )?";
 
     /// <summary>
     /// Regular expression that matches if a string is a valid semantic version (SemVer).
     /// <see href="https://semver.org/#backusnaur-form-grammar-for-valid-semver-versions"/>
     /// </summary>
-    /// <remarks>
-    /// The regex must be run/compiled with the option <see cref="RegexOptions.IgnorePatternWhitespace"/> for correct performance.
-    /// </remarks>
     public const string ValidSemVerRegex = @$"^{ValidSemVerRex}$";
 
     /// <summary>
@@ -358,16 +345,16 @@ public readonly partial struct SemVer
     {
         WriteLine ??= Console.WriteLine;
 
-        WriteLine($"NumericIdentifierRex: {NumericIdentifierRex}");
+        WriteLine($"NumericIdentifierRex:   {NumericIdentifierRex}");
         WriteLine($"NumericIdentifierRegex: {NumericIdentifierRegex}");
 
-        WriteLine($"BuildRex: {BuildRex}");
-        WriteLine($"BuildRegex: {BuildRegex}");
+        WriteLine($"BuildRex:               {BuildRex}");
+        WriteLine($"BuildRegex:             {BuildRegex}");
 
-        WriteLine($"PreReleaseRex: {PreReleaseRex}");
-        WriteLine($"PreReleaseRegex: {PreReleaseRegex}");
+        WriteLine($"PreReleaseRex:          {PreReleaseRex}");
+        WriteLine($"PreReleaseRegex:        {PreReleaseRegex}");
 
-        WriteLine($"ValidSemVerRex: {ValidSemVerRex}");
-        WriteLine($"ValidSemVerRegex: {ValidSemVerRegex}");
+        WriteLine($"ValidSemVerRex:         {ValidSemVerRex}");
+        WriteLine($"ValidSemVerRegex:       {ValidSemVerRegex}");
     }
 }
