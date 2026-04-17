@@ -5,6 +5,23 @@
 
 
 
+## v1.1.0-preview.4 - 2026-04-17
+
+
+### Internal
+
+- sync round-3 changelog templates, bump TestUtilities to 1.4.4, update README and SemVer regex
+- update changelog for v1.1.0 [skip ci]
+- add workflow to refresh NuGet lock files
+- update dependencies
+- add pull request template to GitHub folder
+- update package versions in packages.lock.json to 10.0.6 and add it to the solution
+
+
+
+
+
+
 
 ## v1.1.0 - 2026-04-14
 
