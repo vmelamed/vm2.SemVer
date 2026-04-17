@@ -14,6 +14,7 @@
         <Project Path="benchmarks/SemVer.Benchmarks/SemVer.Benchmarks.csproj" />
     </Folder>
     <Folder Name="/examples/">
+        <File Path="examples/packages.lock.json" />
         <File Path="examples/Program.cs" />
     </Folder>
     <Folder Name="/solution items/">
