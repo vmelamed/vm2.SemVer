@@ -13,34 +13,6 @@
 - add shared conventions document for vm2 packages for claude [skip ci]
 - diff-shared
 
-## v1.1.0-preview.6 - 2026-04-22
-
-### Internal
-
-- update dependencies and rebuild the packages.lock.json files
-
-## v1.1.0-preview.5 - 2026-04-22
-
-### Internal
-
-- fix formatting in changelog body for consistency
-- Update package references to version 10.0.7 for Microsoft.Extensions libraries and related dependencies
-
-### deps
-
-- Bump the minor-and-patch group with 1 update
-
-## v1.1.0-preview.4 - 2026-04-17
-
-### Internal
-
-- sync round-3 changelog templates, bump TestUtilities to 1.4.4, update README and SemVer regex
-- update changelog for v1.1.0 [skip ci]
-- add workflow to refresh NuGet lock files
-- update dependencies
-- add pull request template to GitHub folder
-- update package versions in packages.lock.json to 10.0.6 and add it to the solution
-
 ## v1.1.0 - 2026-04-14
 
 See prereleases below.
@@ -95,13 +67,6 @@ See prereleases below.
 
 - trim redundant benchmarks - remove ToString (wraps TryFormat), replace Parse with TryParse, drop CoreOnly JSON payloads
 - remove CoreOnly benchmarks to reduce alert noise
-
-## v1.0.0 - 2026-04-07
-
-### Internal
-
-- promote to stable v1.0.0 [skip ci]
-- update changelog for v1.0.0 [skip ci]
 
 ## v1.0.0 - 2026-04-07
 
