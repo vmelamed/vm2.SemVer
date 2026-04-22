@@ -1,24 +1,12 @@
 # Changelog
 
-
-
-
-
-
 ## v1.1.1-preview.2 - 2026-04-22
-
 
 ### Fixed
 
 - correct invalid prerelease version headers in CHANGELOG
 
-
-
-
-
-
 ## v1.1.1-preview.1 - 2026-04-22
-
 
 ### Internal
 
