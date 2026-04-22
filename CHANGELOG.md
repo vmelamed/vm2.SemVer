@@ -1,42 +1,23 @@
 # Changelog
 
-
-
-
-
-
 ## v1.1.0-preview.6 - 2026-04-22
-
 
 ### Internal
 
 - update dependencies and rebuild the packages.lock.json files
 
-
-
-
-
-
 ## v1.1.0-preview.5 - 2026-04-22
-
 
 ### Internal
 
 - fix formatting in changelog body for consistency
 - Update package references to version 10.0.7 for Microsoft.Extensions libraries and related dependencies
 
-
 ### deps
 
 - Bump the minor-and-patch group with 1 update
 
-
-
-
-
-
 ## v1.1.0-preview.4 - 2026-04-17
-
 
 ### Internal
 
@@ -46,12 +27,6 @@
 - update dependencies
 - add pull request template to GitHub folder
 - update package versions in packages.lock.json to 10.0.6 and add it to the solution
-
-
-
-
-
-
 
 ## v1.1.0 - 2026-04-14
 
@@ -63,7 +38,6 @@ See prereleases below.
 
 - update vm2.TestUtilities to 1.4.3 and refine changelog template
 
-
 ## v1.1.0-preview.2 - 2026-04-14
 
 ### Internal
@@ -73,11 +47,9 @@ See prereleases below.
 - update tag pattern in changelog configuration for semantic versioning compliance
 - refine documentation commit parser regex and add pull request template
 
-
 ### deps
 
 - Bump the minor-and-patch group with 1 update
-
 
 ## v1.1.0-preview.1 - 2026-04-11
 
@@ -90,7 +62,6 @@ See prereleases below.
 - add dotnet tool SemVer
 - add JsonExporter and MemoryDiagnoser attributes to benchmark classes
 - add regex printing helper and improve SemVer validation tests. Addressed Copilot review comments.
-
 
 ### Fixed
 
@@ -107,12 +78,10 @@ See prereleases below.
 - update settings for cSpell and improve Codecov configuration. Adjust coverage settings for better source matching.
 - add missing newline at end of packages.lock.json files
 
-
 ### Performance
 
 - trim redundant benchmarks - remove ToString (wraps TryFormat), replace Parse with TryParse, drop CoreOnly JSON payloads
 - remove CoreOnly benchmarks to reduce alert noise
-
 
 ## v1.0.0 - 2026-04-07
 
