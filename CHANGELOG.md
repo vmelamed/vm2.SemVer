@@ -5,6 +5,24 @@
 
 
 
+## v1.1.0-preview.5 - 2026-04-22
+
+
+### Internal
+
+- fix formatting in changelog body for consistency
+- Update package references to version 10.0.7 for Microsoft.Extensions libraries and related dependencies
+
+
+### deps
+
+- Bump the minor-and-patch group with 1 update
+
+
+
+
+
+
 ## v1.1.0-preview.4 - 2026-04-17
 
 
