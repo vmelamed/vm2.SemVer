@@ -5,6 +5,18 @@
 
 
 
+## v1.1.0-preview.6 - 2026-04-22
+
+
+### Internal
+
+- update dependencies and rebuild the packages.lock.json files
+
+
+
+
+
+
 ## v1.1.0-preview.5 - 2026-04-22
 
 
