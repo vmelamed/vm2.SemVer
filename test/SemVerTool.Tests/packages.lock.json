@@ -526,7 +526,7 @@
           "Microsoft.Extensions.Logging.Console": "[10.0.7, )",
           "Microsoft.Extensions.Options.ConfigurationExtensions": "[10.0.7, )",
           "Newtonsoft.Json": "[13.0.4, )",
-          "System.CommandLine": "[2.0.6, )",
+          "System.CommandLine": "[2.0.7, )",
           "System.Configuration.ConfigurationManager": "[10.0.7, )",
           "vm2.SemVer": "[1.0.0, )"
         }
@@ -567,9 +567,9 @@
       },
       "System.CommandLine": {
         "type": "CentralTransitive",
-        "requested": "[2.0.6, )",
-        "resolved": "2.0.6",
-        "contentHash": "10CL/VxB7N5FXP5mJD5aROrfyT7g3VIk0GH9DaSR3/QlD0q+GzRD+3+HnicYI1f391IZZ41vC5t+i62NjvEbDg=="
+        "requested": "[2.0.7, )",
+        "resolved": "2.0.7",
+        "contentHash": "ih4yNLLF2Ebz85xJJBaPeddLa4d1AekYId7Y1g8oSsEaBHHd/CtyeBJ+tDvQadqeXz7i591K5ry/td+4aaHnQA=="
       },
       "xunit.v3.extensibility.core": {
         "type": "CentralTransitive",
