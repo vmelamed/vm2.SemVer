@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.1.1-preview.4 - 2026-04-24
+
+### Fixed
+
+- adjust trim setting in changelog templates for consistency
+
 
 
 
