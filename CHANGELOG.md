@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.1.1-preview.7 - 2026-04-30
+
+### Internal
+
+DevOps changes only.
 ## v1.1.1-preview.6 - 2026-04-30
 
 ### Fixed
