@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.1.1-preview.5 - 2026-04-30
+
+### Internal
+
+- update vm2.TestUtilities to version 1.4.6
+
+### deps
+
+- Bump the minor-and-patch group with 1 update
+
 ## v1.1.1-preview.4 - 2026-04-24
 
 ### Fixed
