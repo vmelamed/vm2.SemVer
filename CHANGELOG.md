@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.1.1-preview.6 - 2026-04-30
+
+### Fixed
+
+- commit prefix
+
 ## v1.1.1-preview.5 - 2026-04-30
 
 ### Internal
