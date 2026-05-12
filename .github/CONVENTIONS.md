@@ -49,6 +49,7 @@ This section consolidates instructions specifically for AI coding assistants (Cl
 ### Code Generation and File Editing
 
 - **Wrap complete generated Markdown files in tilde fences** (`~~~markdown`) so the user can copy them cleanly
+- **Align Markdown table columns with spaces** so the table is readable in raw Markdown, not only in the rendered view
 - Do not remove commented-out code without explicit permission
 - Preserve YAML/JSON comments in configuration files
 - For GitHub Actions workflows: preserve commented-out alternatives and explanatory notes
@@ -201,7 +202,7 @@ The project owner is a non-native English speaker.
 - **Prefer `ILogger<T>`** with structured logging over static loggers or string-based logging
 - In services with external dependencies, prefer **circuit breakers and retries** over exceptions for transient faults
 - In services use **health checks and monitoring** to detect and respond to failures instead of relying on exceptions for observability
-- In services for distributed systems **use Open Telemetry** for distributed tracing and metrics to understand system behavior and failures instead of relying on exceptions alone
+- In services for distributed systems **use OpenTelemetry** for distributed tracing and metrics to understand system behavior and failures instead of relying on exceptions alone
 
 ## Testing
 
@@ -290,6 +291,7 @@ The project owner is a non-native English speaker.
 ## Markdown
 
 - **Follow markdownlint default rules** (or `.markdownlint.json` if present).
+- **Align table columns with spaces** for readability in raw Markdown — pad cells so columns line up visually.
 - Use 4-space indentation for code blocks inside Markdown content.
 - **Use `1.` for all items in ordered lists** (renderers number automatically).
 - Prefer kebab-case in YAML; avoid snake_case unless required by external schema.
