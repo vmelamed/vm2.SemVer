@@ -5,6 +5,7 @@
 ### Internal
 
 DevOps changes only.
+
 ## v1.1.1-preview.6 - 2026-04-30
 
 ### Fixed
@@ -27,13 +28,7 @@ DevOps changes only.
 
 - adjust trim setting in changelog templates for consistency
 
-
-
-
-
-
 ## v1.1.1-preview.3 - 2026-04-22
-
 
 ### Internal
 
