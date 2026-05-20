@@ -1,5 +1,21 @@
 # Changelog
 
+## v1.2.0-preview.1 - 2026-05-20
+
+### Added
+
+- add telemetry opt-out and first-time experience skip for .NET CLI [skip ci]
+- add NSubstitute package references to test projects
+
+### Internal
+
+- sync with diff-shared [skip ci]
+- Bump the minor-and-patch group with 15 updates
+- update dependencies
+- add Copilot instructions and project guidance documentation
+- update *.lock.json
+- update Copilot instructions to reflect correct package name
+
 ## v1.1.1-preview.7 - 2026-04-30
 
 ### Internal
