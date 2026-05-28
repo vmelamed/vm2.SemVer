@@ -66,6 +66,7 @@ env:
   PACKAGE_PROJECTS: >-
     [
     "src/SemVer/SemVer.csproj",
+    "src/Serialization.NsJson.SemVer/Serialization.NsJson.SemVer.csproj",
     "src/SemVerTool/SemVerTool.csproj"
     ]
   RUNNERS_OS: >-
