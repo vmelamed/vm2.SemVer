@@ -3,7 +3,4 @@
 
 global using System.Text;
 global using BenchmarkDotNet.Attributes;
-
-global using Newtonsoft.Json;
-
-global using vm2;
+global using vm2.Serialization.NsJson.SemVer;

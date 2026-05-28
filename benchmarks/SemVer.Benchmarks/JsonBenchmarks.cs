@@ -12,29 +12,39 @@ namespace vm2.Benchmarks.SemVer;
 #endif
 public class JsonBenchmarks
 {
-    static readonly vm2.SemVer Full = new(1, 2, 3, "rc.1", "build.7");
+    internal static readonly vm2.SemVer FullSemVer;
 
     // Pre-serialized JSON strings for deserialization benchmarks.
-    static readonly string FullSysJson = System.Text.Json.JsonSerializer.Serialize(Full);
-    static readonly string FullNsJson = JsonConvert.SerializeObject(Full);
+    internal static readonly string FullSemVerStj;
+    internal static readonly string FullSemVerNsj;
+    internal static readonly Newtonsoft.Json.JsonSerializerSettings NsjSettings;
 
+    static JsonBenchmarks()
+    {
+        FullSemVer = new(1, 2, 3, "rc.1", "build.7");
+
+        FullSemVerStj = System.Text.Json.JsonSerializer.Serialize(FullSemVer);
+
+        NsjSettings = new() { Converters = { new SemVerConverter() } };
+        FullSemVerNsj = Newtonsoft.Json.JsonConvert.SerializeObject(FullSemVer, NsjSettings);
+    }
     // --- System.Text.Json Serialize ---
 
     [Benchmark(Description = "STJ Serialize full")]
-    public string SysJson_Serialize_Full() => System.Text.Json.JsonSerializer.Serialize(Full);
+    public string SysJson_Serialize_Full() => System.Text.Json.JsonSerializer.Serialize(FullSemVer);
 
     // --- System.Text.Json Deserialize ---
 
     [Benchmark(Description = "STJ Deserialize full")]
-    public vm2.SemVer SysJson_Deserialize_Full() => System.Text.Json.JsonSerializer.Deserialize<vm2.SemVer>(FullSysJson);
+    public vm2.SemVer SysJson_Deserialize_Full() => System.Text.Json.JsonSerializer.Deserialize<vm2.SemVer>(FullSemVerStj);
 
     // --- Newtonsoft.Json Serialize ---
 
     [Benchmark(Description = "NSJ Serialize full")]
-    public string NsJson_Serialize_Full() => JsonConvert.SerializeObject(Full);
+    public string NsJson_Serialize_Full() => Newtonsoft.Json.JsonConvert.SerializeObject(FullSemVer, NsjSettings);
 
     // --- Newtonsoft.Json Deserialize ---
 
     [Benchmark(Description = "NSJ Deserialize full")]
-    public vm2.SemVer NsJson_Deserialize_Full() => JsonConvert.DeserializeObject<vm2.SemVer>(FullNsJson);
+    public vm2.SemVer NsJson_Deserialize_Full() => Newtonsoft.Json.JsonConvert.DeserializeObject<vm2.SemVer>(FullSemVerNsj, NsjSettings)!;
 }

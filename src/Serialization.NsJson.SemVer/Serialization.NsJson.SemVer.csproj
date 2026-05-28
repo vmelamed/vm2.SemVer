@@ -6,6 +6,9 @@
 
         <IsAotCompatible>false</IsAotCompatible>
         <VerifyReferenceAotCompatibility>false</VerifyReferenceAotCompatibility>
+
+        <EnableTrimAnalyzer>false</EnableTrimAnalyzer>
+        <IsTrimmable>false</IsTrimmable>
     </PropertyGroup>
 
     <PropertyGroup Label="NuGet">
