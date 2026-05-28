@@ -13,6 +13,7 @@ env:
   PACKAGE_PROJECTS: >-
     [
     "src/SemVer/SemVer.csproj",
+    "src/Serialization.NsJson.SemVer/Serialization.NsJson.SemVer.csproj",
     "src/SemVerTool/SemVerTool.csproj"
     ]
   # Ensure the NUGET_API_KEY secret is issued by the server selected here.
