@@ -6,8 +6,7 @@ namespace vm2;
 /// <summary>
 /// Represents a semantic version as defined by the SemVer 2.0.0 specification.
 /// </summary>
-[Newtonsoft.Json.JsonConverter(typeof(SemVerNsConverter))]
-[System.Text.Json.Serialization.JsonConverter(typeof(SemVerSysConverter))]
+[System.Text.Json.Serialization.JsonConverter(typeof(SemVerConverter))]
 public readonly partial struct SemVer :
     IEquatable<SemVer>,
     IComparable<SemVer>,

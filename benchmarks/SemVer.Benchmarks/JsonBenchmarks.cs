@@ -4,7 +4,6 @@
 namespace vm2.SemVerBenchmarks;
 
 #pragma warning disable CA1822  // Mark members as static
-#pragma warning disable IL2026  // Trim analyzer: serialization uses reflection
 
 #if SHORT_RUN
 [ShortRunJob]

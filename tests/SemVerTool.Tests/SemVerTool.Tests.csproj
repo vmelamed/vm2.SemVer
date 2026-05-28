@@ -1,7 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <RootNamespace>vm2.SemVerToolTests</RootNamespace>
+        <OutputType>Exe</OutputType>
+        <RootNamespace>vm2.Tests.SemVerTool</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

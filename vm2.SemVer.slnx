@@ -35,9 +35,10 @@
     <Folder Name="/src/">
         <Project Path="src/SemVer/SemVer.csproj" />
         <Project Path="src/SemVerTool/SemVerTool.csproj" />
+        <Project Path="src/Serialization.NsJson.SemVer/Serialization.NsJson.SemVer.csproj" />
     </Folder>
-    <Folder Name="/test/">
-        <Project Path="test/SemVer.Tests/SemVer.Tests.csproj" />
-        <Project Path="test/SemVerTool.Tests/SemVerTool.Tests.csproj" />
+    <Folder Name="/tests/">
+        <Project Path="tests/SemVer.Tests/SemVer.Tests.csproj" />
+        <Project Path="tests/SemVerTool.Tests/SemVerTool.Tests.csproj" />
     </Folder>
 </Solution>

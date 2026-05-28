@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+        <RootNamespace>vm2.Serialization.NsJson.SemVer</RootNamespace>
+
+        <IsAotCompatible>false</IsAotCompatible>
+        <VerifyReferenceAotCompatibility>false</VerifyReferenceAotCompatibility>
+    </PropertyGroup>
+
+    <PropertyGroup Label="NuGet">
+        <PackageId>vm2.SemVerSerialization.NsJson</PackageId>
+        <Title>Companion package: Newtonsoft.Json converter for vm2.SemVer</Title>
+        <Description>Provides a Newtonsoft.Json converter for SemVer 2.0 from vm2.SemVer.</Description>
+        <PackageTags>vm2 semver semantic versioning parsing formatting comparison json</PackageTags>
+        <PackageProjectUrl>https://github.com/vmelamed/vm2.SemVer/blob/main/src/SemVerNsConverter/SemVerNsConverter.csproj</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/vmelamed/vm2.SemVer</RepositoryUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageReleaseNotes>Initial release: split from vm2.SemVer. This package is not AoT compatible because it depends on Newtonsoft.Json.</PackageReleaseNotes>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="../../README.md"
+            Pack="true"
+            PackagePath="\">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="../../LICENSE"
+            Pack="true"
+            PackagePath="\">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="../../CHANGELOG.md"
+            Pack="true"
+            PackagePath="\">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Newtonsoft.Json" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="../SemVer/SemVer.csproj" />
+    </ItemGroup>
+
+</Project>

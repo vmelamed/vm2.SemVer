@@ -2,16 +2,12 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <RootNamespace>vm2.SemVer.Benchmarks</RootNamespace>
+        <RootNamespace>vm2.Tests.SemVer</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
         <ProjectReference Include="../../src/SemVer/SemVer.csproj" />
         <ProjectReference Include="../../src/Serialization.NsJson.SemVer/Serialization.NsJson.SemVer.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="Newtonsoft.Json" />
     </ItemGroup>
 
 </Project>
