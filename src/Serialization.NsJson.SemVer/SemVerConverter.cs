@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2025-2026 Val Melamed
 
-namespace vm2.SemVerSerialization.NsJson;
+namespace vm2.Serialization.NsJson.SemVer;
 
 using Newtonsoft.Json;
 
@@ -9,20 +9,20 @@ using Newtonsoft.Json;
 /// Provides functionality to convert <see cref="vm2.SemVer"/> values to and from JSON format.
 /// Implements the Newtonsoft.Json.<see cref="JsonConverter{T}"/>.
 /// </summary>
-/// <remarks>This converter is used to serialize and deserialize <see cref="SemVer"/> values in JSON format. It
-/// ensures that <see cref="SemVer"/> instances are correctly represented as strings in JSON and parsed back into <see
-/// cref="SemVer"/> objects during deserialization.</remarks>
-public class SemVerNsConverter : JsonConverter
+/// <remarks>This converter is used to serialize and deserialize <see cref="vm2.SemVer"/> values in JSON format. It
+/// ensures that <see cref="vm2.SemVer"/> instances are correctly represented as strings in JSON and parsed back into <see
+/// cref="vm2.SemVer"/> objects during deserialization.</remarks>
+public class SemVerConverter : JsonConverter
 {
     /// <summary>
-    /// Determines whether the specified type can be converted to or from a <see cref="SemVer"/>.
+    /// Determines whether the specified type can be converted to or from a <see cref="vm2.SemVer"/>.
     /// </summary>
     /// <param name="objectType">The type to evaluate for conversion compatibility.</param>
     /// <returns>
-    /// <see langword="true"/> if the specified type is <see cref="SemVer"/> or <see cref="Nullable{SemVer}"/>; otherwise, <see langword="false"/>.
+    /// <see langword="true"/> if the specified type is <see cref="vm2.SemVer"/> or <see cref="vm2.SemVer"/>?; otherwise, <see langword="false"/>.
     /// </returns>
     public override bool CanConvert(Type objectType)
-        => objectType == typeof(SemVer) || objectType == typeof(SemVer?);
+        => objectType == typeof(vm2.SemVer) || objectType == typeof(vm2.SemVer?);
 
     /// <summary>
     /// Writes the JSON representation of the specified object using the provided <see cref="JsonWriter"/>.
@@ -38,13 +38,13 @@ public class SemVerNsConverter : JsonConverter
             return;
         }
 
-        if (value is SemVer semVer)
+        if (value is vm2.SemVer semVer)
         {
             writer.WriteValue(semVer.ToString());
             return;
         }
 
-        throw new JsonWriterException($"Expected value to be of type {typeof(SemVer)} or null, but got {value?.GetType()}.");
+        throw new JsonWriterException($"Expected value to be of type {typeof(vm2.SemVer)} or null, but got {value?.GetType()}.");
     }
 
     /// <summary>
@@ -66,7 +66,7 @@ public class SemVerNsConverter : JsonConverter
             if (reader.TokenType is not JsonToken.String)
                 throw new JsonReaderException($"Expected token type to be {JsonToken.String} or {JsonToken.Null}, but got {reader.TokenType}.");
 
-            return SemVer.Parse(reader.Value.ToString()!);
+            return vm2.SemVer.Parse(reader.Value.ToString()!);
         }
         catch (Exception ex) when (ex is not JsonReaderException)
         {

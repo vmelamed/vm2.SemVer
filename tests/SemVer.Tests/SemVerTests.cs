@@ -1,102 +1,15 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2025-2026 Val Melamed
 
-namespace vm2.SemVerTests;
+namespace vm2.Tests.SemVer;
 
-#pragma warning disable IL2026 // Trim analyzer: Newtonsoft.Json and System.Text.Json reflection-based APIs are safe in test code
+using System.Text;
 
-public class SemVerTests(ITestOutputHelper output) : TestBase(output)
+using vm2;
+using vm2.TestUtilities;
+
+public partial class SemVerTests : TestBase
 {
-    public static TheoryData<string, int, int, int, string, string> ValidSemVerCases => new()
-    {
-        { "1.2.3", 1, 2, 3, "", "" },
-        { "1.2.3-alpha", 1, 2, 3, "alpha", "" },
-        { "1.2.3+build.7", 1, 2, 3, "", "build.7" },
-        { "1.2.3-alpha.1+build.7", 1, 2, 3, "alpha.1", "build.7" },
-        { "  1.2.3-rc.1+meta.9  ", 1, 2, 3, "rc.1", "meta.9" },
-    };
-
-    public static TheoryData<string> InvalidSemVerCases => new()
-    {
-        "",
-        " ",
-        "1",
-        "1.2",
-        "v1.2.3",
-        "01.2.3",
-        "1.02.3",
-        "1.2.03",
-        "1.2.3-",
-        "1.2.3+",
-        "1.2.3-01",
-        "1.2.3-..",
-    };
-
-    public static TheoryData<string, string, int> CompareCases => new()
-    {
-        { "1.0.0", "2.0.0", -1 },
-        { "2.1.0", "2.1.0", 0 },
-        { "1.0.0-alpha", "1.0.0", -1 },
-        { "1.0.0-alpha", "1.0.0-alpha.1", -1 },
-        { "1.0.0-alpha.1", "1.0.0-alpha.beta", -1 },
-        { "1.0.0-beta", "1.0.0-beta.2", -1 },
-        { "1.0.0-beta.2", "1.0.0-beta.11", -1 },
-        { "1.0.0-beta.11", "1.0.0-rc.1", -1 },
-        { "1.0.0-rc.1", "1.0.0", -1 },
-        { "1.0.0+build.1", "1.0.0+build.2", 0 },
-        { "1.0.0-18446744073709551615", "1.0.0-2", 1 },
-    };
-
-    public static TheoryData<string, string, string> BumpCases => new()
-    {
-        { "major", "1.2.3-alpha+build.1", "2.0.0" },
-        { "minor", "1.2.3-alpha+build.1", "1.3.0" },
-        { "patch", "1.2.3-alpha+build.1", "1.2.4" },
-    };
-
-    public static TheoryData<string, string, string, string, string> BumpWithQualifiersCases => new()
-    {
-        { "major", "1.2.3-alpha+build.1", "rc.1", "build.7", "2.0.0-rc.1+build.7" },
-        { "minor", "1.2.3-alpha+build.1", "beta", "meta.9", "1.3.0-beta+meta.9" },
-        { "patch", "1.2.3-alpha+build.1", "preview.2", "ci.42", "1.2.4-preview.2+ci.42" },
-    };
-
-    public static TheoryData<int, int, int, string> CoreCtorArgumentCases => new()
-    {
-        { -1, 0, 0, "major" },
-        { 0, -1, 0, "minor" },
-        { 0, 0, -1, "patch" },
-    };
-
-    public static TheoryData<string?, string> InvalidQualifierCases => new()
-    {
-        { "01", "preRelease" },
-        { "alpha..1", "preRelease" },
-        { ".build", "buildMetadata" },
-        { "build..7", "buildMetadata" },
-    };
-
-    public static TheoryData<int, int, int, string, string> SemVerComponentCases => new()
-    {
-        { 1, 2, 3, "", "" },
-        { 1, 2, 3, "alpha", "" },
-        { 1, 2, 3, "", "build.7" },
-        { 1, 2, 3, "alpha.1", "build.7" },
-        { 1, 2, 3, "rc.1", "meta.9" },
-    };
-
-    public static TheoryData<string?, bool> IsValidCases => new()
-    {
-        { "1.2.3", true },
-        { "1.2.3-alpha.1+build.7", true },
-        { "1.2.3-rc.1+meta.09", true },
-        { "1.2.a3-rc.1+meta.9", false },
-        { "some string", false },
-        { "", false },
-        { "   ", false },
-        { null, false },
-    };
-
     [Theory]
     [MemberData(nameof(ValidSemVerCases))]
     public void Parse_WhenInputIsValid_ShouldReturnExpectedParts(
@@ -244,16 +157,6 @@ public class SemVerTests(ITestOutputHelper output) : TestBase(output)
         act.Should().Throw<ArgumentException>()
             .Which.ParamName.Should().Be("buildMetadata");
     }
-
-    public static TheoryData<string, int, int, int, string, string> ValidCtorSemVerCases { get; } = new TheoryData<string, int, int, int, string, string>
-    {
-        { "1.2.3", 1, 2, 3, "", "" },
-        { "1.2.3-alpha", 1, 2, 3, "alpha", "" },
-        { "1.2.3+build.7", 1, 2, 3, "", "build.7" },
-        { "1.2.3-alpha.1+build.7", 1, 2, 3, "alpha.1", "build.7" },
-        { "  1.2.3-rc.1+meta.9  ", 1, 2, 3, "rc.1", "meta.9" },
-        { "  123456789.234567890.345678901-rc.1+meta.9  ", 123456789, 234567890, 345678901, "rc.1", "meta.9" },
-    };
 
     [Theory]
     [MemberData(nameof(ValidCtorSemVerCases))]
@@ -591,17 +494,6 @@ public class SemVerTests(ITestOutputHelper output) : TestBase(output)
     }
 
     #region Length accuracy
-    public static TheoryData<string, int> LengthCases => new()
-    {
-        { "0.0.0", 5 },
-        { "1.2.3", 5 },
-        { "1.2.3-a", 7 },
-        { "1.2.3+b", 7 },
-        { "1.2.3-a+b", 9 },
-        { "1.2.3-rc.1+build.7", 18 },
-        { "999999999.999999999.999999999", 29 },
-    };
-
     [Theory]
     [MemberData(nameof(LengthCases))]
     public void Length_ShouldMatchActualStringLength(string input, int expectedLength)
@@ -785,232 +677,6 @@ public class SemVerTests(ITestOutputHelper output) : TestBase(output)
     }
     #endregion
 
-    #region System.Text.Json converter
-    [Theory]
-    [MemberData(nameof(SemVerComponentCases))]
-    public void SysJson_RoundTrip_ShouldPreserveValue(
-        int major, int minor, int patch, string preRelease, string buildMetadata)
-    {
-        var original = new SemVer(major, minor, patch, preRelease, buildMetadata);
-
-        var json = JsonSerializer.Serialize(original);
-        var deserialized = JsonSerializer.Deserialize<SemVer>(json);
-
-        deserialized.Should().Be(original);
-    }
-
-    [Fact]
-    public void SysJson_Serialize_ShouldWriteQuotedString()
-    {
-        var version = new SemVer(1, 2, 3, "rc.1", "build.7");
-
-        var json = JsonSerializer.Serialize(version);
-
-        // Utf8JsonWriter escapes '+' as '\u002B' by default
-        using var doc = JsonDocument.Parse(json);
-        doc.RootElement.GetString().Should().Be("1.2.3-rc.1+build.7");
-    }
-
-    [Fact]
-    public void SysJson_Serialize_CoreVersion_ShouldWriteQuotedString()
-    {
-        var version = new SemVer(1, 2, 3);
-
-        var json = JsonSerializer.Serialize(version);
-
-        json.Should().Be("\"1.2.3\"");
-    }
-
-    [Fact]
-    public void SysJson_Deserialize_NullableSemVer_WhenJsonIsNull_ShouldReturnNull()
-    {
-        var result = JsonSerializer.Deserialize<SemVer?>("null");
-
-        result.Should().BeNull();
-    }
-
-    [Fact]
-    public void SysJson_Deserialize_WhenJsonIsInvalidSemVer_ShouldThrowJsonException()
-    {
-        Action act = () => JsonSerializer.Deserialize<SemVer>("\"not-a-semver\"");
-
-        act.Should().Throw<JsonException>();
-    }
-
-    [Fact]
-    public void SysJson_Deserialize_WhenJsonIsNumber_ShouldThrowJsonException()
-    {
-        Action act = () => JsonSerializer.Deserialize<SemVer>("42");
-
-        act.Should().Throw<JsonException>();
-    }
-
-    [Fact]
-    public void SysJson_RoundTrip_NullableSemVer_WithValue()
-    {
-        var original = (SemVer?)new SemVer(1, 2, 3);
-
-        var json = JsonSerializer.Serialize(original);
-        var deserialized = JsonSerializer.Deserialize<SemVer?>(json);
-
-        deserialized.Should().Be(original);
-    }
-
-    [Fact]
-    public void SysJson_RoundTrip_NullableSemVer_Null()
-    {
-        SemVer? original = null;
-
-        var json = JsonSerializer.Serialize(original);
-        var deserialized = JsonSerializer.Deserialize<SemVer?>(json);
-
-        json.Should().Be("null");
-        deserialized.Should().BeNull();
-    }
-
-    [Fact]
-    public void SysJson_RoundTrip_ObjectWithSemVerProperty()
-    {
-        var obj = new SysJsonTestModel { Version = new SemVer(1, 2, 3, "beta.1"), Label = "test" };
-
-        var json = JsonSerializer.Serialize(obj);
-        var deserialized = JsonSerializer.Deserialize<SysJsonTestModel>(json);
-
-        deserialized!.Version.Should().Be(obj.Version);
-        deserialized.Label.Should().Be("test");
-    }
-
-    [Fact]
-    public void SysJson_RoundTrip_ObjectWithNullableSemVerProperty_Null()
-    {
-        var obj = new SysJsonTestModelNullable { Version = null, Label = "test" };
-
-        var json = JsonSerializer.Serialize(obj);
-        var deserialized = JsonSerializer.Deserialize<SysJsonTestModelNullable>(json);
-
-        deserialized!.Version.Should().BeNull();
-    }
-
-    private sealed class SysJsonTestModel
-    {
-        public SemVer Version { get; set; }
-        public string Label { get; set; } = "";
-    }
-
-    private sealed class SysJsonTestModelNullable
-    {
-        public SemVer? Version { get; set; }
-        public string Label { get; set; } = "";
-    }
-    #endregion
-
-    #region Newtonsoft.Json converter
-    [Theory]
-    [MemberData(nameof(SemVerComponentCases))]
-    public void NsJson_RoundTrip_ShouldPreserveValue(
-        int major, int minor, int patch, string preRelease, string buildMetadata)
-    {
-        var original = new SemVer(major, minor, patch, preRelease, buildMetadata);
-
-        var json = Newtonsoft.Json.JsonConvert.SerializeObject(original);
-        var deserialized = Newtonsoft.Json.JsonConvert.DeserializeObject<SemVer>(json);
-
-        deserialized.Should().Be(original);
-    }
-
-    [Fact]
-    public void NsJson_Serialize_ShouldWriteQuotedString()
-    {
-        var version = new SemVer(1, 2, 3, "rc.1", "build.7");
-
-        var json = Newtonsoft.Json.JsonConvert.SerializeObject(version);
-
-        json.Should().Be("\"1.2.3-rc.1+build.7\"");
-    }
-
-    [Fact]
-    public void NsJson_Deserialize_NullableSemVer_WhenJsonIsNull_ShouldReturnNull()
-    {
-        var result = Newtonsoft.Json.JsonConvert.DeserializeObject<SemVer?>("null");
-
-        result.Should().BeNull();
-    }
-
-    [Fact]
-    public void NsJson_Deserialize_WhenJsonIsInvalidSemVer_ShouldThrowJsonReaderException()
-    {
-        Action act = () => Newtonsoft.Json.JsonConvert.DeserializeObject<SemVer>("\"not-a-semver\"");
-
-        act.Should().Throw<Newtonsoft.Json.JsonReaderException>();
-    }
-
-    [Fact]
-    public void NsJson_Deserialize_WhenJsonIsNumber_ShouldThrowJsonReaderException()
-    {
-        Action act = () => Newtonsoft.Json.JsonConvert.DeserializeObject<SemVer>("42");
-
-        act.Should().Throw<Newtonsoft.Json.JsonReaderException>();
-    }
-
-    [Fact]
-    public void NsJson_RoundTrip_NullableSemVer_WithValue()
-    {
-        var original = (SemVer?)new SemVer(1, 2, 3);
-
-        var json = Newtonsoft.Json.JsonConvert.SerializeObject(original);
-        var deserialized = Newtonsoft.Json.JsonConvert.DeserializeObject<SemVer?>(json);
-
-        deserialized.Should().Be(original);
-    }
-
-    [Fact]
-    public void NsJson_RoundTrip_NullableSemVer_Null()
-    {
-        SemVer? original = null;
-
-        var json = Newtonsoft.Json.JsonConvert.SerializeObject(original);
-        var deserialized = Newtonsoft.Json.JsonConvert.DeserializeObject<SemVer?>(json);
-
-        json.Should().Be("null");
-        deserialized.Should().BeNull();
-    }
-
-    [Fact]
-    public void NsJson_RoundTrip_ObjectWithSemVerProperty()
-    {
-        var obj = new NsJsonTestModel { Version = new SemVer(1, 2, 3, "beta.1"), Label = "test" };
-
-        var json = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
-        var deserialized = Newtonsoft.Json.JsonConvert.DeserializeObject<NsJsonTestModel>(json);
-
-        deserialized!.Version.Should().Be(obj.Version);
-        deserialized.Label.Should().Be("test");
-    }
-
-    [Fact]
-    public void NsJson_RoundTrip_ObjectWithNullableSemVerProperty_Null()
-    {
-        var obj = new NsJsonTestModelNullable { Version = null, Label = "test" };
-
-        var json = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
-        var deserialized = Newtonsoft.Json.JsonConvert.DeserializeObject<NsJsonTestModelNullable>(json);
-
-        deserialized!.Version.Should().BeNull();
-    }
-
-    private sealed class NsJsonTestModel
-    {
-        public SemVer Version { get; set; }
-        public string Label { get; set; } = "";
-    }
-
-    private sealed class NsJsonTestModelNullable
-    {
-        public SemVer? Version { get; set; }
-        public string Label { get; set; } = "";
-    }
-    #endregion
-
     #region Edge cases
     [Fact]
     public void Default_ShouldBeZeroZeroZero()
@@ -1067,38 +733,9 @@ public class SemVerTests(ITestOutputHelper output) : TestBase(output)
         ok.Should().BeTrue();
         parsed.Should().Be(version);
     }
-
-    [Fact]
-    public void SysJson_CrossSerializer_NsJsonSerialized_SysJsonDeserialized()
-    {
-        var original = new SemVer(1, 2, 3, "alpha.1", "build.7");
-
-        var json = Newtonsoft.Json.JsonConvert.SerializeObject(original);
-        var deserialized = JsonSerializer.Deserialize<SemVer>(json);
-
-        deserialized.Should().Be(original);
-    }
-
-    [Fact]
-    public void NsJson_CrossSerializer_SysJsonSerialized_NsJsonDeserialized()
-    {
-        var original = new SemVer(1, 2, 3, "alpha.1", "build.7");
-
-        var json = JsonSerializer.Serialize(original);
-        var deserialized = Newtonsoft.Json.JsonConvert.DeserializeObject<SemVer>(json);
-
-        deserialized.Should().Be(original);
-    }
     #endregion
 
     #region Coverage gap tests — large strings (>1024 threshold)
-    private static SemVer MakeLargeSemVer()
-    {
-        // Build metadata long enough to push Length > 1024
-        var longMeta = new string('a', 1100);
-        return new SemVer(1, 2, 3, "", longMeta);
-    }
-
     [Fact]
     public void ToString_WhenLengthExceeds1024StackallocThreshold_ShouldUseHeapAllocation()
     {
@@ -1140,17 +777,6 @@ public class SemVerTests(ITestOutputHelper output) : TestBase(output)
     }
 
     [Fact]
-    public void SysJson_RoundTrip_WhenLengthExceedsThreshold_ShouldPreserveValue()
-    {
-        var original = MakeLargeSemVer();
-
-        var json = JsonSerializer.Serialize(original);
-        var deserialized = JsonSerializer.Deserialize<SemVer>(json);
-
-        deserialized.Should().Be(original);
-    }
-
-    [Fact]
     public void TryParseString_WhenInputIsNull_ShouldReturnFalse()
     {
         var ok = SemVer.TryParse((string?)null, null, out var result);
@@ -1172,59 +798,6 @@ public class SemVerTests(ITestOutputHelper output) : TestBase(output)
 
         ok.Should().BeTrue();
         parsed.Should().Be(version);
-    }
-    #endregion
-
-    #region Coverage gap tests — Newtonsoft.Json CanConvert + WriteJson
-    [Fact]
-    public void NsJsonConverter_CanConvert_ShouldReturnTrueForSemVer()
-    {
-        var converter = new vm2.SemVerSerialization.NsJson.SemVerNsConverter();
-
-        converter.CanConvert(typeof(SemVer)).Should().BeTrue();
-    }
-
-    [Fact]
-    public void NsJsonConverter_CanConvert_ShouldReturnTrueForNullableSemVer()
-    {
-        var converter = new vm2.SemVerSerialization.NsJson.SemVerNsConverter();
-
-        converter.CanConvert(typeof(SemVer?)).Should().BeTrue();
-    }
-
-    [Fact]
-    public void NsJsonConverter_CanConvert_ShouldReturnFalseForOtherTypes()
-    {
-        var converter = new vm2.SemVerSerialization.NsJson.SemVerNsConverter();
-
-        converter.CanConvert(typeof(string)).Should().BeFalse();
-        converter.CanConvert(typeof(int)).Should().BeFalse();
-        converter.CanConvert(typeof(object)).Should().BeFalse();
-    }
-
-    [Fact]
-    public void NsJsonConverter_WriteJson_WhenValueIsNull_ShouldWriteNull()
-    {
-        var converter = new vm2.SemVerSerialization.NsJson.SemVerNsConverter();
-        var sb = new System.IO.StringWriter();
-        var writer = new Newtonsoft.Json.JsonTextWriter(sb);
-
-        converter.WriteJson(writer, null, Newtonsoft.Json.JsonSerializer.CreateDefault());
-        writer.Flush();
-
-        sb.ToString().Should().Be("null");
-    }
-
-    [Fact]
-    public void NsJsonConverter_WriteJson_WhenValueIsNotSemVer_ShouldThrow()
-    {
-        var converter = new vm2.SemVerSerialization.NsJson.SemVerNsConverter();
-        var sb = new System.IO.StringWriter();
-        var writer = new Newtonsoft.Json.JsonTextWriter(sb);
-
-        Action act = () => converter.WriteJson(writer, "not-a-semver", Newtonsoft.Json.JsonSerializer.CreateDefault());
-
-        act.Should().Throw<Newtonsoft.Json.JsonWriterException>();
     }
     #endregion
 
@@ -1396,17 +969,6 @@ public class SemVerTests(ITestOutputHelper output) : TestBase(output)
     }
     #endregion
 
-    #region Coverage gap tests — SysConverter.Read null token
-    [Fact]
-    public void SysJson_Deserialize_WhenJsonIsNull_NonNullable_ShouldThrowJsonException()
-    {
-        // Directly deserializing "null" into non-nullable SemVer should throw
-        Action act = () => JsonSerializer.Deserialize<SemVer>("null");
-
-        act.Should().Throw<JsonException>();
-    }
-    #endregion
-
     [Theory]
     [MemberData(nameof(IsValidCases))]
     public void IsValid_ShouldValidateInput(string? input, bool expected)
@@ -1414,5 +976,16 @@ public class SemVerTests(ITestOutputHelper output) : TestBase(output)
         var valid = SemVer.IsValid(input);
 
         valid.Should().Be(expected);
+    }
+
+    [Fact]
+    public void NsJson_CrossSerializer_SysJsonSerialized_NsJsonDeserialized()
+    {
+        var original = new SemVer(1, 2, 3, "alpha.1", "build.7");
+
+        var json = System.Text.Json.JsonSerializer.Serialize(original);
+        var deserialized = Newtonsoft.Json.JsonConvert.DeserializeObject<SemVer>(json, _settings);
+
+        deserialized.Should().Be(original);
     }
 }
