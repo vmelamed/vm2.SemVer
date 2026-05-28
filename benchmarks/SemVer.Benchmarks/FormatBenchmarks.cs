@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2025-2026 Val Melamed
 
-namespace vm2.SemVerBenchmarks;
+namespace vm2.Benchmarks.SemVer;
 
 #pragma warning disable CA1822 // Mark members as static
 
@@ -12,9 +12,9 @@ namespace vm2.SemVerBenchmarks;
 #endif
 public class FormatBenchmarks
 {
-    static readonly SemVer WithPreRelease = new(1, 2, 3, "rc.1");
-    static readonly SemVer Full = new(1, 2, 3, "rc.1", "build.7");
-    static readonly SemVer HugeNumbers = new(int.MaxValue, int.MaxValue, int.MaxValue, "alpha.1", "meta.2");
+    static readonly vm2.SemVer WithPreRelease = new(1, 2, 3, "rc.1");
+    static readonly vm2.SemVer Full = new(1, 2, 3, "rc.1", "build.7");
+    static readonly vm2.SemVer HugeNumbers = new(int.MaxValue, int.MaxValue, int.MaxValue, "alpha.1", "meta.2");
 
     // --- TryFormat(Span<char>) ---
 

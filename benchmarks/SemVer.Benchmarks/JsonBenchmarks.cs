@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2025-2026 Val Melamed
 
-namespace vm2.SemVerBenchmarks;
+namespace vm2.Benchmarks.SemVer;
 
 #pragma warning disable CA1822  // Mark members as static
 
@@ -12,7 +12,7 @@ namespace vm2.SemVerBenchmarks;
 #endif
 public class JsonBenchmarks
 {
-    static readonly SemVer Full = new(1, 2, 3, "rc.1", "build.7");
+    static readonly vm2.SemVer Full = new(1, 2, 3, "rc.1", "build.7");
 
     // Pre-serialized JSON strings for deserialization benchmarks.
     static readonly string FullSysJson = System.Text.Json.JsonSerializer.Serialize(Full);
@@ -26,7 +26,7 @@ public class JsonBenchmarks
     // --- System.Text.Json Deserialize ---
 
     [Benchmark(Description = "STJ Deserialize full")]
-    public SemVer SysJson_Deserialize_Full() => System.Text.Json.JsonSerializer.Deserialize<SemVer>(FullSysJson);
+    public vm2.SemVer SysJson_Deserialize_Full() => System.Text.Json.JsonSerializer.Deserialize<vm2.SemVer>(FullSysJson);
 
     // --- Newtonsoft.Json Serialize ---
 
@@ -36,5 +36,5 @@ public class JsonBenchmarks
     // --- Newtonsoft.Json Deserialize ---
 
     [Benchmark(Description = "NSJ Deserialize full")]
-    public SemVer NsJson_Deserialize_Full() => JsonConvert.DeserializeObject<SemVer>(FullNsJson);
+    public vm2.SemVer NsJson_Deserialize_Full() => JsonConvert.DeserializeObject<vm2.SemVer>(FullNsJson);
 }
