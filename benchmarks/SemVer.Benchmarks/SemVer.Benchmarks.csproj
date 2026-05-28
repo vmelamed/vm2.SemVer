@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <RootNamespace>vm2.SemVer.Benchmarks</RootNamespace>
+        <RootNamespace>vm2.Benchmarks.SemVer</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
