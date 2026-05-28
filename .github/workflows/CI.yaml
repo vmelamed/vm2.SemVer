@@ -56,8 +56,8 @@ env:
     ]
   TEST_PROJECTS: >-
     [
-    "test/SemVer.Tests/SemVer.Tests.csproj",
-    "test/SemVerTool.Tests/SemVerTool.Tests.csproj"
+    "tests/SemVer.Tests/SemVer.Tests.csproj",
+    "tests/SemVerTool.Tests/SemVerTool.Tests.csproj"
     ]
   BENCHMARK_PROJECTS: >-
     [
