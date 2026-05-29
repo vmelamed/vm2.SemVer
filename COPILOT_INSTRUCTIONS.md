@@ -36,7 +36,7 @@ Keep this file focused on *intent* and *preferences* so Copilot infers patterns.
   - `.github/` for GitHub workflows and issue templates (optional)
   - `.github/workflows/` for GitHub Actions workflows (optional)
   - `src/` for source code
-  - `test/` for test projects (very rarely optional - only for test and other tiny utilities)
+  - `tests/` for test projects (very rarely optional - only for test and other tiny utilities)
   - `benchmarks/` for performance benchmarks (desirable)
   - `examples/` for sample code and usage examples (desirable)
   - `docs/` for documentation (optional)
@@ -50,7 +50,7 @@ vm2.SemVer/
 ├── src/
 │   ├── SemVer/           # Core library: SemVer struct, regex, serialization
 │   └── SemVerTool/       # CLI tool (dotnet tool): validate, compare, bump
-├── test/
+├── tests/
 │   ├── SemVer.Tests/     # Unit tests for the core library
 │   └── SemVerTool.Tests/ # Unit tests for the CLI tool
 ├── benchmarks/
@@ -71,11 +71,11 @@ When you add a new test project or packable project, you **must** add its path t
 | Array               | Purpose                      | Example entry                                    |
 |---------------------|------------------------------|--------------------------------------------------|
 | `BUILD_PROJECTS`    | Solutions/projects to build  | `"vm2.SemVer.slnx"`                             |
-| `TEST_PROJECTS`     | Test projects to run         | `"test/SemVerTool.Tests/SemVerTool.Tests.csproj"` |
+| `TEST_PROJECTS`     | Test projects to run         | `"tests/SemVerTool.Tests/SemVerTool.Tests.csproj"` |
 | `BENCHMARK_PROJECTS`| Benchmark projects to run    | `"benchmarks/SemVer.Benchmarks/SemVer.Benchmarks.csproj"` |
 | `PACKAGE_PROJECTS`  | Projects to pack as NuGet    | `"src/SemVerTool/SemVerTool.csproj"`             |
 
-Also add the new project to `vm2.SemVer.slnx` under the appropriate solution folder (`/src/`, `/test/`, `/benchmarks/`).
+Also add the new project to `vm2.SemVer.slnx` under the appropriate solution folder (`/src/`, `/tests/`, `/benchmarks/`).
 
 ## SemVer Library — Domain-Specific Guidance
 

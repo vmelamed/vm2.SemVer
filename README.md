@@ -123,7 +123,7 @@ var parsed = JsonConvert.DeserializeObject<SemVer>(json);
   - from **CLI**, if it is not built yet (builds on MTP v2):
 
     ```bash
-    dotnet run --project test/SemVer.Tests/SemVer.Tests.csproj
+    dotnet run --project tests/SemVer.Tests/SemVer.Tests.csproj
     ```
 
   - from **CLI**, if it is already built in **CLI** or **VSCode** (MTP v2):
@@ -155,7 +155,7 @@ var parsed = JsonConvert.DeserializeObject<SemVer>(json);
 ## Project structure
 
 - `src/SemVer/` — library source code
-- `test/SemVer.Tests/` — xUnit v3 + MTP tests
+- `tests/SemVer.Tests/` — xUnit v3 + MTP tests
 - `benchmarks/SemVer.Benchmarks/` — BenchmarkDotNet suite (Parse, Format, JSON)
 - `examples/SemVer.Example/` — minimal console sample
 - `docs/` — documentation
