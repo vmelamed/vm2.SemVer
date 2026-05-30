@@ -1,5 +1,16 @@
 # Changelog
 
+## v2.0.0-preview.1 - 2026-05-30
+
+### Fixed
+
+- ensure .cs files are normalized with LF line endings in .gitattributes [skip ci]
+- **BREAKING:** correct order of attributes for .cs file normalization in .gitattributes
+
+### Internal
+
+- **BREAKING:** separated NSJ converter in its own assembly to keep the main package AOT compatible
+
 ## v1.2.1-preview.1 - 2026-05-30
 
 ### Fixed
