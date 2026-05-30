@@ -1,5 +1,30 @@
 # Changelog
 
+## v1.2.1-preview.1 - 2026-05-30
+
+### Fixed
+
+- disable AoT, refactor Directory.Build.props
+- correct path for test projects in CI configuration
+- Update project configurations and benchmarks for AOT compatibility and namespace adjustments
+- added JsonSerializerSettings
+- clarify comment for text file normalization in .gitattributes
+
+### Internal
+
+- promote to stable v1.2.0 [skip ci]
+- update changelog for v1.2.0 [skip ci]
+- sync with diff-shared.sh
+- update vm2.TestUtilities to version 1.5.1
+- update vm2.TestUtilities to version 1.5.1 and clean up unused dependencies
+- fix typo in conventions for merge or copy action description
+- improve wording in CI warning message and conventions documentation
+- added OutputType Exe
+- following conventions
+- diff-shared.sh
+- change "test/" to "tests/"
+- update dependencies
+
 ## v1.2.0 - 2026-05-20
 
 See prereleases below.
