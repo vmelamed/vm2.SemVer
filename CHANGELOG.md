@@ -1,5 +1,13 @@
 # Changelog
 
+## v2.0.1-preview.1 - 2026-06-03
+
+### Internal
+
+- promote to stable v2.0.0 [skip ci]
+- update changelog for v2.0.0 [skip ci]
+- add default solution setting for .NET in VSCode configuration
+
 ## v2.0.0 - 2026-05-30
 
 See prereleases below.
