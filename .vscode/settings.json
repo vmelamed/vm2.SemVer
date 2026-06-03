@@ -1,4 +1,5 @@
 {
+    "dotnet.defaultSolution": "vm2.SemVer.slnx",
     "cSpell.words": [
         "charsets",
         "inproc"
