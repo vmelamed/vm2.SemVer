@@ -230,7 +230,7 @@ See prereleases below.
 > **Internal**
 >
 > - add internal changes
-> - commit prefix for git-cliff: `refactor:`, `docs:`, `style:`, `test:`, `chore:`, `ci:`, `build:`
+> - commit prefix for git-cliff: `refactor:`, `docs:`, `style:`, `test:`, `tests:`, `chore:`, `ci:`, `build:`
 >
 
 ## References
