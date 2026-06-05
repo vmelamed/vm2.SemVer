@@ -1,5 +1,17 @@
 # Changelog
 
+## v2.0.2-preview.1 - 2026-06-05
+
+### Fixed
+
+- streamline the dev. environment for multi-OS/multi-IDE and for consistent configuration of AI [skip ci]
+- update commit prefix for git-cliff to include 'tests' and adjust documentation
+- remove trailing newline from file header template
+
+### Internal
+
+- update changelog for v2.0.1 [skip ci]
+
 ## v2.0.1 - 2026-06-04
 
 See prereleases below.
