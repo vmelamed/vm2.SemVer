@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.0.2 - 2026-06-05
+
+See prereleases below.
+
 ## v2.0.2-preview.1 - 2026-06-05
 
 ### Fixed
