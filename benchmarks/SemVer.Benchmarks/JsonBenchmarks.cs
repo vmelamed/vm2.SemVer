@@ -40,11 +40,11 @@ public class JsonBenchmarks
 
     // --- Newtonsoft.Json Serialize ---
 
-    [Benchmark(Description = "NSJ Serialize full")]
+    [Benchmark(Description = "NSJ Serialize full", OperationsPerInvoke = 1000)]
     public string NsJson_Serialize_Full() => Newtonsoft.Json.JsonConvert.SerializeObject(FullSemVer, NsjSettings);
 
     // --- Newtonsoft.Json Deserialize ---
 
-    [Benchmark(Description = "NSJ Deserialize full")]
+    [Benchmark(Description = "NSJ Deserialize full", OperationsPerInvoke = 1000)]
     public vm2.SemVer NsJson_Deserialize_Full() => Newtonsoft.Json.JsonConvert.DeserializeObject<vm2.SemVer>(FullSemVerNsj, NsjSettings)!;
 }
