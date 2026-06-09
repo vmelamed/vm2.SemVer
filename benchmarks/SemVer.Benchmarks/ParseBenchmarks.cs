@@ -12,6 +12,8 @@ namespace vm2.Benchmarks.SemVer;
 #endif
 public class ParseBenchmarks
 {
+    const int operationsPerInvoke = 1000;
+
     const string WithPreRelease = "1.2.3-rc.1";
     const string Full = "1.2.3-rc.1+build.7";
     const string HugeNumbers = "2147483647.2147483647.2147483647-alpha.1+meta.2";
@@ -23,33 +25,94 @@ public class ParseBenchmarks
     // --- String TryParse ---
 
     [Benchmark(Description = "TryParse(string) pre-release")]
-    public bool TryParse_String_WithPreRelease() => vm2.SemVer.TryParse(WithPreRelease, null, out _);
+    public bool TryParse_String_WithPreRelease()
+    {
+        var f = false;
+        for (int i = 0; i < operationsPerInvoke; i++)
+            f |= vm2.SemVer.TryParse(WithPreRelease, null, out _);
+        return f;
+    }
 
     [Benchmark(Description = "TryParse(string) full")]
-    public bool TryParse_String_Full() => vm2.SemVer.TryParse(Full, null, out _);
+    public bool TryParse_String_Full()
+    {
+        var f = false;
+        for (int i = 0; i < operationsPerInvoke; i++)
+            f |= vm2.SemVer.TryParse(Full, null, out _);
+        return f;
+    }
+
 
     [Benchmark(Description = "TryParse(string) huge")]
-    public bool TryParse_String_HugeNumbers() => vm2.SemVer.TryParse(HugeNumbers, null, out _);
+    public bool TryParse_String_HugeNumbers()
+    {
+        var f = false;
+        for (int i = 0; i < operationsPerInvoke; i++)
+            f |= vm2.SemVer.TryParse(HugeNumbers, null, out _);
+        return f;
+    }
 
     // --- Span<char> TryParse ---
 
     [Benchmark(Description = "TryParse(span<char>) pre-release")]
-    public bool TryParse_CharSpan_WithPreRelease() => vm2.SemVer.TryParse(WithPreRelease.AsSpan(), null, out _);
+    public bool TryParse_CharSpan_WithPreRelease()
+    {
+        var f = false;
+        for (int i = 0; i < operationsPerInvoke; i++)
+            f |= vm2.SemVer.TryParse(WithPreRelease.AsSpan(), null, out _);
+        return f;
+    }
+
 
     [Benchmark(Description = "TryParse(span<char>) full")]
-    public bool TryParse_CharSpan_Full() => vm2.SemVer.TryParse(Full.AsSpan(), null, out _);
+    public bool TryParse_CharSpan_Full()
+    {
+        var f = false;
+        for (int i = 0; i < operationsPerInvoke; i++)
+            f |= vm2.SemVer.TryParse(Full.AsSpan(), null, out _);
+        return f;
+    }
+
 
     [Benchmark(Description = "TryParse(span<char>) huge")]
-    public bool TryParse_CharSpan_HugeNumbers() => vm2.SemVer.TryParse(HugeNumbers.AsSpan(), null, out _);
+    public bool TryParse_CharSpan_HugeNumbers()
+    {
+        var f = false;
+        for (int i = 0; i < operationsPerInvoke; i++)
+            f |= vm2.SemVer.TryParse(HugeNumbers.AsSpan(), null, out _);
+        return f;
+    }
+
 
     // --- Span<byte> UTF-8 TryParse ---
 
     [Benchmark(Description = "TryParse(span<byte>) pre-release")]
-    public bool TryParse_Utf8Span_WithPreRelease() => vm2.SemVer.TryParse(WithPreReleaseUtf8.AsSpan(), null, out _);
+    public bool TryParse_Utf8Span_WithPreRelease()
+    {
+        var f = false;
+        for (int i = 0; i < operationsPerInvoke; i++)
+            f |= vm2.SemVer.TryParse(WithPreReleaseUtf8.AsSpan(), null, out _);
+        return f;
+    }
+
 
     [Benchmark(Description = "TryParse(span<byte>) full")]
-    public bool TryParse_Utf8Span_Full() => vm2.SemVer.TryParse(FullUtf8.AsSpan(), null, out _);
+    public bool TryParse_Utf8Span_Full()
+    {
+        var f = false;
+        for (int i = 0; i < operationsPerInvoke; i++)
+            f |= vm2.SemVer.TryParse(FullUtf8.AsSpan(), null, out _);
+        return f;
+    }
+
 
     [Benchmark(Description = "TryParse(span<byte>) huge")]
-    public bool TryParse_Utf8Span_HugeNumbers() => vm2.SemVer.TryParse(HugeNumbersUtf8.AsSpan(), null, out _);
+    public bool TryParse_Utf8Span_HugeNumbers()
+    {
+        var f = false;
+        for (int i = 0; i < operationsPerInvoke; i++)
+            f |= vm2.SemVer.TryParse(HugeNumbersUtf8.AsSpan(), null, out _);
+        return f;
+    }
+
 }
