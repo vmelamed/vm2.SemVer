@@ -37,8 +37,8 @@ public class SemVerConverter : JsonConverter
         object? value,
         [NotNull] JsonSerializer serializer)
     {
-        ArgumentNullException.ThrowIfNull(writer, nameof(writer));
-        ArgumentNullException.ThrowIfNull(serializer, nameof(serializer));
+        ArgumentNullException.ThrowIfNull(writer);
+        ArgumentNullException.ThrowIfNull(serializer);
 
         switch (value)
         {
@@ -68,8 +68,8 @@ public class SemVerConverter : JsonConverter
         object? __,
         [NotNull] JsonSerializer serializer)
     {
-        ArgumentNullException.ThrowIfNull(reader, nameof(reader));
-        ArgumentNullException.ThrowIfNull(serializer, nameof(serializer));
+        ArgumentNullException.ThrowIfNull(reader);
+        ArgumentNullException.ThrowIfNull(serializer);
 
         if (reader.TokenType is JsonToken.Null || reader.Value is null)
             return null;
