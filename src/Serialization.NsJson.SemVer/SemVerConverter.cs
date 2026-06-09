@@ -3,6 +3,8 @@
 
 namespace vm2.Serialization.NsJson.SemVer;
 
+using System.Diagnostics.CodeAnalysis;
+
 using Newtonsoft.Json;
 
 /// <summary>
@@ -30,21 +32,25 @@ public class SemVerConverter : JsonConverter
     /// <param name="writer">The <see cref="JsonWriter"/> used to write the JSON output. Cannot be <c>null</c>.</param>
     /// <param name="value">The object to serialize. Can be <c>null</c>, in which case a JSON null value is written.</param>
     /// <param name="serializer">The <see cref="JsonSerializer"/> used to customize the serialization process. Cannot be <c>null</c>.</param>
-    public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
+    public override void WriteJson(
+        [NotNull] JsonWriter writer,
+        object? value,
+        [NotNull] JsonSerializer serializer)
     {
-        if (value is null)
-        {
-            writer.WriteNull();
-            return;
-        }
+        ArgumentNullException.ThrowIfNull(writer, nameof(writer));
+        ArgumentNullException.ThrowIfNull(serializer, nameof(serializer));
 
-        if (value is vm2.SemVer semVer)
+        switch (value)
         {
-            writer.WriteValue(semVer.ToString());
-            return;
+            case null:
+                writer.WriteNull();
+                return;
+            case vm2.SemVer semVer:
+                writer.WriteValue(semVer.ToString());
+                return;
+            default:
+                throw new JsonWriterException($"Expected value to be of type {typeof(vm2.SemVer)} or null, but got {value.GetType()}.");
         }
-
-        throw new JsonWriterException($"Expected value to be of type {typeof(vm2.SemVer)} or null, but got {value?.GetType()}.");
     }
 
     /// <summary>
@@ -52,12 +58,19 @@ public class SemVerConverter : JsonConverter
     /// type.
     /// </summary>
     /// <param name="reader">The <see cref="JsonReader"/> to read JSON data from.</param>
-    /// <param name="objectType">The type of the object to deserialize the JSON data into.</param>
-    /// <param name="existingValue">An existing object to populate with the JSON data, or <c>null</c> to create a new object.</param>
+    /// <param name="_">The type of the object to deserialize the JSON data into.</param>
+    /// <param name="__">An existing object to populate with the JSON data, or <c>null</c> to create a new object.</param>
     /// <param name="serializer">The <see cref="JsonSerializer"/> used to deserialize the JSON data.</param>
     /// <returns>The deserialized object, or <c>null</c> if the JSON data is empty or cannot be deserialized.</returns>
-    public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
+    public override object? ReadJson(
+        [NotNull] JsonReader reader,
+        Type _,
+        object? __,
+        [NotNull] JsonSerializer serializer)
     {
+        ArgumentNullException.ThrowIfNull(reader, nameof(reader));
+        ArgumentNullException.ThrowIfNull(serializer, nameof(serializer));
+
         try
         {
             if (reader.TokenType is JsonToken.Null || reader.Value is null)
