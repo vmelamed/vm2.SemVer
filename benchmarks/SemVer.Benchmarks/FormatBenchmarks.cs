@@ -12,6 +12,8 @@ namespace vm2.Benchmarks.SemVer;
 #endif
 public class FormatBenchmarks
 {
+    const int operationsPerInvoke = 1000;
+
     static readonly vm2.SemVer WithPreRelease = new(1, 2, 3, "rc.1");
     static readonly vm2.SemVer Full = new(1, 2, 3, "rc.1", "build.7");
     static readonly vm2.SemVer HugeNumbers = new(int.MaxValue, int.MaxValue, int.MaxValue, "alpha.1", "meta.2");
@@ -21,22 +23,37 @@ public class FormatBenchmarks
     [Benchmark(Description = "TryFormat(char) pre-release")]
     public bool TryFormat_Char_WithPreRelease()
     {
+        var f = false;
         Span<char> buffer = stackalloc char[WithPreRelease.Length];
-        return WithPreRelease.TryFormat(buffer, out _);
+
+        for (int i = 0; i < operationsPerInvoke; i++)
+             f |= WithPreRelease.TryFormat(buffer, out _);
+
+        return f;
     }
 
     [Benchmark(Description = "TryFormat(char) full")]
     public bool TryFormat_Char_Full()
     {
+        var f = false;
         Span<char> buffer = stackalloc char[Full.Length];
-        return Full.TryFormat(buffer, out _);
+
+        for (int i = 0; i < operationsPerInvoke; i++)
+             f |= Full.TryFormat(buffer, out _);
+
+        return f;
     }
 
     [Benchmark(Description = "TryFormat(char) huge")]
     public bool TryFormat_Char_HugeNumbers()
     {
+        var f = false;
         Span<char> buffer = stackalloc char[HugeNumbers.Length];
-        return HugeNumbers.TryFormat(buffer, out _);
+
+        for (int i = 0; i < operationsPerInvoke; i++)
+             f |= HugeNumbers.TryFormat(buffer, out _);
+
+        return f;
     }
 
     // --- TryFormat(Span<byte>) UTF-8 ---
@@ -44,21 +61,36 @@ public class FormatBenchmarks
     [Benchmark(Description = "TryFormat(byte) pre-release")]
     public bool TryFormat_Utf8_WithPreRelease()
     {
+        var f = false;
         Span<byte> buffer = stackalloc byte[WithPreRelease.Length];
-        return WithPreRelease.TryFormat(buffer, out _);
+
+        for (int i = 0; i < operationsPerInvoke; i++)
+             f |= WithPreRelease.TryFormat(buffer, out _);
+
+        return f;
     }
 
     [Benchmark(Description = "TryFormat(byte) full")]
     public bool TryFormat_Utf8_Full()
     {
+        var f = false;
         Span<byte> buffer = stackalloc byte[Full.Length];
-        return Full.TryFormat(buffer, out _);
+
+        for (int i = 0; i < operationsPerInvoke; i++)
+             f |= Full.TryFormat(buffer, out _);
+
+        return f;
     }
 
     [Benchmark(Description = "TryFormat(byte) huge")]
     public bool TryFormat_Utf8_HugeNumbers()
     {
+        var f = false;
         Span<byte> buffer = stackalloc byte[HugeNumbers.Length];
-        return HugeNumbers.TryFormat(buffer, out _);
+
+        for (int i = 0; i < operationsPerInvoke; i++)
+             f |= HugeNumbers.TryFormat(buffer, out _);
+
+        return f;
     }
 }
