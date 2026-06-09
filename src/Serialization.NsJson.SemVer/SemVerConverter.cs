@@ -71,17 +71,17 @@ public class SemVerConverter : JsonConverter
         ArgumentNullException.ThrowIfNull(reader, nameof(reader));
         ArgumentNullException.ThrowIfNull(serializer, nameof(serializer));
 
+        if (reader.TokenType is JsonToken.Null || reader.Value is null)
+            return null;
+
+        if (reader.TokenType is not JsonToken.String)
+            throw new JsonReaderException($"Expected token type to be {JsonToken.String} or {JsonToken.Null}, but got {reader.TokenType}.");
+
         try
         {
-            if (reader.TokenType is JsonToken.Null || reader.Value is null)
-                return null;
-
-            if (reader.TokenType is not JsonToken.String)
-                throw new JsonReaderException($"Expected token type to be {JsonToken.String} or {JsonToken.Null}, but got {reader.TokenType}.");
-
             return vm2.SemVer.Parse(reader.Value.ToString()!);
         }
-        catch (Exception ex) when (ex is not JsonReaderException)
+        catch (Exception ex)
         {
             throw new JsonReaderException("Could not parse SemVer value.", ex);
         }
