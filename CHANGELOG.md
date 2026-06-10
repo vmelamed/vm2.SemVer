@@ -1,5 +1,30 @@
 # Changelog
 
+## v2.1.0-preview.1 - 2026-06-10
+
+### Added
+
+- add max generation collection thresholds to CI environment variables [skip ci]
+
+### Internal
+
+- promote to stable v2.0.2 [skip ci]
+- update changelog for v2.0.2 [skip ci]
+- Bump the minor-and-patch group with 1 update
+- update vm2.TestUtilities to version 2.1.0
+- update vm2.TestUtilities to version 2.1.0
+- enhance parameter validation in JsonConverter methods
+- streamline error handling and null checks in WriteJson method
+- simplify null checks in WriteJson method of SemVerConverter
+- update Microsoft.NET.ILLink.Tasks version to 10.0.9 in packages.lock.json
+- add OperationsPerInvoke to Newtonsoft.Json benchmark methods
+- implement operationsPerInvoke in benchmark methods for performance consistency
+- add OperationsPerInvoke to System.Text.Json benchmark methods for consistency
+- update Microsoft.DotNet.ILCompiler and Microsoft.NET.ILLink.Tasks versions to 10.0.9 in packages.lock.json
+- update vm2.TestUtilities to version 2.1.1
+- re-add OperationsPerInvoke
+- rename suppress optimization discard variables in benchmark methods
+
 ## v2.0.2 - 2026-06-05
 
 See prereleases below.
