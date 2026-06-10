@@ -32,7 +32,7 @@ public class JsonBenchmarks
     }
     // --- System.Text.Json Serialize ---
 
-    [Benchmark(Description = "STJ Serialize full")]
+    [Benchmark(Description = "STJ Serialize full", OperationsPerInvoke = operationsPerInvoke)]
     public string SysJson_Serialize_Full()
     {
         string json = string.Empty;
@@ -45,15 +45,15 @@ public class JsonBenchmarks
 
     // --- System.Text.Json Deserialize ---
 
-    [Benchmark(Description = "STJ Deserialize full")]
+    [Benchmark(Description = "STJ Deserialize full", OperationsPerInvoke = operationsPerInvoke)]
     public vm2.SemVer SysJson_Deserialize_Full()
     {
-        vm2.SemVer sv = default;
+        vm2.SemVer json = default;
 
         for (int i = 0; i < operationsPerInvoke; i++)
-            sv = System.Text.Json.JsonSerializer.Deserialize<vm2.SemVer>(FullSemVerStj);
+            json = System.Text.Json.JsonSerializer.Deserialize<vm2.SemVer>(FullSemVerStj);
 
-        return sv;
+        return json;
     }
 
     // --- Newtonsoft.Json Serialize ---
