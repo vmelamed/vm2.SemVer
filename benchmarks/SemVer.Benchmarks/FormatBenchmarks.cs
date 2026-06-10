@@ -20,7 +20,7 @@ public class FormatBenchmarks
 
     // --- TryFormat(Span<char>) ---
 
-    [Benchmark(Description = "TryFormat(char) pre-release")]
+    [Benchmark(Description = "TryFormat(char) pre-release", OperationsPerInvoke=operationsPerInvoke)]
     public bool TryFormat_Char_WithPreRelease()
     {
         var f = false;
@@ -32,7 +32,7 @@ public class FormatBenchmarks
         return f;
     }
 
-    [Benchmark(Description = "TryFormat(char) full")]
+    [Benchmark(Description = "TryFormat(char) full", OperationsPerInvoke=operationsPerInvoke)]
     public bool TryFormat_Char_Full()
     {
         var f = false;
@@ -44,7 +44,7 @@ public class FormatBenchmarks
         return f;
     }
 
-    [Benchmark(Description = "TryFormat(char) huge")]
+    [Benchmark(Description = "TryFormat(char) huge", OperationsPerInvoke=operationsPerInvoke)]
     public bool TryFormat_Char_HugeNumbers()
     {
         var f = false;
@@ -58,7 +58,7 @@ public class FormatBenchmarks
 
     // --- TryFormat(Span<byte>) UTF-8 ---
 
-    [Benchmark(Description = "TryFormat(byte) pre-release")]
+    [Benchmark(Description = "TryFormat(byte) pre-release", OperationsPerInvoke=operationsPerInvoke)]
     public bool TryFormat_Utf8_WithPreRelease()
     {
         var f = false;
@@ -70,7 +70,7 @@ public class FormatBenchmarks
         return f;
     }
 
-    [Benchmark(Description = "TryFormat(byte) full")]
+    [Benchmark(Description = "TryFormat(byte) full", OperationsPerInvoke=operationsPerInvoke)]
     public bool TryFormat_Utf8_Full()
     {
         var f = false;
@@ -82,7 +82,7 @@ public class FormatBenchmarks
         return f;
     }
 
-    [Benchmark(Description = "TryFormat(byte) huge")]
+    [Benchmark(Description = "TryFormat(byte) huge", OperationsPerInvoke=operationsPerInvoke)]
     public bool TryFormat_Utf8_HugeNumbers()
     {
         var f = false;

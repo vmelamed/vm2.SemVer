@@ -24,7 +24,7 @@ public class ParseBenchmarks
 
     // --- String TryParse ---
 
-    [Benchmark(Description = "TryParse(string) pre-release")]
+    [Benchmark(Description = "TryParse(string) pre-release", OperationsPerInvoke = operationsPerInvoke)]
     public bool TryParse_String_WithPreRelease()
     {
         var f = false;
@@ -33,7 +33,7 @@ public class ParseBenchmarks
         return f;
     }
 
-    [Benchmark(Description = "TryParse(string) full")]
+    [Benchmark(Description = "TryParse(string) full", OperationsPerInvoke = operationsPerInvoke)]
     public bool TryParse_String_Full()
     {
         var f = false;
@@ -43,7 +43,7 @@ public class ParseBenchmarks
     }
 
 
-    [Benchmark(Description = "TryParse(string) huge")]
+    [Benchmark(Description = "TryParse(string) huge", OperationsPerInvoke = operationsPerInvoke)]
     public bool TryParse_String_HugeNumbers()
     {
         var f = false;
@@ -54,7 +54,7 @@ public class ParseBenchmarks
 
     // --- Span<char> TryParse ---
 
-    [Benchmark(Description = "TryParse(span<char>) pre-release")]
+    [Benchmark(Description = "TryParse(span<char>) pre-release", OperationsPerInvoke = operationsPerInvoke)]
     public bool TryParse_CharSpan_WithPreRelease()
     {
         var f = false;
@@ -64,7 +64,7 @@ public class ParseBenchmarks
     }
 
 
-    [Benchmark(Description = "TryParse(span<char>) full")]
+    [Benchmark(Description = "TryParse(span<char>) full", OperationsPerInvoke = operationsPerInvoke)]
     public bool TryParse_CharSpan_Full()
     {
         var f = false;
@@ -74,7 +74,7 @@ public class ParseBenchmarks
     }
 
 
-    [Benchmark(Description = "TryParse(span<char>) huge")]
+    [Benchmark(Description = "TryParse(span<char>) huge", OperationsPerInvoke = operationsPerInvoke)]
     public bool TryParse_CharSpan_HugeNumbers()
     {
         var f = false;
@@ -86,7 +86,7 @@ public class ParseBenchmarks
 
     // --- Span<byte> UTF-8 TryParse ---
 
-    [Benchmark(Description = "TryParse(span<byte>) pre-release")]
+    [Benchmark(Description = "TryParse(span<byte>) pre-release", OperationsPerInvoke = operationsPerInvoke)]
     public bool TryParse_Utf8Span_WithPreRelease()
     {
         var f = false;
@@ -96,7 +96,7 @@ public class ParseBenchmarks
     }
 
 
-    [Benchmark(Description = "TryParse(span<byte>) full")]
+    [Benchmark(Description = "TryParse(span<byte>) full", OperationsPerInvoke = operationsPerInvoke)]
     public bool TryParse_Utf8Span_Full()
     {
         var f = false;
@@ -106,7 +106,7 @@ public class ParseBenchmarks
     }
 
 
-    [Benchmark(Description = "TryParse(span<byte>) huge")]
+    [Benchmark(Description = "TryParse(span<byte>) huge", OperationsPerInvoke = operationsPerInvoke)]
     public bool TryParse_Utf8Span_HugeNumbers()
     {
         var f = false;
