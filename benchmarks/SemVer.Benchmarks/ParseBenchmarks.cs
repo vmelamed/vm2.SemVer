@@ -27,29 +27,29 @@ public class ParseBenchmarks
     [Benchmark(Description = "TryParse(string) pre-release", OperationsPerInvoke = operationsPerInvoke)]
     public bool TryParse_String_WithPreRelease()
     {
-        var f = false;
+        var suppressOptimizationDiscard = false;
         for (int i = 0; i < operationsPerInvoke; i++)
-            f |= vm2.SemVer.TryParse(WithPreRelease, null, out _);
-        return f;
+            suppressOptimizationDiscard |= vm2.SemVer.TryParse(WithPreRelease, null, out _);
+        return suppressOptimizationDiscard;
     }
 
     [Benchmark(Description = "TryParse(string) full", OperationsPerInvoke = operationsPerInvoke)]
     public bool TryParse_String_Full()
     {
-        var f = false;
+        var suppressOptimizationDiscard = false;
         for (int i = 0; i < operationsPerInvoke; i++)
-            f |= vm2.SemVer.TryParse(Full, null, out _);
-        return f;
+            suppressOptimizationDiscard |= vm2.SemVer.TryParse(Full, null, out _);
+        return suppressOptimizationDiscard;
     }
 
 
     [Benchmark(Description = "TryParse(string) huge", OperationsPerInvoke = operationsPerInvoke)]
     public bool TryParse_String_HugeNumbers()
     {
-        var f = false;
+        var suppressOptimizationDiscard = false;
         for (int i = 0; i < operationsPerInvoke; i++)
-            f |= vm2.SemVer.TryParse(HugeNumbers, null, out _);
-        return f;
+            suppressOptimizationDiscard |= vm2.SemVer.TryParse(HugeNumbers, null, out _);
+        return suppressOptimizationDiscard;
     }
 
     // --- Span<char> TryParse ---
@@ -57,30 +57,30 @@ public class ParseBenchmarks
     [Benchmark(Description = "TryParse(span<char>) pre-release", OperationsPerInvoke = operationsPerInvoke)]
     public bool TryParse_CharSpan_WithPreRelease()
     {
-        var f = false;
+        var suppressOptimizationDiscard = false;
         for (int i = 0; i < operationsPerInvoke; i++)
-            f |= vm2.SemVer.TryParse(WithPreRelease.AsSpan(), null, out _);
-        return f;
+            suppressOptimizationDiscard |= vm2.SemVer.TryParse(WithPreRelease.AsSpan(), null, out _);
+        return suppressOptimizationDiscard;
     }
 
 
     [Benchmark(Description = "TryParse(span<char>) full", OperationsPerInvoke = operationsPerInvoke)]
     public bool TryParse_CharSpan_Full()
     {
-        var f = false;
+        var suppressOptimizationDiscard = false;
         for (int i = 0; i < operationsPerInvoke; i++)
-            f |= vm2.SemVer.TryParse(Full.AsSpan(), null, out _);
-        return f;
+            suppressOptimizationDiscard |= vm2.SemVer.TryParse(Full.AsSpan(), null, out _);
+        return suppressOptimizationDiscard;
     }
 
 
     [Benchmark(Description = "TryParse(span<char>) huge", OperationsPerInvoke = operationsPerInvoke)]
     public bool TryParse_CharSpan_HugeNumbers()
     {
-        var f = false;
+        var suppressOptimizationDiscard = false;
         for (int i = 0; i < operationsPerInvoke; i++)
-            f |= vm2.SemVer.TryParse(HugeNumbers.AsSpan(), null, out _);
-        return f;
+            suppressOptimizationDiscard |= vm2.SemVer.TryParse(HugeNumbers.AsSpan(), null, out _);
+        return suppressOptimizationDiscard;
     }
 
 
@@ -89,30 +89,30 @@ public class ParseBenchmarks
     [Benchmark(Description = "TryParse(span<byte>) pre-release", OperationsPerInvoke = operationsPerInvoke)]
     public bool TryParse_Utf8Span_WithPreRelease()
     {
-        var f = false;
+        var suppressOptimizationDiscard = false;
         for (int i = 0; i < operationsPerInvoke; i++)
-            f |= vm2.SemVer.TryParse(WithPreReleaseUtf8.AsSpan(), null, out _);
-        return f;
+            suppressOptimizationDiscard |= vm2.SemVer.TryParse(WithPreReleaseUtf8.AsSpan(), null, out _);
+        return suppressOptimizationDiscard;
     }
 
 
     [Benchmark(Description = "TryParse(span<byte>) full", OperationsPerInvoke = operationsPerInvoke)]
     public bool TryParse_Utf8Span_Full()
     {
-        var f = false;
+        var suppressOptimizationDiscard = false;
         for (int i = 0; i < operationsPerInvoke; i++)
-            f |= vm2.SemVer.TryParse(FullUtf8.AsSpan(), null, out _);
-        return f;
+            suppressOptimizationDiscard |= vm2.SemVer.TryParse(FullUtf8.AsSpan(), null, out _);
+        return suppressOptimizationDiscard;
     }
 
 
     [Benchmark(Description = "TryParse(span<byte>) huge", OperationsPerInvoke = operationsPerInvoke)]
     public bool TryParse_Utf8Span_HugeNumbers()
     {
-        var f = false;
+        var suppressOptimizationDiscard = false;
         for (int i = 0; i < operationsPerInvoke; i++)
-            f |= vm2.SemVer.TryParse(HugeNumbersUtf8.AsSpan(), null, out _);
-        return f;
+            suppressOptimizationDiscard |= vm2.SemVer.TryParse(HugeNumbersUtf8.AsSpan(), null, out _);
+        return suppressOptimizationDiscard;
     }
 
 }

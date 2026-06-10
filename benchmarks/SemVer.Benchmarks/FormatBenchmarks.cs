@@ -23,37 +23,37 @@ public class FormatBenchmarks
     [Benchmark(Description = "TryFormat(char) pre-release", OperationsPerInvoke=operationsPerInvoke)]
     public bool TryFormat_Char_WithPreRelease()
     {
-        var f = false;
+        var suppressOptimizationDiscard = false;
         Span<char> buffer = stackalloc char[WithPreRelease.Length];
 
         for (int i = 0; i < operationsPerInvoke; i++)
-             f |= WithPreRelease.TryFormat(buffer, out _);
+             suppressOptimizationDiscard |= WithPreRelease.TryFormat(buffer, out _);
 
-        return f;
+        return suppressOptimizationDiscard;
     }
 
     [Benchmark(Description = "TryFormat(char) full", OperationsPerInvoke=operationsPerInvoke)]
     public bool TryFormat_Char_Full()
     {
-        var f = false;
+        var suppressOptimizationDiscard = false;
         Span<char> buffer = stackalloc char[Full.Length];
 
         for (int i = 0; i < operationsPerInvoke; i++)
-             f |= Full.TryFormat(buffer, out _);
+             suppressOptimizationDiscard |= Full.TryFormat(buffer, out _);
 
-        return f;
+        return suppressOptimizationDiscard;
     }
 
     [Benchmark(Description = "TryFormat(char) huge", OperationsPerInvoke=operationsPerInvoke)]
     public bool TryFormat_Char_HugeNumbers()
     {
-        var f = false;
+        var suppressOptimizationDiscard = false;
         Span<char> buffer = stackalloc char[HugeNumbers.Length];
 
         for (int i = 0; i < operationsPerInvoke; i++)
-             f |= HugeNumbers.TryFormat(buffer, out _);
+             suppressOptimizationDiscard |= HugeNumbers.TryFormat(buffer, out _);
 
-        return f;
+        return suppressOptimizationDiscard;
     }
 
     // --- TryFormat(Span<byte>) UTF-8 ---
@@ -61,36 +61,36 @@ public class FormatBenchmarks
     [Benchmark(Description = "TryFormat(byte) pre-release", OperationsPerInvoke=operationsPerInvoke)]
     public bool TryFormat_Utf8_WithPreRelease()
     {
-        var f = false;
+        var suppressOptimizationDiscard = false;
         Span<byte> buffer = stackalloc byte[WithPreRelease.Length];
 
         for (int i = 0; i < operationsPerInvoke; i++)
-             f |= WithPreRelease.TryFormat(buffer, out _);
+             suppressOptimizationDiscard |= WithPreRelease.TryFormat(buffer, out _);
 
-        return f;
+        return suppressOptimizationDiscard;
     }
 
     [Benchmark(Description = "TryFormat(byte) full", OperationsPerInvoke=operationsPerInvoke)]
     public bool TryFormat_Utf8_Full()
     {
-        var f = false;
+        var suppressOptimizationDiscard = false;
         Span<byte> buffer = stackalloc byte[Full.Length];
 
         for (int i = 0; i < operationsPerInvoke; i++)
-             f |= Full.TryFormat(buffer, out _);
+             suppressOptimizationDiscard |= Full.TryFormat(buffer, out _);
 
-        return f;
+        return suppressOptimizationDiscard;
     }
 
     [Benchmark(Description = "TryFormat(byte) huge", OperationsPerInvoke=operationsPerInvoke)]
     public bool TryFormat_Utf8_HugeNumbers()
     {
-        var f = false;
+        var suppressOptimizationDiscard = false;
         Span<byte> buffer = stackalloc byte[HugeNumbers.Length];
 
         for (int i = 0; i < operationsPerInvoke; i++)
-             f |= HugeNumbers.TryFormat(buffer, out _);
+             suppressOptimizationDiscard |= HugeNumbers.TryFormat(buffer, out _);
 
-        return f;
+        return suppressOptimizationDiscard;
     }
 }

@@ -35,12 +35,12 @@ public class JsonBenchmarks
     [Benchmark(Description = "STJ Serialize full", OperationsPerInvoke = operationsPerInvoke)]
     public string SysJson_Serialize_Full()
     {
-        string json = string.Empty;
+        string suppressOptimizationDiscard = string.Empty;
 
         for (int i = 0; i < operationsPerInvoke; i++)
-            json = System.Text.Json.JsonSerializer.Serialize(FullSemVer);
+            suppressOptimizationDiscard = System.Text.Json.JsonSerializer.Serialize(FullSemVer);
 
-        return json;
+        return suppressOptimizationDiscard;
     }
 
     // --- System.Text.Json Deserialize ---
@@ -48,12 +48,12 @@ public class JsonBenchmarks
     [Benchmark(Description = "STJ Deserialize full", OperationsPerInvoke = operationsPerInvoke)]
     public vm2.SemVer SysJson_Deserialize_Full()
     {
-        vm2.SemVer json = default;
+        vm2.SemVer suppressOptimizationDiscard = default;
 
         for (int i = 0; i < operationsPerInvoke; i++)
-            json = System.Text.Json.JsonSerializer.Deserialize<vm2.SemVer>(FullSemVerStj);
+            suppressOptimizationDiscard = System.Text.Json.JsonSerializer.Deserialize<vm2.SemVer>(FullSemVerStj);
 
-        return json;
+        return suppressOptimizationDiscard;
     }
 
     // --- Newtonsoft.Json Serialize ---
@@ -61,12 +61,12 @@ public class JsonBenchmarks
     [Benchmark(Description = "NSJ Serialize full", OperationsPerInvoke = operationsPerInvoke)]
     public string NsJson_Serialize_Full()
     {
-        string json = string.Empty;
+        string suppressOptimizationDiscard = string.Empty;
 
         for (int i = 0; i < operationsPerInvoke; i++)
-            json = Newtonsoft.Json.JsonConvert.SerializeObject(FullSemVer, NsjSettings);
+            suppressOptimizationDiscard = Newtonsoft.Json.JsonConvert.SerializeObject(FullSemVer, NsjSettings);
 
-        return json;
+        return suppressOptimizationDiscard;
     }
 
     // --- Newtonsoft.Json Deserialize ---
@@ -74,11 +74,11 @@ public class JsonBenchmarks
     [Benchmark(Description = "NSJ Deserialize full", OperationsPerInvoke = operationsPerInvoke)]
     public vm2.SemVer NsJson_Deserialize_Full()
     {
-        vm2.SemVer json = default;
+        vm2.SemVer suppressOptimizationDiscard = default;
 
         for (int i = 0; i < operationsPerInvoke; i++)
-            json = Newtonsoft.Json.JsonConvert.DeserializeObject<vm2.SemVer>(FullSemVerNsj, NsjSettings)!;
+            suppressOptimizationDiscard = Newtonsoft.Json.JsonConvert.DeserializeObject<vm2.SemVer>(FullSemVerNsj, NsjSettings)!;
 
-        return json;
+        return suppressOptimizationDiscard;
     }
 }
