@@ -1,5 +1,13 @@
 # Changelog
 
+## v2.1.1-preview.1 - 2026-06-11
+
+### Internal
+
+- promote to stable v2.1.0 [skip ci]
+- update changelog for v2.1.0 [skip ci]
+- update cache-pattern description for clarity
+
 ## v2.1.0 - 2026-06-11
 
 See prereleases below.
