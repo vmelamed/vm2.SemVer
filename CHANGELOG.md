@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.1.0 - 2026-06-11
+
+See prereleases below.
+
 ## v2.1.0-preview.2 - 2026-06-11
 
 ### Internal
