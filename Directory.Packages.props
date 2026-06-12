@@ -26,7 +26,7 @@
         <!-- for running with Visual Studio profiler:<PackageVersion Include="Microsoft.VisualStudio.DiagnosticsHub.BenchmarkDotNetDiagnosers" Version="18.0.36421.1" />-->
         <PackageVersion Include="BenchmarkDotNet" Version="0.15.8" />
         <PackageVersion Include="BenchmarkDotNet.Annotations" Version="0.15.8" />
-        <!-- Add repo-specific package versions here: -->
+        <!-- ADD REPO-SPECIFIC PACKAGE VERSIONS HERE: -->
         <PackageVersion Include="System.CommandLine" Version="2.0.8" />
         <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
     </ItemGroup>
