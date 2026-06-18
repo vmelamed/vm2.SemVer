@@ -1,39 +1,5 @@
 # vm2 Shared Conventions
 
-<!-- TOC tocDepth:2..3 chapterDepth:2..6 -->
-
-- [vm2 Shared Conventions](#vm2-shared-conventions)
-  - [For AI Coding Assistants](#for-ai-coding-assistants)
-    - [Code Generation and File Editing](#code-generation-and-file-editing)
-    - [PR Review](#pr-review)
-    - [Language and Writing Quality](#language-and-writing-quality)
-  - [Directory Structure](#directory-structure)
-  - [Document Convention](#document-convention)
-    - [Files with shared content](#files-with-shared-content)
-  - [Dependency Management](#dependency-management)
-    - [Files with shared content](#files-with-shared-content-1)
-  - [Project Structure](#project-structure)
-    - [Files with shared content](#files-with-shared-content-2)
-  - [General C# Coding Conventions](#general-c-coding-conventions)
-    - [Files with shared content](#files-with-shared-content-3)
-  - [Async](#async)
-  - [Services (if applicable)](#services-if-applicable)
-  - [Error Handling](#error-handling)
-  - [Testing](#testing)
-    - [Files with shared content](#files-with-shared-content-4)
-  - [Performance](#performance)
-  - [Security](#security)
-  - [Naming](#naming)
-  - [AOT and Trimming](#aot-and-trimming)
-  - [Git and PR Hygiene](#git-and-pr-hygiene)
-    - [Files with shared content](#files-with-shared-content-5)
-  - [Documentation](#documentation)
-  - [Markdown](#markdown)
-  - [File Modification](#file-modification)
-  - [CI / GitHub Actions](#ci--github-actions)
-
-<!-- /TOC -->
-
 The *vm2* family of repositories (packages, solutions, etc.) **share a common set of conventions** for the directory structure, project structure, coding style, documentation style, Git and PR hygiene, and more. This file documents these shared conventions to ensure **consistency across all repositories** and to provide guidance for contributors.
 
 The key words **MUST**, **MUST NOT**, **SHOULD**, **SHOULD NOT**, and **MAY** in this document are to be interpreted as described in [RFC 2119](https://www.rfc-editor.org/rfc/rfc2119).
