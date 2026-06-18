@@ -1,5 +1,12 @@
 # Changelog
 
+## v2.1.1-preview.2 - 2026-06-18
+
+### Internal
+
+- sync, no code changes [skip ci]
+- Bump the minor-and-patch group with 1 update
+
 ## v2.1.1-preview.1 - 2026-06-11
 
 ### Internal
