@@ -166,8 +166,7 @@ var parsed = JsonConvert.DeserializeObject<SemVer>(json);
 - `RE`: regular expression.
 - `Charset`: a set of characters (that is, a character-class fragment).
 
-Charsets are strings that contain literal characters (for example, `"abc"`) and/or character ranges (for example, `"A-Z"`).
-A charset may represent a BNF term that is defined as a set of characters, for example:
+"Charsets" are strings that contain literal characters (for example, `"abc"`) and/or character ranges (for example, `"A-Z"`). A charset may represent a BNF term that is defined as a set of characters, for example:
 
 ```text
 letter ::= "A" | "B" | "C" | ... | "Z" | "a" | "b" | "c" | ... | "z"
@@ -191,21 +190,17 @@ const string letter = $"[{letterChars}]"; // real RE that matches a single lette
 
 By convention, non-public charset constants use camelCase and the `Chars` suffix, for example `letterChars`.
 
-Non-public constants in camelCase without a suffix represent regex fragments. Most of these are valid regex patterns on their
-own, but they are intended for composition rather than standalone use.
+Non-public constants in camelCase without a suffix represent regex fragments. Most of these are valid regex patterns on their own, but they are intended for composition rather than standalone use.
 
-Whitespace rule:
-If a fragment includes readability spaces around operators (for example, around `|`), every Regex instance that includes that
-fragment must be compiled or generated with `RegexOptions.IgnorePatternWhitespace`.
+**Whitespace rule:**
+If a fragment includes readability spaces around operators (for example, around `|`), every Regex instance that includes that fragment must be compiled or generated with `RegexOptions.IgnorePatternWhitespace`.
 
 Rex vs Regex:
 
 - `*Rex` constants are generally unanchored patterns intended for composition or searching within larger strings.
 - `*Regex` constants are full-string validation patterns, typically anchored with `^` and `$`.
 
-Only `*Regex` constants get public `Regex` instance producing factory methods.
-These methods are named after the constant without the `Regex` suffix (for example, `SemVer20()`), and are generated via
-`GeneratedRegexAttribute` using the corresponding `*Regex` pattern.
+Only `*Regex` constants get public `Regex` instance producing factory methods. These methods are named after the constant without the `Regex` suffix (for example, `SemVer20()`), and are generated via `GeneratedRegexAttribute` using the corresponding `*Regex` pattern.
 
 Quick convention table:
 
