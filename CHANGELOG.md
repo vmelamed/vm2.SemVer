@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.1.1-preview.3 - 2026-06-19
+
+### Internal
+
+- sync CONVENTIONS.md; edit AI files and README.md
+
 ## v2.1.1-preview.2 - 2026-06-18
 
 ### Internal
