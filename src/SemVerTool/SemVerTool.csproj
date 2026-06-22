@@ -28,6 +28,9 @@
     <ItemGroup>
         <PackageReference Include="System.CommandLine" />
     </ItemGroup>
+    <ItemGroup>
+        <Using Include="System.CommandLine" />
+    </ItemGroup>
 
     <ItemGroup>
         <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
