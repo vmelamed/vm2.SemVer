@@ -3,10 +3,7 @@
 
 namespace vm2.Tests.SemVer;
 
-using System.Text;
-
 using vm2;
-using vm2.TestUtilities;
 
 public partial class SemVerTests : TestBase
 {

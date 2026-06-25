@@ -33,9 +33,9 @@ public class SemVerConverter : JsonConverter
     /// <param name="value">The object to serialize. Can be <c>null</c>, in which case a JSON null value is written.</param>
     /// <param name="serializer">The <see cref="JsonSerializer"/> used to customize the serialization process. Cannot be <c>null</c>.</param>
     public override void WriteJson(
-        [NotNull] JsonWriter writer,
+         JsonWriter writer,
         object? value,
-        [NotNull] JsonSerializer serializer)
+         JsonSerializer serializer)
     {
         ArgumentNullException.ThrowIfNull(writer);
         ArgumentNullException.ThrowIfNull(serializer);
@@ -63,10 +63,10 @@ public class SemVerConverter : JsonConverter
     /// <param name="serializer">The <see cref="JsonSerializer"/> used to deserialize the JSON data.</param>
     /// <returns>The deserialized object, or <c>null</c> if the JSON data is empty or cannot be deserialized.</returns>
     public override object? ReadJson(
-        [NotNull] JsonReader reader,
+         JsonReader reader,
         Type _,
         object? __,
-        [NotNull] JsonSerializer serializer)
+         JsonSerializer serializer)
     {
         ArgumentNullException.ThrowIfNull(reader);
         ArgumentNullException.ThrowIfNull(serializer);
