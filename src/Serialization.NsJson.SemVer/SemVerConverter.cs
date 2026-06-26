@@ -3,8 +3,6 @@
 
 namespace vm2.Serialization.NsJson.SemVer;
 
-using System.Diagnostics.CodeAnalysis;
-
 using Newtonsoft.Json;
 
 /// <summary>
@@ -34,7 +32,7 @@ public class SemVerConverter : JsonConverter
     /// <param name="serializer">The <see cref="JsonSerializer"/> used to customize the serialization process. Cannot be <c>null</c>.</param>
     public override void WriteJson(
          JsonWriter writer,
-        object? value,
+         object? value,
          JsonSerializer serializer)
     {
         ArgumentNullException.ThrowIfNull(writer);
@@ -64,8 +62,8 @@ public class SemVerConverter : JsonConverter
     /// <returns>The deserialized object, or <c>null</c> if the JSON data is empty or cannot be deserialized.</returns>
     public override object? ReadJson(
          JsonReader reader,
-        Type _,
-        object? __,
+         Type _,
+         object? __,
          JsonSerializer serializer)
     {
         ArgumentNullException.ThrowIfNull(reader);
