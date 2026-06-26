@@ -1,5 +1,20 @@
 # Changelog
 
+## v2.1.1-preview.4 - 2026-06-26
+
+### Fixed
+
+- update conventions for async handling and error management [skip ci]
+
+### Internal
+
+- update dependencies
+- Bump the minor-and-patch group with 1 update
+- update workflows, package references, and usings; enhance CI and prerelease documentation
+- update vm2.TestUtilities to 2.1.3 and add Microsoft.Extensions dependencies
+- update workflows, package references, and usings; enhance CI and prerelease documentation
+- update vm2.TestUtilities to 2.1.3 and add Microsoft.Extensions dependencies
+
 ## v2.1.1-preview.3 - 2026-06-19
 
 ### Internal
