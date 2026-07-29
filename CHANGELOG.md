@@ -1,5 +1,17 @@
 # Changelog
 
+## v2.1.2-preview.1 - 2026-07-29
+
+### Internal
+
+- change `.github/copilot-instructions.md` to refer to both `CONVENTIONS.md` AND to `../CLAUDE.md` [skip ci]
+- update changelog for v2.1.1 [skip ci]
+- update Copilot instructions header to reflect correct package name [skip ci]
+- enhance conventions for instance and extension methods [skip ci]
+- update conventions to include interface honesty and AI co-authorship guidelines [skip ci]
+- enhance conventions with guidelines for exception handling and equality-contract tests [skip ci]
+- update package dependencies and lock files
+
 ## v2.1.1 - 2026-07-01
 
 See prereleases below.
