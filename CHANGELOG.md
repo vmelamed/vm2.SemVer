@@ -1,5 +1,18 @@
 # Changelog
 
+## v2.1.2-preview.2 - 2026-10-05
+
+### Fixed
+
+- change the MinVerDefaultPreReleaseIdentifiers to preview.0; separate artifacts output layout settings with a comment
+- remove unnecessary gh_escape variable and use reason directly in workflows
+
+### Internal
+
+- remove unused package-projects-len output from workflows
+- update vm2.TestUtilities package version to 2.1.4
+- drop UTF-8 BOM from *.cs files; standardize on charset = utf-8
+
 ## v2.1.2-preview.1 - 2026-07-29
 
 ### Internal
