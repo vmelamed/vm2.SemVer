@@ -1,5 +1,13 @@
 # Changelog
 
+## v2.1.3-preview.1 - 2026-10-07
+
+### Internal
+
+- promote to stable v2.1.2 [skip ci]
+- update changelog for v2.1.2 [skip ci]
+- update NuGet package versions in Directory.Packages.props
+
 ## v2.1.2 - 2026-10-05
 
 See prereleases below.
