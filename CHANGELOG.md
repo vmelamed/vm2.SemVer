@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.1.3-preview.2 - 2026-10-07
+
+### Internal
+
+- update NuGet package versions in Directory.Packages.props
+
 ## v2.1.3-preview.1 - 2026-10-07
 
 ### Internal
