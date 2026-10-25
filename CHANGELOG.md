@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.1.3-preview.7 - 2026-10-25
+
+### Fixed
+
+- remove remove_traps
+
 ## v2.1.3-preview.6 - 2026-10-22
 
 ### Fixed
