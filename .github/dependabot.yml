@@ -40,9 +40,8 @@ updates:
       prefix: "chore(deps)"
       include: "scope"
 
-    labels:
-      - "dependencies"
-      - "automated"
+    # no 'labels:' -- Dependabot then applies its defaults ('dependencies' plus the ecosystem, e.g. '.NET',
+    # 'github_actions') and creates them where missing; custom labels that a repo lacks are silently dropped
 
   # Also update GitHub Actions
   - package-ecosystem: "github-actions"
@@ -51,6 +50,3 @@ updates:
       interval: "weekly"
     commit-message:
       prefix: "ci"
-    labels:
-      - "github-actions"
-      - "automated"

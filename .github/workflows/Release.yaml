@@ -187,8 +187,8 @@ jobs:
 
           set -euo pipefail
 
-          declare -xi err_missing_argument
-          declare -xi err_argument_value
+          declare -x err_missing_argument
+          declare -x err_argument_value
 
           artifacts_dir="packages"
           server_name=$NUGET_SERVER

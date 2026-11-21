@@ -196,7 +196,11 @@ jobs:
   # Replaces per-job required checks that break with reusable workflows + matrix (check names include
   # workflow prefix, matrix params, inner job names, and event suffixes that are impossible to predict).
   postrun-ci:
-    name: Postrun-CI
+    # Only the pull_request (and workflow_dispatch) run may report the required check 'Postrun-CI'. On a branch with an
+    # open PR, the push run skips CI (prerun-ci's de-dupe), and its quick success would otherwise satisfy the ruleset
+    # before the PR run has finished: the ruleset matches checks by name, and a skipped job would count as passing too,
+    # so a different name is the only way out. setup-repo.sh registers the final "|| '<name>'" literal as the check.
+    name: ${{ github.event_name == 'push' && 'Postrun-CI (push)' || 'Postrun-CI' }}
     needs:
       - prerun-ci
       - run-ci
